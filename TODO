@@ -1,0 +1,12 @@
+possible qu'il fasse refaire toute les signatures, transformer tous les double* en glm::vec3 par exemple.
+
+-1 réussir a faire bouger une caméra dans le monde (dur)
+-2 séparer la vue du main
+-2.1 faire un vrai Makefile 
+-3 génerer une planete sphere utilisant le mesh (constructeur de planette)
+-4 implémenter l'affichage des primitives et nottament du mesh (dans drawer)
+-5 optimiser (culling, multiThread/passer tout dans le gpu, gestion d'événnement passive)
+-6 reformater a fond le code (include dans l'ordre alphabétique et companie)
+
+foutre des pointeurs sur les vec3 quand il le faut
+-optionnel stabilisateur de fps
