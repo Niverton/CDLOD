@@ -95,9 +95,40 @@ Boris \textsc{Mansencal}
 \addcontentsline{toc}{chapter}{Introduction}
 \setcounter{chapter}{1}
 
-Le projet de programmation s'effectue dans le cadre du master 1. L'objectif est de développer une bibliothèque en C++ permettant de stocker les cartes de hauteur d'une planète en utilisant un système hiérarchique dans les niveaux de détails afin de générer le maillage de la planète correspondant au niveau de détails choisi et de la visualiser sous format fils de fer.
-La bibliothèque utilisera comme structure de donnée un arbre à quatre fils correspondant à quatre sous parti de la carte de hauteur. Chaque fils pouvant aussi avoir quatre fils, le niveau de détails est la hauteur dans l'arbre. 
+Un objet en trois dimensions complexe est un ensemble de sommets reliés
+entre eux par des arrêtes, formant des faces triangulaires. L'ensemble
+de ces points et arrêtes est appelé maillage. Ces triangles sont ensuite
+traités et affichés à l'écran en deux dimensions. Plus le nombre de
+triangles à afficher est élevé, plus le rendu d'une image est long, ce
+qui est problématique dans une application nécessitant de générer
+beaucoup d'images rapidement, par exemple pour un rendu temps réel dans
+une simulation ou un jeu vidéo.\\
+Il est alors intéressant de pouvoir réduire le nombre de triangles d'un
+objet qui n'a pas besoin d'être très détaillé dans un cas précis, par
+exemple si l'objet est loin de l'observateur. Un cas particulier est
+l'affichage d'une surface très grande comportant des aspérités, par
+exemple un terrain. Une partie du terrain est proche de l'observateur,
+nous voulons donc en afficher les détails, mais une autre partie est
+plus éloignée, et les détails seront moins visibles sur l'image finale.
+On peut donc réduire le nombre de triangle de la partie éloignée afin de
+réduire le nombre de triangles à traiter.
 
+L'objectif de ce projet est d'implémenter un système de \emph{LOD} (
+\emph{Level of Detail}: niveau de détail) à appliquer sur le maillage
+d'une sphère en vue d'une application en temps réel, afin d'optimiser
+son affichage. Le projet comportera aussi une application permettant le
+rendu de cette sphère en trois dimensions, afin de pouvoir visualiser le
+fonctionnement du système de \emph{LOD}, ainsi qu'un moyen de mesurer
+les performances du système. Comme demandé, notre projet se basera sur
+la méthode proposée dans \cite{CDLOD}, permettant de générer le
+maillage en temps réel en fonction de la distance à la caméra. Nous
+adapterons la méthode de \cite{CDLOD} qui utilise le \emph{GPU}
+pour développer une version \emph{CPU}. Cette méthode a l'avantage de
+rattacher les maillages des différents niveau de détail de manière lisse
+et progressive, c'est à dire sans frontières intermédiaires, rendant le
+résultat homogène. Un autre avantage de cette méthode est de garder le
+nombre de triangles affichés constant, en répartissant les triangles
+dans les différents niveaux de détails.
 
 %-----------------------------------------------------------------%
 %   État de l’existant
@@ -164,7 +195,7 @@ Générer une carte de hauteur décrivant le terrain de la planète, et l'utilis
 
 Implémenter une structure de donnée représentant un quad-tree à utiliser avec les algorithmes de CDLOD (voir figure \ref{fig:quadtree})
 
-\begin{figure}[h!]
+\begin{figure}[!h]
   \includegraphics[scale=0.5]{img/Quadtree.png}
   \caption{Quad-tree}
   \label{fig:quadtree}
@@ -183,9 +214,6 @@ Afficher le nombre de trames par seconde à l'écran.
 Proposer un moyen de mesurer les performances à l’exécution (temps nécessaire pour générer une image, réponse de la base de données, ...).
 % J'aime pas cette phrase et c'est moi qui l'ai écrite -Rémy
 
-
-\subsection{Gestionnaire de versions }
-Utiliser un outil de gestion de version afin de disposer d'un dépôt partagé et de suivre l'évolution du projet. Git sera l'outil utilisé, avec un dépôt hébergé sur le serveur Savane du CREMI.
 
 \subsection{Documentations}
 
@@ -214,6 +242,9 @@ Mettre en place un système d'intégration continue en parallèle au projet afin
 % A chacun de configurer son git pour lancer l'outil avant chaque commit -Rémy
 
 
+\subsection{Gestionnaire de versions }
+Utiliser un outil de gestion de version afin de disposer d'un dépôt partagé et de suivre l'évolution du projet. Git sera l'outil utilisé, avec un dépôt hébergé sur le serveur Savane du CREMI.
+
 %-----------------------------------------------------------------%
 %   MISE EN OEUVRE
 %-----------------------------------------------------------------%
@@ -235,7 +266,7 @@ Mettre en place un système d'intégration continue en parallèle au projet afin
 %TODO 
 
 \bibliography{biblio}{}
-\bibliographystyle{plain}
+\bibliographystyle{plainnat}
 
 
 \end{document}
