@@ -120,15 +120,8 @@ son affichage. Le projet comportera aussi une application permettant le
 rendu de cette sphère en trois dimensions, afin de pouvoir visualiser le
 fonctionnement du système de \emph{LOD}, ainsi qu'un moyen de mesurer
 les performances du système. Comme demandé, notre projet se basera sur
-la méthode proposée dans \cite{CDLOD}, permettant de générer le
-maillage en temps réel en fonction de la distance à la caméra. Nous
-adapterons la méthode de \cite{CDLOD} qui utilise le \emph{GPU}
-pour développer une version \emph{CPU}. Cette méthode a l'avantage de
-rattacher les maillages des différents niveau de détail de manière lisse
-et progressive, c'est à dire sans frontières intermédiaires, rendant le
-résultat homogène. Un autre avantage de cette méthode est de garder le
-nombre de triangles affichés constant, en répartissant les triangles
-dans les différents niveaux de détails.
+la méthode proposée dans \cite{CDLOD}, permettant de génére le
+maillage en temps réel en fonction de la distance à la caméra. 
 
 %-----------------------------------------------------------------%
 %   État de l’existant
@@ -136,13 +129,20 @@ dans les différents niveaux de détails.
 \newpage
 
 \chapter*{État de l'existant}
-\addcontentsline{toc}{chapter}{État de l'existant}
+\addcontentsline{toc}{chapter}{État de l'art}
 \setcounter{chapter}{2}
 
 L'objectif final du projet est d'optimiser l'affichage de la planète grâce à un système de niveau de détails variant en fonction de l'éloignement de la caméra. Plusieurs implémentations allant dans ce sens existent et ont déja été publiées.
 Notre projet sera basé sur la technique décrite par Filip Strugar en 2010, \textit{Continuous Distance Dependent Level of Detail for Rendering Heightmaps}.
 D'autre projets similaires existent mais utilisent des structures de données différentes, l'utilisation d'un système de \textbf{chunks} ou encore de \textbf{clipmaps}. Bien que toutes ces techniques soient différentes, elles se basent sur le même principe fondamental, rajouter à la volée des détails sur les objets proches.
 
+%Nous adapterons la méthode de \cite{CDLOD} qui utilise le \emph{GPU}
+%pour développer une version \emph{CPU}. Cette méthode a l'avantage de
+%rattacher les maillages des différents niveau de détail de manière lisse
+%et progressive, c'est à dire sans frontières intermédiaires, rendant le
+%résultat homogène. Un autre avantage de cette méthode est de garder le
+%nombre de triangles affichés constant, en répartissant les triangles
+%dans les différents niveaux de détails.
 
 %http://tulrich.com/geekstuff/sig-notes.pdf
 %http://hhoppe.com/gpugcm.pdf
