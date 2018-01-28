@@ -132,9 +132,9 @@ maillage en temps réel en fonction de la distance à la caméra.
 \addcontentsline{toc}{chapter}{État de l'art}
 \setcounter{chapter}{2}
 
-L'objectif final du projet est d'optimiser l'affichage de la planète grâce à un système de niveau de détails variant en fonction de l'éloignement de la caméra. Plusieurs implémentations allant dans ce sens existent et ont déja été publiées.
-Notre projet sera basé sur la technique décrite par Filip Strugar en 2010, \textit{Continuous Distance Dependent Level of Detail for Rendering Heightmaps}.
-D'autre projets similaires existent mais utilisent des structures de données différentes, l'utilisation d'un système de \textbf{chunks} ou encore de \textbf{clipmaps}. Bien que toutes ces techniques soient différentes, elles se basent sur le même principe fondamental, rajouter à la volée des détails sur les objets proches.
+%L'objectif final du projet est d'optimiser l'affichage de la planète grâce à un système de niveau de détails variant en fonction de l'éloignement de la caméra. Plusieurs implémentations allant dans ce sens existent et ont déja été publiées.
+%Notre projet sera basé sur la technique décrite par Filip Strugar en 2010, \textit{Continuous Distance Dependent Level of Detail for Rendering Heightmaps}.
+%D'autre projets similaires existent mais utilisent des structures de données différentes, l'utilisation d'un système de \textbf{chunks} ou encore de \textbf{clipmaps}. Bien que toutes ces techniques soient différentes, elles se basent sur le même principe fondamental, rajouter à la volée des détails sur les objets proches.
 
 %Nous adapterons la méthode de \cite{CDLOD} qui utilise le \emph{GPU}
 %pour développer une version \emph{CPU}. Cette méthode a l'avantage de
@@ -143,6 +143,18 @@ D'autre projets similaires existent mais utilisent des structures de données di
 %résultat homogène. Un autre avantage de cette méthode est de garder le
 %nombre de triangles affichés constant, en répartissant les triangles
 %dans les différents niveaux de détails.
+
+De nombreuses applications utilisent des techniques d'optimisation de l'affichage. Notament les applications qui demandent de bonnes performances tel que les simulations 3D ou les jeux vidéos.
+%Génération Procédural
+Dans le cas du développement d'un environement 3D il est souvent fait appel à des techniques de génération procédural, par exemple le logiciel terragen qui est utilisé dans le monde du cinéma ou encore Elite dangerous dans le monde du jeux vidéos.
+Ces deux applications utilisent des mécanisme de génération procédurale pour créer respectivement des planètes et une galaxie.
+%% TODO: Mettre en référence Terragen et Elite Dangerous dans la Bib
+
+%LOD et dérivé
+Plusieurs algorithmes peuvent être utilisé dans la mise en place d'un système de niveau de détail dynamique, tous d'abord le \cite{CDLOD} qui est utilisé comme référence dans le cadre de se projet. Ce dernier sera adapté car il utilise le \emph{GPU}. Il a l'avantage de rattacher les maillages des différents niveaux de détails de manière lisse et progressive c'est à dire sans frontières intermédiaires, rendant le résultat homogène.
+Un autre avantage de cette méthode est de garder le nombre de triangles affichés constant, en répartissant les triangles dans les différents niveaux de détails.\\
+Une autre approche serait de mettre à jour des zones entière de terrain, comme détaillé par \cite{DRAFT}. Cet algorithme ne permet pas de garder un nombre constant de triangles affichés par le fait qu'ils s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
+
 
 %http://tulrich.com/geekstuff/sig-notes.pdf
 %http://hhoppe.com/gpugcm.pdf
