@@ -120,7 +120,7 @@ son affichage. Le projet comportera aussi une application permettant le
 rendu de cette sphère en trois dimensions, afin de pouvoir visualiser le
 fonctionnement du système de \emph{LOD}, ainsi qu'un moyen de mesurer
 les performances du système. Comme demandé, notre projet se basera sur
-la méthode proposée dans \cite{CDLOD}, permettant de génére le
+la méthode proposée dans \cite{CDLOD}, permettant de générer le
 maillage en temps réel en fonction de la distance à la caméra. 
 
 %-----------------------------------------------------------------%
@@ -144,16 +144,16 @@ maillage en temps réel en fonction de la distance à la caméra.
 %nombre de triangles affichés constant, en répartissant les triangles
 %dans les différents niveaux de détails.
 
-De nombreuses applications utilisent des techniques d'optimisation de l'affichage. Notament les applications qui demandent de bonnes performances tel que les simulations 3D ou les jeux vidéos.
+De nombreuses applications utilisent des techniques d'optimisation de l'affichage. Notamment les applications qui demandent de bonnes performances tel que les simulations 3D ou les jeux vidéos.
 %Génération Procédural
-Dans le cas du développement d'un environement 3D il est souvent fait appel à des techniques de génération procédural, par exemple le logiciel terragen qui est utilisé dans le monde du cinéma ou encore Elite dangerous dans le monde du jeux vidéos.
+Dans le cas du développement d'un environnement 3D il est souvent fait appel à des techniques de génération procédural, par exemple le logiciel terragen qui est utilisé dans le monde du cinéma ou encore Elite dangerous dans le monde du jeux vidéos.
 Ces deux applications utilisent des mécanisme de génération procédurale pour créer respectivement des planètes et une galaxie.
 %% TODO: Mettre en référence Terragen et Elite Dangerous dans la Bib
 
 %LOD et dérivé
 Plusieurs algorithmes peuvent être utilisé dans la mise en place d'un système de niveau de détail dynamique, tous d'abord le \cite{CDLOD} qui est utilisé comme référence dans le cadre de se projet. Ce dernier sera adapté car il utilise le \emph{GPU}. Il a l'avantage de rattacher les maillages des différents niveaux de détails de manière lisse et progressive c'est à dire sans frontières intermédiaires, rendant le résultat homogène.
 Un autre avantage de cette méthode est de garder le nombre de triangles affichés constant, en répartissant les triangles dans les différents niveaux de détails.\\
-Une autre approche serait de mettre à jour des zones entière de terrain, comme détaillé par \cite{DRAFT}. Cet algorithme ne permet pas de garder un nombre constant de triangles affichés par le fait qu'ils s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
+Une autre approche serait de mettre à jour des zones entière de terrain, comme détaillé par \cite{MassiveTerrain}. Cet algorithme ne permet pas de garder un nombre constant de triangles affichés par le fait qu'ils s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
 
 %http://tulrich.com/geekstuff/sig-notes.pdf
@@ -209,13 +209,14 @@ une planète.
 
 \subsection{Interface graphique}
 
-
-
-\subsection{Interface graphique}
-
-Générer une carte de hauteur décrivant le terrain de la planète, et l'utiliser pour former le maillage d'une sphère et l'afficher à l'écran. L'utilisateur doit pouvoir déplacer la caméra en trois dimensions dans la scène à l'aide du clavier et/ou de la souris.
+Afficher à l'écran une scène en trois dimensions représentant la planète.\\
+La surface de la planète sera affichée en maillage, afin de bien voir
+les triangles créés par l'algorithme.\\
+Déplacer la caméra dans l'espace en fonction des entrées clavier et
+souris de l'utilisateur\\
 
 \subsection{Structure de donnée}
+%TODO revoir la section, citer l'origine de la figure (CDLOD)
 
 Implémenter une structure de donnée représentant un quad-tree à utiliser avec les algorithmes de CDLOD (voir figure \ref{fig:quadtree})
 
@@ -227,47 +228,53 @@ Implémenter une structure de donnée représentant un quad-tree à utiliser ave
 
 \subsection{CDLOD}
 
-Implémenter un algorithme de CDLOD permettant de générer des niveaux de détails d'une carte de hauteur. L'algorithme doit être implémenté sous forme de quadtree, et livré dans une bibliothèque séparée du programme principal. La bibliothèque fonctionne comme une base de données. Les paramètres des requêtes sont le niveau de détail demandé (le niveau de détail le plus bas correspond à la carte de hauteur d'origine) et la zone ou le point demandé, sous forme de coordonnées polaires. La base de donnée converti ces coordonnées polaires en coordonnées sur le plan de la carte de hauteur.
-
-Associer la bibliothèque de niveau de détail avec l'affichage de la scène. Le maillage de la planète doit s'adapter à la distance à la caméra. Plus la caméra est éloignée d'un point, moins ce point doit être détaillé (son niveau de détail est plus grand).
+Implémenter un algorithme inspiré de \cite{CDLOD}, conformément aux demandes du client.
+L'algorithme permettra de générer les différents niveaux de détails de
+la surface de la planète, et sera accessible dans une bibliothèque
+séparée du reste du projet.\\
+La bibliothèque exposera des fonctions permettant de générer la base de
+données des niveaux de détails à partir du terrain précédemment généré,
+et de récupérer le nouveau terrain à afficher à partir du champs de
+vision de la caméra. Le terrain retourné n'est donc que la partie
+visible du terrain de la planète, et plus les points sont éloignés de la
+caméra, moins ils sont détaillés.
 
 \subsection{Mesure des performances}
 
-Afficher le nombre de trames par seconde à l'écran.
+Mesurer le nombre d'images générées par seconde.\\
+L'afficher dans un coin de l'écran.\\
 
-Proposer un moyen de mesurer les performances à l’exécution (temps nécessaire pour générer une image, réponse de la base de données, ...).
-% J'aime pas cette phrase et c'est moi qui l'ai écrite -Rémy
-
-
-\subsection{Documentations}
-
-Documenter les interfaces du projets ainsi que les implémentations, en anglais. La documentation des interfaces doit être extractible.
-% Je veux vraiment sortir doxygen pour le principe, mais on peut faire sauter le passage dans les besoins. -Rémy
-Utiliser un style de code défini.
-
-
-\subsection{Tests}
-
-Mettre en place des tests unitaires. Tout les tests  seront utilisés au long du projet afin de vérifier que les nouvelles fonctionnalités apportées ne dérangent pas le bon fonctionnement des précédentes.
-% ctest pour les tests ? C'est livré avec CMake donc pas chiant pour les lancer.
-% D'intégration ? De validation ? Ca commence à faire beaucoup de tests mais ça peut être intéressant les tests d'intégration -Rémy
-
+Mesurer le temps de réponse de la bibliothèque à chaque requête.\\
+Afficher les résultats dans la sortie standard à la fin de l'exécution
+du programme.\\
 
 %---------------------------%
-%   BESOINS NON-FONCTIONNELS
+%   BESOINS NON FONCTIONNELS
 %---------------------------%
 \newpage
 
-\section{Besoins non-fonctionnels}
+\section{Besoins non fonctionnels}
+
 \subsection{Intégration continue}
 
-Mettre en place un système d'intégration continue en parallèle au projet afin d'éxécuter les tests et de formater le code de manière uniforme.
-% A appliquer avec un outil type clang-format. Va falloir le définir
-% A chacun de configurer son git pour lancer l'outil avant chaque commit -Rémy
+Mettre en place un système d'intégration continue en parallèle au projet
+afin d'exécuter les tests.\\
 
+\subsection{Gestionnaire de versions}
 
-\subsection{Gestionnaire de versions }
-Utiliser un outil de gestion de version afin de disposer d'un dépôt partagé et de suivre l'évolution du projet. Git sera l'outil utilisé, avec un dépôt hébergé sur le serveur Savane du CREMI.
+Utiliser un outil de gestion de version afin de disposer d'un dépôt
+partagé et de suivre l'évolution du projet.\\
+
+\subsection{Documentations}
+
+Documenter les interfaces du projets ainsi que les implémentations, en
+anglais.\\
+
+\subsection{Tests}
+
+Mettre en place des tests unitaires. Tout les tests seront utilisés au
+long du projet afin de vérifier que les nouvelles fonctionnalités
+apportées ne dérangent pas le bon fonctionnement des précédentes.
 
 %-----------------------------------------------------------------%
 %   MISE EN OEUVRE
