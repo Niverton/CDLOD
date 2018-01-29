@@ -116,12 +116,14 @@ réduire le nombre de triangles à traiter.
 L'objectif de ce projet est d'implémenter un système de \emph{LOD} (
 \emph{Level of Detail}: niveau de détail) à appliquer sur le maillage
 d'une sphère en vue d'une application en temps réel, afin d'optimiser
-son affichage. Le projet comportera aussi une application permettant le
-rendu de cette sphère en trois dimensions, afin de pouvoir visualiser le
-fonctionnement du système de \emph{LOD}, ainsi qu'un moyen de mesurer
-les performances du système. Comme demandé, notre projet se basera sur
-la méthode proposée dans \cite{CDLOD}, permettant de générer le
-maillage en temps réel en fonction de la distance à la caméra. 
+son affichage. Ce système sera fournis en temps que bibliothèque de
+fonctions.
+Le projet comportera aussi une application permettant le rendu de cette
+sphère en trois dimensions, afin de pouvoir visualiser le fonctionnement
+du système de \emph{LOD}, ainsi qu'un moyen de mesurer les performances
+du système. Comme demandé, notre projet se basera sur la méthode
+proposée dans \cite{CDLOD}, permettant de générer le maillage en temps
+réel en fonction de la distance à la caméra. 
 
 %-----------------------------------------------------------------%
 %   État de l’existant
@@ -158,7 +160,7 @@ performances tel que les simulations 3D ou les jeux vidéos.
 %Génération Procédural
 Dans le cas du développement d'un environnement 3D il est souvent fait
 appel à des techniques de génération procédural, par exemple le logiciel
-terragen qui est utilisé dans le monde du cinéma ou encore Elite
+Terragen qui est utilisé dans le monde du cinéma ou encore Elite
 dangerous dans le monde du jeux vidéos.  Ces deux applications utilisent
 des mécanisme de génération procédurale pour créer respectivement des
 planètes et une galaxie.
@@ -173,11 +175,11 @@ maillages des différents niveaux de détails de manière lisse et
 progressive c'est à dire sans frontières intermédiaires, rendant le
 résultat homogène.  Un autre avantage de cette méthode est de garder le
 nombre de triangles affichés constant, en répartissant les triangles
-dans les différents niveaux de détails.\\ Une autre approche serait de
-mettre à jour des zones entière de terrain, comme détaillé par
-\cite{MassiveTerrain}. Cet algorithme ne permet pas de garder un nombre
-constant de triangles affichés par le fait qu'ils s'affichent par
-groupe. Il est aussi implémenté sur \emph{GPU}.\\
+dans les différents niveaux de détails.\\
+Une autre approche serait de mettre à jour des zones entière de terrain,
+comme détaillé par \cite{MassiveTerrain}. Cet algorithme ne permet pas
+de garder un nombre constant de triangles affichés par le fait qu'ils
+s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
 
 %http://tulrich.com/geekstuff/sig-notes.pdf
@@ -226,9 +228,9 @@ groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
 \subsection{Génération de terrain}
 
-Générer la carte de hauteur d'un terrain.\\
+Générer aléatoirement la carte de hauteur d'un terrain.\\
 Construire une sphère à partir de la carte rectangulaire afin d'obtenir
-une planète.
+une planète.\\
 
 
 \subsection{Interface graphique}
@@ -237,8 +239,9 @@ Afficher à l'écran une scène en trois dimensions représentant la planète.\\
 La surface de la planète sera affichée en maillage, afin de bien voir
 les triangles créés par l'algorithme.\\
 Déplacer la caméra dans l'espace en fonction des entrées clavier et
-souris de l'utilisateur\\
-Afficher dans un coin de l'écran les informations sur les performances sous forme du nombre d'images par seconde.
+souris de l'utilisateur.\\
+Afficher dans un coin de l'écran les informations sur les performances
+sous forme du nombre d'images par seconde.\\
 
 \subsection{Structure de donnée}
 
@@ -249,35 +252,36 @@ Un quadtree est un arbre dont chaque nœud possède quatre fils, cette
 structure de donnée nous permet de subdiviser le terrain, chaque nœud
 représentant une surface du terrain. Une nœud contient la représentation
 de sa zone à son niveau de détail, et quatre fils représentant chacun un
-quart de la zone du parent au niveau de détail supérieur.
+quart de la zone du parent au niveau de détail supérieur.\\
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
   \includegraphics[scale=0.5]{img/Quadtree.png}
-  \caption{Quad-tree}
+  \caption{Quadtree \cite{CDLOD}}
   \label{fig:quadtree}
 \end{figure}
 
 \subsection{CDLOD}
 
 Implémenter un algorithme inspiré de \cite{CDLOD}, conformément aux
-demandes du client.
+demandes du client.\\
 L'algorithme permettra de générer les différents niveaux de détails de
 la surface de la planète, et sera accessible dans une bibliothèque
 séparée du reste du projet.\\
-La bibliothèque exposera des fonctions permettant de générer la base de
-données des niveaux de détails à partir du terrain précédemment généré,
-et de récupérer le nouveau terrain à afficher à partir du champs de
-vision de la caméra. Le terrain retourné n'est donc que la partie
-visible du terrain de la planète, et plus les points sont éloignés de la
-caméra, moins ils sont détaillés.\\
-La structure de donnée et les algorithmes correspondant seront fournis indépendamment de la partie affichage graphique dans une interface de programmation.\\
-L'API peut être vue comme une base de donnée, des requêtes sont faites en lui donnant comme données de départ deux coordonnées polaire représentant une zone sur la sphère ainsi que les coordonnées de la caméra.
-La bibliothèque retournera un arbre composé des différentes cartes de hauteurs.
+La structure de donnée et les algorithmes correspondant seront fournis
+indépendamment de la partie affichage graphique dans une interface de
+programmation.\\
+L'API peut être vue comme une base de donnée, des requêtes sont faites
+en lui donnant comme données de départ deux coordonnées polaire
+représentant une zone sur la sphère ainsi que les coordonnées de la
+caméra.\\
+La bibliothèque retournera un arbre composé des différentes cartes de
+hauteurs.\\
 
 \subsection{Mesure des performances}
 
 Mesurer le nombre d'images générées par seconde, les afficher à l'écran.\\
-Mesurer le temps de réponse de la bibliothèque à chaque requête. Afficher les résultats dans la sortie standard à la fin de l'exécution
+Mesurer le temps de réponse de la bibliothèque à chaque requête.\\
+Afficher les résultats dans la sortie standard à la fin de l'exécution
 du programme.\\
 
 %---------------------------%
@@ -303,9 +307,10 @@ anglais.\\
 
 \subsection{Tests}
 
-Mettre en place des tests unitaires. Tout les tests seront utilisés au
-long du projet afin de vérifier que les nouvelles fonctionnalités
-apportées ne dérangent pas le bon fonctionnement des précédentes.
+Mettre en place des tests unitaires.\\
+Tout les tests seront utilisés au long du projet afin de vérifier que
+les nouvelles fonctionnalités apportées ne dérangent pas le bon
+fonctionnement des précédentes.
 
 %-----------------------------------------------------------------%
 %   MISE EN OEUVRE
@@ -324,8 +329,11 @@ apportées ne dérangent pas le bon fonctionnement des précédentes.
 
 \section{Diagramme de Gantt}
 
-
-%TODO 
+\begin{figure}[!h]
+  \includegraphics[scale=0.5]{img/gantt.png}
+  \caption{Diagramme de Gantt}
+  \label{fig:gantt}
+\end{figure}
 
 \bibliography{biblio}{}
 \bibliographystyle{plainnat}
