@@ -238,6 +238,7 @@ La surface de la planète sera affichée en maillage, afin de bien voir
 les triangles créés par l'algorithme.\\
 Déplacer la caméra dans l'espace en fonction des entrées clavier et
 souris de l'utilisateur\\
+Afficher dans un coin de l'écran les informations sur les performances sous forme du nombre d'images par seconde.
 
 \subsection{Structure de donnée}
 
@@ -268,21 +269,20 @@ données des niveaux de détails à partir du terrain précédemment généré,
 et de récupérer le nouveau terrain à afficher à partir du champs de
 vision de la caméra. Le terrain retourné n'est donc que la partie
 visible du terrain de la planète, et plus les points sont éloignés de la
-caméra, moins ils sont détaillés.
+caméra, moins ils sont détaillés.\\
+La structure de donnée et les algorithmes correspondant seront fournis indépendamment de la partie affichage graphique dans une interface de programmation.\\
+L'API peut être vue comme une base de donnée, des requêtes sont faites en lui donnant comme données de départ deux coordonnées polaire représentant une zone sur la sphère ainsi que les coordonnées de la caméra.
+La bibliothèque retournera un arbre composé des différentes cartes de hauteurs.
 
 \subsection{Mesure des performances}
 
-Mesurer le nombre d'images générées par seconde.\\
-L'afficher dans un coin de l'écran.\\
-
-Mesurer le temps de réponse de la bibliothèque à chaque requête.\\
-Afficher les résultats dans la sortie standard à la fin de l'exécution
+Mesurer le nombre d'images générées par seconde, les afficher à l'écran.\\
+Mesurer le temps de réponse de la bibliothèque à chaque requête. Afficher les résultats dans la sortie standard à la fin de l'exécution
 du programme.\\
 
 %---------------------------%
 %   BESOINS NON FONCTIONNELS
 %---------------------------%
-\newpage
 
 \section{Besoins non fonctionnels}
 
