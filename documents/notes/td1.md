@@ -14,7 +14,7 @@
 
 ## Etat de l'existant
 
-- Renommer la section :V
+- Renommer la section
 - Citer tout les documents en détaillant pourquoi ils sont intéressants
     - Expliquer les différentes méthodes utilisées, les comparer
 - Trouver des projets similaires au notre et les comparer ?
