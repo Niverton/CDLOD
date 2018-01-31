@@ -237,13 +237,6 @@ s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
 \section{Besoins fonctionnels}
 
-\subsection{Génération de terrain}
-
-Générer aléatoirement la carte de hauteur d'un terrain.\\
-Construire une sphère à partir de la carte rectangulaire afin d'obtenir
-une planète.\\
-
-
 \subsection{Interface graphique}
 
 Afficher à l'écran une scène en trois dimensions représentant la planète.\\
@@ -253,6 +246,13 @@ Déplacer la caméra dans l'espace en fonction des entrées clavier et
 souris de l'utilisateur.\\
 Afficher dans un coin de l'écran les informations sur les performances
 sous forme du nombre d'images par seconde.\\
+
+\subsection{Génération de terrain}
+
+Générer aléatoirement la carte de hauteur d'un terrain.\\
+Construire une sphère à partir de la carte rectangulaire afin d'obtenir
+une planète.\\
+Cette partie ne sera pas implémenté, elle sera utilisé grâce à une bibliothèque de création de carte de hauteur.
 
 \subsection{Structure de donnée}
 
@@ -301,6 +301,19 @@ du programme.\\
 
 \section{Besoins non fonctionnels}
 
+\subsection{Structure de donnée}
+
+Les cartes de hauteur seront stockées dans des tableaux de flottant de dimension 
+deux. Ainsi cela nous laisse une certaine marge de manœuvre sur la précision des 
+hauteurs. Chaque hauteur prendra donc 4 octets dans la mémoire vive. Nous estimons 
+que la taille total de l'arbre dans la mémoire sera de l'ordre de la
+centaine de Mo.\\
+
+\subsection{Performances}
+
+L'objectif du projet étant de tester les performances d'une implémentation de \cite{CDLOD}, 
+il n'y a pas de contrainte de performance imposées par le client.% Cependant, on peut estimer des performances moyennes en ce basant sur des projets déjà existant. 
+
 \subsection{Documentations}
 
 Documenter les interfaces du projets ainsi que les implémentations, en
@@ -313,12 +326,20 @@ Tout les tests seront utilisés au long du projet afin de vérifier que
 les nouvelles fonctionnalités apportées ne dérangent pas le bon
 fonctionnement des précédentes.
 
+\subsection{Robustesse}
+Lors de la mise à jours du terrain, des nouveaux sommets sont créés et sont rattaché 
+à ces voisins de sorte a former un triangle. L'implémentation ne doit par permettre à 
+un sommet de se retrouver seul, c'est à dire éviter la formation de trous dans le maillage.\\
+Elle doit aussi éviter de former des triangles qui s'intersectent.
+Pour cela, pour un sommet dans un maillage, ce sommet sera relié uniquement a ces plus
+ proches voisins
+
 %-----------------------------------------------------------------%
 %   MISE EN OEUVRE
 %-----------------------------------------------------------------%
 \newpage
 
-\chapter*{Mise en Oeuvre}
+\chapter*{Mise en Œuvre}
 \addcontentsline{toc}{chapter}{Mise en Oeuvre}
 \setcounter{chapter}{4}
 
