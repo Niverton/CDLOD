@@ -95,6 +95,17 @@ Boris \textsc{Mansencal}
 \addcontentsline{toc}{chapter}{Introduction}
 \setcounter{chapter}{1}
 
+L'objectif de ce projet est de générer le terrain \ref{fig:terrain}
+d'une planète procéduralement et de l'afficher à l'écran.
+
+\begin{figure}[!h]
+  \includegraphics[scale=0.5]{img/terrain.png}
+  \caption{Terrain procédural\protect\footnotemark}
+  \label{fig:terrain}
+\end{figure}
+%Parce que latex
+\footnotetext{Source: https://youtu.be/AT7h8pYJRiw}
+
 Un objet en trois dimensions complexe est un ensemble de sommets reliés
 entre eux par des arrêtes, formant des faces triangulaires. L'ensemble
 de ces points et arrêtes est appelé maillage. Ces triangles sont ensuite
@@ -111,19 +122,19 @@ exemple un terrain. Une partie du terrain est proche de l'observateur,
 nous voulons donc en afficher les détails, mais une autre partie est
 plus éloignée, et les détails seront moins visibles sur l'image finale.
 On peut donc réduire le nombre de triangle de la partie éloignée afin de
-réduire le nombre de triangles à traiter.
+réduire le nombre de triangles à traiter. Pour simplifier le stockage
+des données du terrain, on peut représenter les points du maillage
+uniquement par leur hauteur par rapport au rayon de la sphère. Un
+tableau représentant la hauteur d'un ensemble de points reliés est
+appelé carte de hauteur ou \emph{heightmap}.
 
 L'objectif de ce projet est d'implémenter un système de \emph{LOD} (
 \emph{Level of Detail}: niveau de détail) à appliquer sur le maillage
-d'une sphère en vue d'une application en temps réel, afin d'optimiser
-son affichage. Ce système sera fournis en temps que bibliothèque de
-fonctions.
-Le projet comportera aussi une application permettant le rendu de cette
-sphère en trois dimensions, afin de pouvoir visualiser le fonctionnement
-du système de \emph{LOD}, ainsi qu'un moyen de mesurer les performances
-du système. Comme demandé, notre projet se basera sur la méthode
-proposée dans \cite{CDLOD}, permettant de générer le maillage en temps
-réel en fonction de la distance à la caméra. 
+d'une sphère en vue d'une application en temps interactif, afin
+d'optimiser son affichage. Le projet comportera une application
+permettant le rendu de cette sphère en trois dimensions, afin de pouvoir
+visualiser le fonctionnement du système de \emph{LOD}, ainsi qu'un moyen
+de mesurer les performances du système.
 
 %-----------------------------------------------------------------%
 %   État de l’existant
@@ -228,10 +239,6 @@ s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
 \subsection{Génération de terrain}
 
-Générer aléatoirement la carte de hauteur d'un terrain. 
-Nous aurons besoin d'une méthode pour traduire les points dans la heightmap en point cartésiens 3D.
-Pour cela, nous comptons pour l'instant prendre le premier point de la heightmap et le mappé sur une une vrai coordonnée 3d (non nul). Pour retrouver la position 3D du point P (x,y), il suffit d'éxécuter une rotation proportionnelle en x et en y du vecteur formé par le mappé le centre de la planete. Ensuite, on norme le vecteur à la valeur contenue dans la height map. 
-
 
 \subsection{Interface graphique}
 
@@ -242,6 +249,25 @@ Déplacer la caméra dans l'espace en fonction des entrées clavier et
 souris de l'utilisateur.\\
 Afficher dans un coin de l'écran les informations sur les performances
 sous forme du nombre d'images par seconde.\\
+
+\subsection{Génération de terrain}
+
+Générer aléatoirement la carte de hauteur d'un terrain.
+La génération se fera à partir d'un algorithme de bruit de perlin déjà
+implémenté dans une dépendance, par exemple \cite{libnoise}. Ce type
+d'algorithme est souvent utilisé dans le cadre de génération
+procédurale pour sa simplicité.\\
+Construire une sphère à partir de la carte rectangulaire afin d'obtenir
+une planète.\\
+Nous aurons besoin d'une méthode pour transformer les points dans la carte 2D en point cartésiens 3D.
+Pour cela, nous comptons pour l'instant prendre le premier point de la
+carte de hauteur et le transposer sur une une vraie coordonnée 3D (A,B,C) (non
+nulle). Pour retrouver la position 3D d'un point quelconque  P (x,y), il suffit
+d'éxécuter une rotation proportionnelle en x et en y du vecteur formé
+par (A,B,C) et le centre de la planete. Ensuite, on norme le vecteur à la
+valeur contenue dans la height map. 
+
+
 
 \subsection{Structure de donnée}
 
@@ -256,7 +282,7 @@ quart de la zone du parent au niveau de détail supérieur.\\
 
 \begin{figure}[!h]
   \includegraphics[scale=0.5]{img/Quadtree.png}
-  \caption{Quadtree \cite{CDLOD}}
+  \caption{quadtree \cite{CDLOD}}
   \label{fig:quadtree}
 \end{figure}
 
@@ -290,15 +316,26 @@ du programme.\\
 
 \section{Besoins non fonctionnels}
 
-\subsection{Intégration continue}
+\subsection{Structure de donnée}
 
-Mettre en place un système d'intégration continue en parallèle au projet
-afin d'exécuter les tests.\\
+Les cartes de hauteur seront stockées dans des tableaux de flottant de dimension 
+deux. Ainsi cela nous laisse une certaine marge de manœuvre sur la précision des 
+hauteurs. Chaque hauteur prendra donc 4 octets dans la mémoire vive. Nous estimons 
+que la taille total de l'arbre dans la mémoire sera de l'ordre de la
+centaine de Mo.\\
 
-\subsection{Gestionnaire de versions}
+\subsection{Performances}
 
-Utiliser un outil de gestion de version afin de disposer d'un dépôt
-partagé et de suivre l'évolution du projet.\\
+L'objectif du projet étant de tester les performances d'une
+implémentation de \cite{CDLOD}, il n'y a pas de contrainte de
+performance imposées par le client. Nous pouvons cependant estimer les
+performances de notre système en regardant des algorithmes similaires,
+comme par exemple \cite{PlanetRenderer}. L'algorithme étant implémenté
+sur GPU, notre implémentation CPU ne sera pas aussi performante.
+Néanmoins nous nous attendons à des performances raisonnables de l'ordre
+de plusieurs centaines d'images par secondes sur un ordinateur récent.
+%TODO Si possible intégrer capture d'écran de PlanetRenderer avec
+%compteur de FPS bien visible
 
 \subsection{Documentations}
 
@@ -312,12 +349,21 @@ Tout les tests seront utilisés au long du projet afin de vérifier que
 les nouvelles fonctionnalités apportées ne dérangent pas le bon
 fonctionnement des précédentes.
 
+\subsection{Robustesse}
+Lors de la mise à jours du terrain, des nouveaux sommets sont créés et
+sont rattaché à ces voisins de sorte à former un triangle.
+L'implémentation ne doit par permettre à un sommet de se retrouver seul,
+c'est à dire éviter la formation de trous dans le maillage.\\
+Elle doit aussi éviter de former des triangles qui s'intersectent.  Pour
+cela, pour un sommet dans un maillage, ce sommet sera relié uniquement à
+ses plus proches voisins.
+
 %-----------------------------------------------------------------%
 %   MISE EN OEUVRE
 %-----------------------------------------------------------------%
 \newpage
 
-\chapter*{Mise en Oeuvre}
+\chapter*{Mise en Œuvre}
 \addcontentsline{toc}{chapter}{Mise en Oeuvre}
 \setcounter{chapter}{4}
 
