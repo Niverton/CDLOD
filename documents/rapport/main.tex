@@ -267,7 +267,7 @@ quart de la zone du parent au niveau de détail supérieur.\\
 
 \begin{figure}[!h]
   \includegraphics[scale=0.5]{img/Quadtree.png}
-  \caption{quadtree \cite{cdlod}}
+  \caption{quadtree \cite{CDLOD}}
   \label{fig:quadtree}
 \end{figure}
 
@@ -311,8 +311,16 @@ centaine de Mo.\\
 
 \subsection{Performances}
 
-L'objectif du projet étant de tester les performances d'une implémentation de \cite{CDLOD}, 
-il n'y a pas de contrainte de performance imposées par le client.% Cependant, on peut estimer des performances moyennes en ce basant sur des projets déjà existant. 
+L'objectif du projet étant de tester les performances d'une
+implémentation de \cite{CDLOD}, il n'y a pas de contrainte de
+performance imposées par le client. Nous pouvons cependant estimer les
+performances de notre système en regardant des algorithmes similaires,
+comme par exemple \cite{PlanetRenderer}. L'algorithme étant implémenté
+sur GPU, notre implémentation CPU ne sera pas aussi performante.
+Néanmoins nous nous attendons à des performances résonnables de l'ordre
+de plusieurs centaines d'images par secondes sur un ordinateur récent.
+%TODO Si possible intégrer capture d'écran de PlanetRenderer avec
+%compteur de FPS bien visible
 
 \subsection{Documentations}
 
