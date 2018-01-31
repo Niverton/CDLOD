@@ -228,9 +228,9 @@ s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
 \subsection{Génération de terrain}
 
-Générer aléatoirement la carte de hauteur d'un terrain.\\
-Construire une sphère à partir de la carte rectangulaire afin d'obtenir
-une planète.\\
+Générer aléatoirement la carte de hauteur d'un terrain. 
+Nous aurons besoin d'une méthode pour traduire les points dans la heightmap en point cartésiens 3D.
+Pour cela, nous comptons pour l'instant prendre le premier point de la heightmap et le mappé sur une une vrai coordonnée 3d (non nul). Pour retrouver la position 3D du point P (x,y), il suffit d'éxécuter une rotation proportionnelle en x et en y du vecteur formé par le mappé le centre de la planete. Ensuite, on norme le vecteur à la valeur contenue dans la height map. 
 
 
 \subsection{Interface graphique}
