@@ -226,13 +226,6 @@ s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
 \section{Besoins fonctionnels}
 
-\subsection{Génération de terrain}
-
-Générer aléatoirement la carte de hauteur d'un terrain.\\
-Construire une sphère à partir de la carte rectangulaire afin d'obtenir
-une planète.\\
-
-
 \subsection{Interface graphique}
 
 Afficher à l'écran une scène en trois dimensions représentant la planète.\\
@@ -242,6 +235,13 @@ Déplacer la caméra dans l'espace en fonction des entrées clavier et
 souris de l'utilisateur.\\
 Afficher dans un coin de l'écran les informations sur les performances
 sous forme du nombre d'images par seconde.\\
+
+\subsection{Génération de terrain}
+
+Générer aléatoirement la carte de hauteur d'un terrain.\\
+Construire une sphère à partir de la carte rectangulaire afin d'obtenir
+une planète.\\
+Cette partie ne sera pas implémenté, elle sera utilisé grâce à une bibliothèque de création de carte de hauteur.
 
 \subsection{Structure de donnée}
 
@@ -290,15 +290,23 @@ du programme.\\
 
 \section{Besoins non fonctionnels}
 
-\subsection{Intégration continue}
+%\subsection{Intégration continue}
+%
+%Mettre en place un système d'intégration continue en parallèle au projet
+%afin d'exécuter les tests.\\
 
-Mettre en place un système d'intégration continue en parallèle au projet
-afin d'exécuter les tests.\\
+%\subsection{Gestionnaire de versions}
+%
+%Utiliser un outil de gestion de version afin de disposer d'un dépôt
+%partagé et de suivre l'évolution du projet.\\
 
-\subsection{Gestionnaire de versions}
+Les cartes de hauteur seront stockées dans des tableaux de flottant de dimension 
+deux. Ainsi cela nous laisse une certaine marge de manœuvre sur la précision des 
+hauteurs. Chaque hauteur prendra donc 4 octets dans la mémoire vive. Nous estimons 
+que la consommation total de l'arbre sera de l'ordre de 100Mo.\\
 
-Utiliser un outil de gestion de version afin de disposer d'un dépôt
-partagé et de suivre l'évolution du projet.\\
+L'objectif du projet étant de tester les performances d'une implémentation de \cite{CDLOD}, 
+il n'y a pas de contrainte de performance imposées par le client.% Cependant, on peut estimer des performances moyennes en ce basant sur des projets déjà existant. 
 
 \subsection{Documentations}
 
@@ -312,12 +320,20 @@ Tout les tests seront utilisés au long du projet afin de vérifier que
 les nouvelles fonctionnalités apportées ne dérangent pas le bon
 fonctionnement des précédentes.
 
+\subsection{Robustesse}
+Lors de la mise à jours du terrain, des nouveaux sommets sont créés et sont rattaché 
+à ces voisins de sorte a former un triangle. L'implémentation ne doit par permettre à 
+un sommet de se retrouver seul, c'est à dire éviter la formation de trous dans le maillage.\\
+Elle doit aussi éviter de former des triangles qui s'intersectent.
+Pour cela, pour un sommet dans un maillage, ce sommet sera relié uniquement a ces plus
+ proches voisins
+
 %-----------------------------------------------------------------%
 %   MISE EN OEUVRE
 %-----------------------------------------------------------------%
 \newpage
 
-\chapter*{Mise en Oeuvre}
+\chapter*{Mise en Œuvre}
 \addcontentsline{toc}{chapter}{Mise en Oeuvre}
 \setcounter{chapter}{4}
 
