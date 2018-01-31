@@ -130,7 +130,7 @@ appelé carte de hauteur ou \emph{heightmap}.
 
 L'objectif de ce projet est d'implémenter un système de \emph{LOD} (
 \emph{Level of Detail}: niveau de détail) à appliquer sur le maillage
-d'une sphère en vue d'une application en temps intéractif, afin
+d'une sphère en vue d'une application en temps interactif, afin
 d'optimiser son affichage. Le projet comportera une application
 permettant le rendu de cette sphère en trois dimensions, afin de pouvoir
 visualiser le fonctionnement du système de \emph{LOD}, ainsi qu'un moyen
@@ -320,7 +320,7 @@ performance imposées par le client. Nous pouvons cependant estimer les
 performances de notre système en regardant des algorithmes similaires,
 comme par exemple \cite{PlanetRenderer}. L'algorithme étant implémenté
 sur GPU, notre implémentation CPU ne sera pas aussi performante.
-Néanmoins nous nous attendons à des performances résonnables de l'ordre
+Néanmoins nous nous attendons à des performances raisonnables de l'ordre
 de plusieurs centaines d'images par secondes sur un ordinateur récent.
 %TODO Si possible intégrer capture d'écran de PlanetRenderer avec
 %compteur de FPS bien visible
@@ -338,12 +338,13 @@ les nouvelles fonctionnalités apportées ne dérangent pas le bon
 fonctionnement des précédentes.
 
 \subsection{Robustesse}
-Lors de la mise à jours du terrain, des nouveaux sommets sont créés et sont rattaché 
-à ces voisins de sorte a former un triangle. L'implémentation ne doit par permettre à 
-un sommet de se retrouver seul, c'est à dire éviter la formation de trous dans le maillage.\\
-Elle doit aussi éviter de former des triangles qui s'intersectent.
-Pour cela, pour un sommet dans un maillage, ce sommet sera relié uniquement a ces plus
- proches voisins
+Lors de la mise à jours du terrain, des nouveaux sommets sont créés et
+sont rattaché à ces voisins de sorte à former un triangle.
+L'implémentation ne doit par permettre à un sommet de se retrouver seul,
+c'est à dire éviter la formation de trous dans le maillage.\\
+Elle doit aussi éviter de former des triangles qui s'intersectent.  Pour
+cela, pour un sommet dans un maillage, ce sommet sera relié uniquement à
+ses plus proches voisins.
 
 %-----------------------------------------------------------------%
 %   MISE EN OEUVRE
