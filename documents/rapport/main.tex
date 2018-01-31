@@ -249,10 +249,13 @@ sous forme du nombre d'images par seconde.\\
 
 \subsection{Génération de terrain}
 
-Générer aléatoirement la carte de hauteur d'un terrain.\\
+Générer aléatoirement la carte de hauteur d'un terrain.
+La génération se fera à partir d'un algorithme de bruit de perlin déjà
+implémenté dans une dépendance, par exemple \cite{libnoise}. Ce type
+d'algorithme est souvent utilisé dans le cadre de génération
+procédurale pour sa simplicité.\\
 Construire une sphère à partir de la carte rectangulaire afin d'obtenir
 une planète.\\
-Cette partie ne sera pas implémenté, elle sera utilisé grâce à une bibliothèque de création de carte de hauteur.
 
 \subsection{Structure de donnée}
 
