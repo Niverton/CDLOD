@@ -259,13 +259,14 @@ d'algorithme est souvent utilisé dans le cadre de génération
 procédurale pour sa simplicité.\\
 Construire une sphère à partir de la carte rectangulaire afin d'obtenir
 une planète.\\
-Nous aurons besoin d'une méthode pour transformer les points dans la carte 2D en point cartésiens 3D.
+Nous aurons besoin d'une méthode pour transformer les points dans la
+carte 2D en point cartésiens 3D.
 Pour cela, nous comptons pour l'instant prendre le premier point de la
 carte de hauteur et le transposer sur une une vraie coordonnée 3D (A,B,C) (non
 nulle). Pour retrouver la position 3D d'un point quelconque  P (x,y), il suffit
-d'éxécuter une rotation proportionnelle en x et en y du vecteur formé
-par (A,B,C) et le centre de la planete. Ensuite, on norme le vecteur à la
-valeur contenue dans la height map. 
+d'exécuter une rotation proportionnelle en x et en y du vecteur formé
+par (A,B,C) et le centre de la planète. Ensuite, on norme le vecteur à la
+valeur contenue dans la carte de hauteur. 
 
 
 
@@ -328,14 +329,24 @@ centaine de Mo.\\
 
 L'objectif du projet étant de tester les performances d'une
 implémentation de \cite{CDLOD}, il n'y a pas de contrainte de
-performance imposées par le client. Nous pouvons cependant estimer les
-performances de notre système en regardant des algorithmes similaires,
-comme par exemple \cite{PlanetRenderer}. L'algorithme étant implémenté
-sur GPU, notre implémentation CPU ne sera pas aussi performante.
-Néanmoins nous nous attendons à des performances raisonnables de l'ordre
-de plusieurs centaines d'images par secondes sur un ordinateur récent.
-%TODO Si possible intégrer capture d'écran de PlanetRenderer avec
-%compteur de FPS bien visible
+performance imposées par le client. Nous pouvons prévoir grâce aux
+études de performances de \cite{CDLOD} l'impacte de performance de
+l'algorithme de CDLOD. Sur des processeurs performants de l'époque,
+\cite{CDLOD} mesure en moyenne 0.08ms de temps de parcours de l'arbre
+nécessaire pour générer le maillage du terrain. A cela devront s'ajouter
+les coups de génération du maillage, ainsi que les coups de rendu de la
+scène.  Pour atteindre un rendu très fluide, lorsque la caméra se
+déplace dans la scène, il faudrait atteindre au moins 60 images par
+secondes, donc passer moins de 16ms de calcul par image. \cite{CDLOD}
+atteint des performances élevées en effectuant une partie des calculs de
+la scène sur GPU.  Des algorithmes similaires à \cite{CDLOD} comme
+\cite{PlanetRenderer} atteignent plusieurs centaines d'images par
+secondes.\\
+Comme notre implémentation sera largement sur CPU, nos
+performances seront plus faibles, cependant les mesures de performances
+de \cite{CDLOD} sur du matériel à faible capacité de calcul (NVIDIA Ion)
+nous permettent de supposer que notre implémentation atteindra les 60
+images par seconde.
 
 \subsection{Documentations}
 
