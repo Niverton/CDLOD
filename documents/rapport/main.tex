@@ -181,18 +181,28 @@ planètes et une galaxie.
 %LOD et dérivé
 Plusieurs algorithmes peuvent être utilisé dans la mise en place d'un
 système de niveau de détail dynamique, tous d'abord le \cite{CDLOD} qui
-est utilisé comme référence dans le cadre de se projet. Ce dernier sera
-adapté car il utilise le \emph{GPU}. Il a l'avantage de rattacher les
+est utilisé comme référence dans le cadre de se projet.
+Il a l'avantage de rattacher les
 maillages des différents niveaux de détails de manière lisse et
 progressive c'est à dire sans frontières intermédiaires, rendant le
 résultat homogène.  Un autre avantage de cette méthode est de garder le
 nombre de triangles affichés constant, en répartissant les triangles
 dans les différents niveaux de détails.\\
+Du code d'exemple est fournit par l'auteur du papier de référence, cependant
+il utilise la bibliothèque graphique DirectX. Il est uniquement compatible
+avec windows et ne peut pas être utilisé tel quel dans notre projet.
+Pour être compatible avec le système d'explotation cible, il est nécessaire 
+d'utiliser la bibliothque graphique OpenGl à la place. De plus, les 
+algorithmes utilisé comme base par \citep{CDLOD} sont implémentés sur \emph{GPU}.
 Une autre approche serait de mettre à jour des zones entière de terrain,
 comme détaillé par \cite{MassiveTerrain}. Cet algorithme ne permet pas
 de garder un nombre constant de triangles affichés par le fait qu'ils
 s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
+On peut voir que la pluparts des algorithmes modernes sont développés sur \emph{GPU}.
+En effet, la possibilité de développer au sein d'une carte graphique remonte à environ
+1995 comme on peut le voir dans \cite{EvoGPU}. Notre objectif ici est de montrer 
+à quelle point les processeurs moderne sont capables de faire ce même travail.
 
 %http://tulrich.com/geekstuff/sig-notes.pdf
 %http://hhoppe.com/gpugcm.pdf
@@ -345,8 +355,6 @@ deux. Ainsi cela nous laisse une certaine marge de manœuvre sur la précision d
 hauteurs. Chaque hauteur prendra donc 4 octets dans la mémoire vive. Nous estimons 
 que la taille total de l'arbre dans la mémoire sera de l'ordre de la
 centaine de Mo.\\
-
-
 
 
 \subsection{Performances}
