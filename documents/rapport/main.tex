@@ -238,11 +238,9 @@ s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
 
 \section{Besoins fonctionnels}
 
-\subsection{Génération de terrain}
-
-
 \subsection{Interface graphique}
 
+L'interface sera implémentée avec OpenGL et ciblant Linux.\\
 Afficher à l'écran une scène en trois dimensions représentant la planète.\\
 La surface de la planète sera affichée en maillage, afin de bien voir
 les triangles créés par l'algorithme.\\
@@ -251,7 +249,12 @@ souris de l'utilisateur.\\
 Afficher dans un coin de l'écran les informations sur les performances
 sous forme du nombre d'images par seconde.\\
 
+Cette partie a une priorité haute car nécessaire pour tester les
+algorithmes. Nous estimons la durée d'implémentation à trois semaines.\\
+
+
 \subsection{Génération de terrain}
+
 
 Générer aléatoirement la carte de hauteur d'un terrain.
 La génération se fera à partir d'un algorithme de bruit de perlin déjà
@@ -267,8 +270,11 @@ carte de hauteur et le transposer sur une une vraie coordonnée 3D (A,B,C) (non
 nulle). Pour retrouver la position 3D d'un point quelconque  P (x,y), il suffit
 d'exécuter une rotation proportionnelle en x et en y du vecteur formé
 par (A,B,C) et le centre de la planète. Ensuite, on norme le vecteur à la
-valeur contenue dans la carte de hauteur. 
+valeur contenue dans la carte de hauteur. \\
 
+Priorité moyenne, le terrain généré est nécessaire aux tests de
+l'interface graphique et des algorithmes, mais n'est pas requis pour
+commencer leurs développements.\\
 
 
 \subsection{Structure de donnée}
@@ -288,6 +294,10 @@ quart de la zone du parent au niveau de détail supérieur.\\
   \label{fig:quadtree}
 \end{figure}
 
+La structure de donnée est la base de l'algorithme de CDLOD. Elle est
+donc de haute priorité. Nous estimons la durée de développement à deux
+semaines.\\
+
 \subsection{CDLOD}
 
 Implémenter un algorithme inspiré de \cite{CDLOD}, conformément aux
@@ -305,12 +315,20 @@ caméra.\\
 La bibliothèque retournera un arbre composé des différentes cartes de
 hauteurs.\\
 
+L'algorithme de CDLOD est de priorité moyenne car nécessite
+l'implémentation de la structure de donnée en premier. Son
+développement prendra quatre semaines selon nos estimations.\\
+
 \subsection{Mesure des performances}
 
 Mesurer le nombre d'images générées par seconde, les afficher à l'écran.\\
 Mesurer le temps de réponse de la bibliothèque à chaque requête.\\
 Afficher les résultats dans la sortie standard à la fin de l'exécution
 du programme.\\
+
+Les tests de performance sont de priorité faible. Il seront implémenté
+en dernier. Nous estimons que leur développement prendra deux à trois
+semaines.\\
 
 %---------------------------%
 %   BESOINS NON FONCTIONNELS
