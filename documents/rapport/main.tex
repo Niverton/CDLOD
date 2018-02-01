@@ -96,7 +96,7 @@ Boris \textsc{Mansencal}
 \setcounter{chapter}{1}
 
 L'objectif de ce projet est de générer le terrain (voir
-figure\ref{fig:terrain})
+figure \ref{fig:terrain})
 d'une planète procéduralement et de l'afficher à l'écran.
 
 \begin{figure}[!h]
@@ -287,6 +287,8 @@ structure de donnée nous permet de subdiviser le terrain, chaque nœud
 représentant une surface du terrain. Une nœud contient la représentation
 de sa zone à son niveau de détail, et quatre fils représentant chacun un
 quart de la zone du parent au niveau de détail supérieur.\\
+La hauteur de l'arbre réprésente le nombre de niveau de détail.
+La structure de donnée est fixe et paramètrable.
 
 \begin{figure}[!h]
   \includegraphics[scale=0.5]{img/Quadtree.png}
@@ -343,6 +345,9 @@ deux. Ainsi cela nous laisse une certaine marge de manœuvre sur la précision d
 hauteurs. Chaque hauteur prendra donc 4 octets dans la mémoire vive. Nous estimons 
 que la taille total de l'arbre dans la mémoire sera de l'ordre de la
 centaine de Mo.\\
+
+
+
 
 \subsection{Performances}
 
