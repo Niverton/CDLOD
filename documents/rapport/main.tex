@@ -101,11 +101,14 @@ L'objectif de ce projet est de générer le terrain (voir
 figure \ref{fig:terrain})
 d'une planète procéduralement et de l'afficher à l'écran.
 
+\begin{center}
 \begin{figure}[!h]
   \includegraphics[scale=0.5]{img/terrain.png}
   \caption{Terrain procédural\protect\footnotemark}
   \label{fig:terrain}
 \end{figure}
+\end{center}
+
 %Parce que latex
 \footnotetext{Source: https://youtu.be/AT7h8pYJRiw}
 
@@ -174,10 +177,10 @@ performances tel que les simulations 3D ou les jeux vidéos.
 %Génération Procédural
 Dans le cas du développement d'un environnement 3D il est souvent fait
 appel à des techniques de génération procédural, par exemple le logiciel
-Terragen comme présenté en figure \ref{fig:Terragen} qui est utilisé dans le monde du cinéma ou encore Elite
-dangerous dans le monde du jeux vidéos.  Ces deux applications utilisent
-des mécanisme de génération procédurale pour créer respectivement des
-planètes et une galaxie.
+Terragen comme présenté en figure \ref{fig:Terragen} qui est utilisé dans 
+le monde du cinéma ou encore Elite  dangerous dans le monde du jeux vidéos.  
+Ces deux applications utilisent des mécanisme de génération procédurale pour
+créer respectivement des planètes et une galaxie.
 %% TODO: Mettre en référence Terragen et Elite Dangerous dans la Bib
 
 %LOD et dérivé
@@ -193,7 +196,7 @@ Du code d'exemple est fournit par l'auteur du papier de référence,
 cependant il utilise la bibliothèque graphique DirectX. Il est
 uniquement compatible avec Windows et ne peut pas être utilisé tel quel
 dans notre projet.  Pour être compatible avec le système d'explotation
-cible, il est nécessaire d'utiliser la bibliothque graphique OpenGl à la
+cible, il est nécessaire d'utiliser la bibliothèque graphique OpenGl à la
 place. De plus, les algorithmes utilisé comme base par \cite{CDLOD} sont
 implémentés sur \emph{GPU}.  Une autre approche serait de mettre à jour
 des zones entière de terrain, comme détaillé par \cite{MassiveTerrain}.
@@ -202,7 +205,7 @@ affichés par le fait qu'ils s'affichent par groupe. Il est aussi
 implémenté sur \emph{GPU}.\\
 L'algorithme de CDLOD a déjà été implémenté dans \cite{WorldGenerator}.
 \cite{WorldGenerator} est implémenté en C++, l'algorithme est
-réutilisable. la partie rendue est écrite en shaders OpenGL.
+réutilisable. La partie rendue est écrite en shaders OpenGL.
 
 On peut voir que la pluparts des algorithmes modernes sont développés sur \emph{GPU}.
 En effet, la possibilité de développer au sein d'une carte graphique remonte à environ
@@ -292,12 +295,13 @@ notre projet, car c'est celle utilisée dans \cite{WorldGenerator}. Elle
 permet de garder des découpages carrés, ce qui simplifie les opérations
 dans le quadtree.\\
 
+\begin{center}
 \begin{figure}[!h]
   \includegraphics[scale=1]{img/Cubetosphere.png}
   \caption{Transformation d'un cube en sphère \cite{Cube2Sphere}}
   \label{fig:Cubetosphere}
 \end{figure}
-
+\end{center}
 
 Priorité moyenne, le terrain généré est nécessaire aux tests de
 l'interface graphique et des algorithmes, mais n'est pas requis pour
@@ -316,12 +320,13 @@ de sa zone à son niveau de détail, et quatre fils représentant chacun un
 quart de la zone du parent au niveau de détail supérieur.\\
 La hauteur de l'arbre réprésente le nombre de niveau de détail.
 La structure de donnée est fixe et paramètrable.
-
+\begin{center}
 \begin{figure}[!h]
   \includegraphics[scale=0.5]{img/Quadtree.png}
   \caption{quadtree \cite{CDLOD}}
   \label{fig:quadtree}
 \end{figure}
+\end{center}
 
 La structure de donnée est la base de l'algorithme de CDLOD. Elle est
 donc de haute priorité. Nous estimons la durée de développement à deux
@@ -338,15 +343,11 @@ La structure de donnée et les algorithmes correspondant seront fournis
 indépendamment de la partie affichage graphique dans une interface de
 programmation.\\
 L'API peut être vue comme une base de donnée, des requêtes sont faites
-en lui donnant comme données de départ deux coordonnées polaire
-représentant une zone sur la sphère ainsi que les coordonnées de la
-caméra.\\
-Les coordonnées polaires sont 
+en lui donnant le frustum de la caméra, c'est à dire son cône de vision,
+ainsi que ses informations tel que les coordonnées.
 
 La bibliothèque retournera un arbre composé des différentes cartes de
 hauteurs.\\
-
-
 
 L'algorithme de CDLOD est de priorité moyenne car nécessite
 l'implémentation de la structure de donnée en premier. Son
@@ -449,6 +450,9 @@ ses plus proches voisins.
   \label{fig:tache}
 \end{figure}
 \end{center}
+
+Le projet peut être découpé en quatre grandes parties comme on peut le voir dans la figure \ref{fig:tache}.\\
+
 
 \begin{center}
 \begin{figure}[!h]
