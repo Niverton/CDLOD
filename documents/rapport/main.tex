@@ -174,7 +174,7 @@ performances tel que les simulations 3D ou les jeux vidéos.
 %Génération Procédural
 Dans le cas du développement d'un environnement 3D il est souvent fait
 appel à des techniques de génération procédural, par exemple le logiciel
-Terragen qui est utilisé dans le monde du cinéma ou encore Elite
+Terragen comme présenté en figure \ref{fig:Terragen} qui est utilisé dans le monde du cinéma ou encore Elite
 dangerous dans le monde du jeux vidéos.  Ces deux applications utilisent
 des mécanisme de génération procédurale pour créer respectivement des
 planètes et une galaxie.
@@ -186,12 +186,12 @@ système de niveau de détail dynamique, tous d'abord le \cite{CDLOD} qui
 est utilisé comme référence dans le cadre de se projet.  Il a l'avantage
 de rattacher les maillages des différents niveaux de détails de manière
 lisse et progressive c'est à dire sans frontières intermédiaires,
-empéchant l'apparition de discontinuités.  Un autre avantage de cette
+empêchant l'apparition de discontinuités.  Un autre avantage de cette
 méthode est de garder le nombre de triangles affichés constant, en
 répartissant les triangles dans les différents niveaux de détails.\\
 Du code d'exemple est fournit par l'auteur du papier de référence,
 cependant il utilise la bibliothèque graphique DirectX. Il est
-uniquement compatible avec windows et ne peut pas être utilisé tel quel
+uniquement compatible avec Windows et ne peut pas être utilisé tel quel
 dans notre projet.  Pour être compatible avec le système d'explotation
 cible, il est nécessaire d'utiliser la bibliothque graphique OpenGl à la
 place. De plus, les algorithmes utilisé comme base par \cite{CDLOD} sont
@@ -208,6 +208,14 @@ On peut voir que la pluparts des algorithmes modernes sont développés sur \emp
 En effet, la possibilité de développer au sein d'une carte graphique remonte à environ
 1995 comme on peut le voir dans \cite{EvoGPU}. Notre objectif ici est de montrer 
 à quelle point les processeurs moderne sont capables de faire ce même travail.
+
+\begin{center}
+\begin{figure}[!h]
+  \includegraphics[scale=0.2]{img/Lake.jpg}
+  \caption{Terragen \cite{Terragen}}
+  \label{fig:Terragen}
+\end{figure}
+\end{center}
 
 %http://tulrich.com/geekstuff/sig-notes.pdf
 %http://hhoppe.com/gpugcm.pdf
@@ -255,7 +263,7 @@ En effet, la possibilité de développer au sein d'une carte graphique remonte �
 
 \subsection{Interface graphique}
 
-L'interface sera implémentée avec OpenGL et ciblant Linux.\\
+L'interface sera implémentée avec OpenGL 3.3 et ciblant Linux.\\
 Afficher à l'écran une scène en trois dimensions représentant la planète.\\
 La surface de la planète sera affichée en maillage, afin de bien voir
 les triangles créés par l'algorithme.\\
@@ -432,13 +440,23 @@ ses plus proches voisins.
 %   DIAGRAMME DE GRANT
 %---------------------------%
 
-\section{Diagramme de Gantt}
+\section{Découpage des tâches}
 
+\begin{center}
+\begin{figure}[!h]
+  \includegraphics[scale=0.5]{img/DecoupageTache.png}
+  \caption{Découpage des tâches}
+  \label{fig:tache}
+\end{figure}
+\end{center}
+
+\begin{center}
 \begin{figure}[!h]
   \includegraphics[scale=0.5]{img/gantt.png}
   \caption{Diagramme de Gantt}
   \label{fig:gantt}
 \end{figure}
+\end{center}
 
 \bibliography{biblio}{}
 \bibliographystyle{plainnat}
