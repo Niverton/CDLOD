@@ -115,9 +115,9 @@ l'écran.
 
 %Parce que latex
 \footnotetext{Source: \url{https://youtu.be/AT7h8pYJRiw}}
-Une planète en trois dimensions complexe est un ensemble de sommets reliés
-entre eux par des arrêtes, formant des faces triangulaires regroupées grille appelé maillage.\\
-Le nombre d'images par seconde affichable à l'écran étant directement proportionnel aux nombre de sommets et de triangle, il est rapidement nécessaire d'avoir recourt à des méthodes d'optimisation.
+Une planète en trois dimensions est un ensemble de sommets reliés
+entre eux par des arrêtes, formant des faces triangulaires regroupées en grille appelé maillage.\\
+Le nombre d'images par seconde affichable à l'écran étant directement proportionnel aux nombre de sommets et de triangles, il est rapidement nécessaire d'avoir recourt à des méthodes d'optimisation.\\
 %Ces triangles sont ensuite
 %traités et affichés à l'écran en deux dimensions. Plus le nombre de
 %triangles à afficher est élevé, plus le rendu d'une image est long, ce
@@ -131,7 +131,7 @@ l'affichage d'une surface très grande comportant des aspérités, par
 exemple un terrain. Une partie du terrain est proche de l'observateur,
 nous voulons donc en afficher les détails, mais une autre partie est
 plus éloignée, et les détails seront moins visibles sur l'image finale.
-On peut donc réduire le nombre de triangle de la partie éloignée afin de
+On peut donc réduire le nombre de triangles de la partie éloignée afin de
 réduire le nombre de triangles à traiter. Pour simplifier le stockage
 des données du terrain, on peut représenter les points du maillage
 uniquement par leur hauteur par rapport au rayon de la sphère. Un
@@ -165,11 +165,11 @@ Terragen\footnote{Terragen: \url{http://planetside.co.uk/}} comme
 présenté en figure \ref{fig:Terragen} qui est utilisé dans le monde du
 cinéma ou encore Elite Dangerous\footnote{Elite Dangerous:
 \url{https://www.elitedangerous.com/}} dans le monde du jeux vidéos.
-Ces deux applications utilisent des mécanisme de génération procédurale
+Ces deux applications utilisent des mécanismes de générations procédurales
 pour créer respectivement des planètes et une galaxie.
 
 %LOD et dérivé
-Plusieurs algorithmes peuvent être utilisé dans la mise en place d'un
+Plusieurs algorithmes peuvent être utilisés dans la mise en place d'un
 système de niveau de détail dynamique, tous d'abord le \cite{CDLOD} qui
 est utilisé comme référence dans le cadre de se projet.  Il a l'avantage
 de rattacher les maillages des différents niveaux de détails de manière
@@ -182,8 +182,9 @@ cependant il utilise la bibliothèque graphique DirectX. Il est
 uniquement compatible avec Windows et ne peut pas être utilisé tel quel
 dans notre projet.  Pour être compatible avec le système d'exploitation
 cible, il est nécessaire d'utiliser la bibliothèque graphique OpenGl à la
-place. De plus, les algorithmes utilisé comme base par \cite{CDLOD} sont
-implémentés sur \emph{GPU}.  Une autre approche serait de mettre à jour
+place. \\
+De plus, les algorithmes utilisés comme base par \cite{CDLOD} sont
+implémentés sur \emph{GPU}. Une autre approche serait de mettre à jour
 des zones entière de terrain, comme détaillé par \cite{MassiveTerrain}.
 Cet algorithme ne permet pas de garder un nombre constant de triangles
 affichés par le fait qu'ils s'affichent par groupe. Il est aussi
@@ -283,7 +284,7 @@ l'algorithme de CDLOD (voir figure \ref{fig:quadtree} tirée de
 \cite{CDLOD}).\\
 Un quadtree est un arbre dont chaque nœud possède quatre fils, cette
 structure de donnée nous permet de subdiviser le terrain, chaque nœud
-représentant une surface du terrain. Une nœud contient la représentation
+représentant une surface du terrain. Un nœud contient la représentation
 de sa zone à son niveau de détail, et quatre fils représentant chacun un
 quart de la zone du parent au niveau de détail supérieur.\\
 La hauteur de l'arbre représente le nombre de niveau de détail.
@@ -315,7 +316,7 @@ ainsi que ses informations tel que les coordonnées.
 La bibliothèque retournera un arbre composé des différentes cartes de
 hauteurs.\\
 
-Les distances auxquelles les transitions entre deux niveaux de détail
+Les distances auxquelles les transitions entre deux niveaux de détails
 ont lieu seront choisies après expérimentation. Idéalement, les
 transitions sont plus longues sur les niveaux les moins détaillés.
 
@@ -352,7 +353,7 @@ en dernier. Nous estimons que leur développement prendra une semaine.\\
 
 \subsection{Structure de donnée}
 
-Les cartes de hauteur seront stockées dans des tableaux de flottant à
+Les cartes de hauteurs seront stockées dans des tableaux de flottant à
 deux dimensions. Ainsi cela nous laisse une certaine marge de manœuvre
 sur la précision des hauteurs. Chaque hauteur prendra donc 4 octets dans
 la mémoire vive. Nous estimons que la taille total de l'arbre dans la
@@ -367,7 +368,7 @@ performance imposées par le client. Nous pouvons prévoir grâce aux
 études de performances de \cite{CDLOD} l'impacte de performance de
 l'algorithme de CDLOD. Sur des processeurs performants de l'époque,
 \cite{CDLOD} mesure en moyenne 0.08ms de temps de parcours de l'arbre
-nécessaire pour générer le maillage du terrain. A cela devront s'ajouter
+nécessaire pour générer le maillage du terrain. À cela devront s'ajouter
 les coups de génération du maillage, ainsi que les coups de rendu de la
 scène.  Pour un rendu très fluide, lorsque la caméra se
 déplace dans la scène, il faudrait atteindre au moins 60 images par
@@ -402,8 +403,8 @@ fonctionnement des précédentes.
 
 \subsection{Robustesse}
 
-Lors de la mise à jours du terrain, des nouveaux sommets sont créés et
-sont rattaché à ces voisins de sorte à former un triangle.
+Lors de la mise à jour du terrain, des nouveaux sommets sont créés et
+sont rattachés à ses voisins de sorte à former un triangle.
 L'implémentation ne doit par permettre à un sommet de se retrouver seul,
 c'est à dire éviter la formation de trous dans le maillage.\\
 Elle doit aussi éviter de former des triangles qui s'intersectent. Pour
@@ -418,8 +419,6 @@ ses plus proches voisins.
 \chapter*{Mise en Œuvre}
 \addcontentsline{toc}{chapter}{Mise en Œuvre}
 \setcounter{chapter}{4}
-
-
 
 %---------------------------%
 %   DIAGRAMME DE GRANT
@@ -437,9 +436,9 @@ ses plus proches voisins.
 
 Comme montré dans la figure \ref{fig:tache}, le projet peut être découpé
 en quatre grandes parties.  Chaque partie est indépendante et
-parallélisable. Chaque tâche peut aussi être divisée, le diagramme de
-Gantt ci-contre (figure \ref{fig:gantt}) montre la répartition précise
-des tâche ainsi qu'un découpage du projet en fonction du temps.
+parallélisable. Chaque tâches peut aussi être divisée, le diagramme de
+Gannt ci-contre (figure \ref{fig:gantt}) montre la répartition précise
+des tâche ainsi qu'un découpage du projet en fonction du temps. 
 
 \begin{center}
 \begin{figure}[!h]
