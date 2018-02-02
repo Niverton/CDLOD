@@ -274,11 +274,18 @@ est souvent utilisé dans le cadre de génération procédurale pour son
 efficacité. Plusieurs algorithmes de bruits sont disponibles, cependant
 le bruit Simplex est plus performant dans un nombre plus elevé de
 dimensions \cite{Simplexnoise}.  Pour former la sphère, il suffit de
-construire un cube cadrillé et de le déformer en sphère, en utilisant
+construire un cube cadrillé et de le déformer en sphère (voir figure \ref{fig:Cubetosphere} ), en utilisant
 les formules de \cite{Cube2Sphere}. Cette technique est adaptable à
 notre projet, car c'est celle utilisée dans \cite{WorldGenerator}. Elle
 permet de garder des découpages carrés, ce qui simplifie les opérations
 dans le quadtree.\\
+
+\begin{figure}[!h]
+  \includegraphics[scale=0.5]{img/Cubetosphere.png}
+  \caption{Transformation d'un cube en sphère \cite{Cube2Sphere}}
+  \label{fig:Cubetosphere}
+\end{figure}
+
 
 Priorité moyenne, le terrain généré est nécessaire aux tests de
 l'interface graphique et des algorithmes, mais n'est pas requis pour
