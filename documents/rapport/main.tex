@@ -322,13 +322,11 @@ semaines.\\
 \subsection{CDLOD}
 
 Implémenter un algorithme inspiré de \cite{CDLOD}, conformément aux
-demandes du client.\\
-L'algorithme permettra de générer les différents niveaux de détails de
-la surface de la planète, et sera accessible dans une bibliothèque
-séparée du reste du projet.\\
-La structure de donnée et les algorithmes correspondant seront fournis
-indépendamment de la partie affichage graphique dans une interface de
-programmation.\\
+demandes du client.  L'algorithme permettra de générer les différents
+niveaux de détails de la surface de la planète, et sera accessible dans
+une bibliothèque séparée du reste du projet. La structure de donnée et
+les algorithmes correspondant seront fournis indépendamment de la partie
+affichage graphique dans une interface de programmation.\\
 L'API peut être vue comme une base de donnée, des requêtes sont faites
 en lui donnant comme données de départ deux coordonnées polaire
 représentant une zone sur la sphère ainsi que les coordonnées de la
@@ -338,7 +336,18 @@ Les coordonnées polaires sont
 La bibliothèque retournera un arbre composé des différentes cartes de
 hauteurs.\\
 
+Les distances auxquelles les transitions entre deux niveaux de détail
+ont lieu seront choisies après expérimentation. Idéalement, les
+transitions sont plus longues sur les niveaux les moins détaillés.
 
+\begin{center}
+\begin{figure}[!h]
+  \includegraphics[scale=0.5]{img/lods.png}
+  \caption{Différents niveaux de détails en fonction de la distance à la
+  caméra}
+  \label{fig:lods}
+\end{figure}
+\end{center}
 
 L'algorithme de CDLOD est de priorité moyenne car nécessite
 l'implémentation de la structure de donnée en premier. Son
@@ -359,6 +368,7 @@ semaines.\\
 %   BESOINS NON FONCTIONNELS
 %---------------------------%
 
+\newpage
 \section{Besoins non fonctionnels}
 
 \subsection{Structure de donnée}
@@ -380,7 +390,7 @@ l'algorithme de CDLOD. Sur des processeurs performants de l'époque,
 \cite{CDLOD} mesure en moyenne 0.08ms de temps de parcours de l'arbre
 nécessaire pour générer le maillage du terrain. A cela devront s'ajouter
 les coups de génération du maillage, ainsi que les coups de rendu de la
-scène.  Pour atteindre un rendu très fluide, lorsque la caméra se
+scène.  Pour un rendu très fluide, lorsque la caméra se
 déplace dans la scène, il faudrait atteindre au moins 60 images par
 secondes, donc passer moins de 16ms de calcul par image. \cite{CDLOD}
 atteint des performances élevées en effectuant une partie des calculs de
@@ -409,6 +419,7 @@ les nouvelles fonctionnalités apportées ne dérangent pas le bon
 fonctionnement des précédentes.
 
 \subsection{Robustesse}
+
 Lors de la mise à jours du terrain, des nouveaux sommets sont créés et
 sont rattaché à ces voisins de sorte à former un triangle.
 L'implémentation ne doit par permettre à un sommet de se retrouver seul,
