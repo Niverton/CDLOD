@@ -97,9 +97,9 @@ Boris \textsc{Mansencal}
 \addcontentsline{toc}{chapter}{Introduction}
 \setcounter{chapter}{1}
 
-L'objectif de ce projet est de générer le terrain (voir
-figure \ref{fig:terrain})
-d'une planète procéduralement et de l'afficher à l'écran.
+L'objectif de ce projet est de générer le terrain (voir figure
+\ref{fig:terrain}) d'une planète procéduralement et de l'afficher à
+l'écran.
 
 \begin{center}
 \begin{figure}[!h]
@@ -151,37 +151,18 @@ de mesurer les performances du système.
 \addcontentsline{toc}{chapter}{État de l'art}
 \setcounter{chapter}{2}
 
-%L'objectif final du projet est d'optimiser l'affichage de la planète
-%grâce à un système de niveau de détails variant en fonction de
-%l'éloignement de la caméra. Plusieurs implémentations allant dans ce
-%sens existent et ont déja été publiées.  Notre projet sera basé sur la
-%technique décrite par Filip Strugar en 2010, \textit{Continuous
-%Distance Dependent Level of Detail for Rendering Heightmaps}.  D'autre
-%projets similaires existent mais utilisent des structures de données
-%différentes, l'utilisation d'un système de \textbf{chunks} ou encore de
-%\textbf{clipmaps}. Bien que toutes ces techniques soient différentes,
-%elles se basent sur le même principe fondamental, rajouter à la volée
-%des détails sur les objets proches.
-
-%Nous adapterons la méthode de \cite{CDLOD} qui utilise le \emph{GPU}
-%pour développer une version \emph{CPU}. Cette méthode a l'avantage de
-%rattacher les maillages des différents niveau de détail de manière lisse
-%et progressive, c'est à dire sans frontières intermédiaires, rendant le
-%résultat homogène. Un autre avantage de cette méthode est de garder le
-%nombre de triangles affichés constant, en répartissant les triangles
-%dans les différents niveaux de détails.
-
 De nombreuses applications utilisent des techniques d'optimisation de
 l'affichage. Notamment les applications qui demandent de bonnes
 performances tel que les simulations 3D ou les jeux vidéos.
 %Génération Procédural
 Dans le cas du développement d'un environnement 3D il est souvent fait
 appel à des techniques de génération procédural, par exemple le logiciel
-Terragen comme présenté en figure \ref{fig:Terragen} qui est utilisé dans 
-le monde du cinéma ou encore Elite  dangerous dans le monde du jeux vidéos.  
-Ces deux applications utilisent des mécanisme de génération procédurale pour
-créer respectivement des planètes et une galaxie.
-%% TODO: Mettre en référence Terragen et Elite Dangerous dans la Bib
+Terragen\footnote{Terragen: \url{http://planetside.co.uk/}} comme
+présenté en figure \ref{fig:Terragen} qui est utilisé dans le monde du
+cinéma ou encore Elite Dangerous\footnote{Elite Dangerous:
+\url{https://www.elitedangerous.com/}} dans le monde du jeux vidéos.
+Ces deux applications utilisent des mécanisme de génération procédurale
+pour créer respectivement des planètes et une galaxie.
 
 %LOD et dérivé
 Plusieurs algorithmes peuvent être utilisé dans la mise en place d'un
@@ -207,22 +188,19 @@ L'algorithme de CDLOD a déjà été implémenté dans \cite{WorldGenerator}.
 \cite{WorldGenerator} est implémenté en C++, l'algorithme est
 réutilisable. La partie rendue est écrite en shaders OpenGL.
 
-On peut voir que la pluparts des algorithmes modernes sont développés sur \emph{GPU}.
-En effet, la possibilité de développer au sein d'une carte graphique remonte à environ
-1995 comme on peut le voir dans \cite{EvoGPU}. Notre objectif ici est de montrer 
-à quelle point les processeurs moderne sont capables de faire ce même travail.
+On peut voir que la pluparts des algorithmes modernes sont développés
+sur \emph{GPU}.  En effet, la possibilité de développer au sein d'une
+carte graphique remonte à environ 1995 comme on peut le voir dans
+\cite{EvoGPU}. Notre objectif ici est de montrer à quelle point les
+processeurs moderne sont capables de faire ce même travail.
 
 \begin{center}
 \begin{figure}[!h]
   \includegraphics[scale=0.2]{img/Lake.jpg}
-  \caption{Terragen \cite{Terragen}}
+  \caption{Terragen: \protect\url{http://planetside.co.uk/}}
   \label{fig:Terragen}
 \end{figure}
 \end{center}
-
-%http://tulrich.com/geekstuff/sig-notes.pdf
-%http://hhoppe.com/gpugcm.pdf
-%http://dept-info.labri.fr/~narbel/PdP/Subjects17-18/Papers/cdlod_latest.pdf
 
 %-----------------------------------------------------------------%
 %   ANALYSE DES BESOINS
@@ -232,31 +210,6 @@ En effet, la possibilité de développer au sein d'une carte graphique remonte �
 \chapter*{Analyse des besoins}
 \addcontentsline{toc}{chapter}{Analyse des besoins}
 \setcounter{chapter}{3}
-
-%% Trier les besoins :
-
-% Créer une structure de données quadtree
-% Stocker des heightmaps dans les quadtree
-% Générer des heightmaps
-% Crééer une lib pour gérer les quadtrees (voir ça comme une base de données) => demande(theta, rho) => DB => return z;
-% Convertir les coordonnées x,y de la heightmap en coordonnées polaires
-	% x = rho cos theta
-    % y = rho sin theta
-
-% Récupérer la hauteur z dans le quadtree
-% Faire une sphère avec un maillage hiérarchique
-% Afficher la sphère avec opengl
-% Paramètre de l'application : -d Density -i Init point
-% Faire les tests unitaires // pourquoi (hugo)? L'appli a pas besoin d’être robuste. Les test unitaires seront durs à implémentés
-% Test de performance (en fonction de la densité)
-% Afficher un compteur de fps
-% Densité changeable en live (par ex avec + et -), peut être afficher aussi la densité
-% Doc et commentaire en anglais
-% CI avec travis, style de codage cohérent
-% Utilisation de triangle pour représenter le maillage
-
-% Se déplacer dans la scène 3d
-%Gérer les événements clavier et souris. Les mettre en relation avec une classe caméra. Prendre en compte cette caméra dans la boucle d'affichage de la sphère afin de pouvoir se déplacer dans la scène 3D.
 
 %---------------------------%
 %   BESOINS FONCTIONNELS
@@ -287,13 +240,14 @@ se fera à partir d'un algorithme d'un bruit Simplex 3D déjà implémenté
 dans une dépendance, par exemple \cite{libnoise}. Ce type d'algorithme
 est souvent utilisé dans le cadre de génération procédurale pour son
 efficacité. Plusieurs algorithmes de bruits sont disponibles, cependant
-le bruit Simplex est plus performant dans un nombre plus elevé de
+le bruit Simplex est plus performant dans un nombre plus élevé de
 dimensions \cite{Simplexnoise}.  Pour former la sphère, il suffit de
-construire un cube cadrillé et de le déformer en sphère (voir figure \ref{fig:Cubetosphere} ), en utilisant
-les formules de \cite{Cube2Sphere}. Cette technique est adaptable à
-notre projet, car c'est celle utilisée dans \cite{WorldGenerator}. Elle
-permet de garder des découpages carrés, ce qui simplifie les opérations
-dans le quadtree.\\
+construire un cube quadrillé et de le déformer en sphère (voir figure
+\ref{fig:Cubetosphere} ), en utilisant les formules de
+\cite{Cube2Sphere}. Cette technique est adaptable à notre projet, car
+c'est celle utilisée dans \cite{WorldGenerator}. Elle permet de garder
+des découpages carrés, ce qui simplifie les opérations dans le
+quadtree.\\
 
 \begin{center}
 \begin{figure}[!h]
@@ -318,8 +272,8 @@ structure de donnée nous permet de subdiviser le terrain, chaque nœud
 représentant une surface du terrain. Une nœud contient la représentation
 de sa zone à son niveau de détail, et quatre fils représentant chacun un
 quart de la zone du parent au niveau de détail supérieur.\\
-La hauteur de l'arbre réprésente le nombre de niveau de détail.
-La structure de donnée est fixe et paramètrable.
+La hauteur de l'arbre représente le nombre de niveau de détail.
+La structure de donnée est fixe et paramétrable.
 \begin{center}
 \begin{figure}[!h]
   \includegraphics[scale=0.5]{img/Quadtree.png}
@@ -366,7 +320,8 @@ développement prendra quatre semaines selon nos estimations.\\
 
 \subsection{Mesure des performances}
 
-Mesurer le nombre d'images générées par seconde, les afficher à l'écran.\\
+Mesurer le nombre d'images générées par seconde, les afficher à
+l'écran.\\
 Mesurer le temps de réponse de la bibliothèque à chaque requête.\\
 Afficher les résultats dans la sortie standard à la fin de l'exécution
 du programme.\\
@@ -384,11 +339,11 @@ semaines.\\
 
 \subsection{Structure de donnée}
 
-Les cartes de hauteur seront stockées dans des tableaux de flottant de dimension 
-deux. Ainsi cela nous laisse une certaine marge de manœuvre sur la précision des 
-hauteurs. Chaque hauteur prendra donc 4 octets dans la mémoire vive. Nous estimons 
-que la taille total de l'arbre dans la mémoire sera de l'ordre de la
-centaine de Mo.\\
+Les cartes de hauteur seront stockées dans des tableaux de flottant de
+dimension deux. Ainsi cela nous laisse une certaine marge de manœuvre
+sur la précision des hauteurs. Chaque hauteur prendra donc 4 octets dans
+la mémoire vive. Nous estimons que la taille total de l'arbre dans la
+mémoire sera de l'ordre de la centaine de Mo.\\
 
 
 \subsection{Performances}
@@ -418,7 +373,10 @@ images par seconde.
 
 \subsection{Documentation et règles de codage}
 
-Les interfaces et implémentations du projet devront et seront documentées en anglais. Des règles de codage seront respectées pour l'intégralité du projet afin de faciliter la maintenance du code et éviter les erreurs de programmation.
+Les interfaces et implémentations du projet devront et seront
+documentées en anglais. Des règles de codage seront respectées pour
+l'intégralité du projet afin de faciliter la maintenance du code et
+éviter les erreurs de programmation.
 
 
 
@@ -435,7 +393,7 @@ Lors de la mise à jours du terrain, des nouveaux sommets sont créés et
 sont rattaché à ces voisins de sorte à former un triangle.
 L'implémentation ne doit par permettre à un sommet de se retrouver seul,
 c'est à dire éviter la formation de trous dans le maillage.\\
-Elle doit aussi éviter de former des triangles qui s'intersectent.  Pour
+Elle doit aussi éviter de former des triangles qui s'intersectent. Pour
 cela, pour un sommet dans un maillage, ce sommet sera relié uniquement à
 ses plus proches voisins.
 
@@ -464,7 +422,8 @@ ses plus proches voisins.
 \end{figure}
 \end{center}
 
-Le projet peut être découpé en quatre grandes parties comme on peut le voir dans la figure \ref{fig:tache}.\\
+Le projet peut être découpé en quatre grandes parties comme on peut le
+voir dans la figure \ref{fig:tache}.\\
 
 
 \begin{center}
