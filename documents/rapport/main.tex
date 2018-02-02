@@ -7,6 +7,10 @@
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[strings]{underscore}
 \usepackage{url}
+\usepackage{hyperref}
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
 
 \begin{document}
 
@@ -110,16 +114,16 @@ l'écran.
 \end{center}
 
 %Parce que latex
-\footnotetext{Source: https://youtu.be/AT7h8pYJRiw}
-
-Un objet en trois dimensions complexe est un ensemble de sommets reliés
-entre eux par des arrêtes, formant des faces triangulaires. L'ensemble
-de ces points et arrêtes est appelé maillage. Ces triangles sont ensuite
-traités et affichés à l'écran en deux dimensions. Plus le nombre de
-triangles à afficher est élevé, plus le rendu d'une image est long, ce
-qui est problématique dans une application nécessitant de générer
-beaucoup d'images rapidement, par exemple pour un rendu temps réel dans
-une simulation ou un jeu vidéo.\\
+\footnotetext{Source: \url{https://youtu.be/AT7h8pYJRiw}}
+Une planète en trois dimensions complexe est un ensemble de sommets reliés
+entre eux par des arrêtes, formant des faces triangulaires regroupées grille appelé maillage.\\
+Le nombre d'images par seconde affichable à l'écran étant directement proportionnel aux nombre de sommets et de triangle, il est rapidement nécessaire d'avoir recourt à des méthodes d'optimisation.
+%Ces triangles sont ensuite
+%traités et affichés à l'écran en deux dimensions. Plus le nombre de
+%triangles à afficher est élevé, plus le rendu d'une image est long, ce
+%qui est problématique dans une application nécessitant de générer
+%beaucoup d'images rapidement, par exemple pour un rendu temps réel dans
+%une simulation ou un jeu vidéo.\\
 Il est alors intéressant de pouvoir réduire le nombre de triangles d'un
 objet qui n'a pas besoin d'être très détaillé dans un cas précis, par
 exemple si l'objet est loin de l'observateur. Un cas particulier est
@@ -134,7 +138,7 @@ uniquement par leur hauteur par rapport au rayon de la sphère. Un
 tableau représentant la hauteur d'un ensemble de points reliés est
 appelé carte de hauteur ou \emph{heightmap}.
 
-L'objectif de ce projet est d'implémenter un système de \emph{LOD} (
+Le but est donc d'implémenter un système de \emph{LOD} (
 \emph{Level of Detail}: niveau de détail) à appliquer sur le maillage
 d'une sphère en vue d'une application en temps interactif, afin
 d'optimiser son affichage. Le projet comportera une application
@@ -422,9 +426,8 @@ ses plus proches voisins.
 \end{figure}
 \end{center}
 
-Le projet peut être découpé en quatre grandes parties comme on peut le
-voir dans la figure \ref{fig:tache}.\\
-
+Comme montré dans la figure \ref{fig:tache}, le projet peut être découpé en quatre grandes parties.
+Chaque partie est indépendante et parallélisable. Chaque tâche peut aussi être divisée, le diagramme de Gannt ci-contre (figure \ref{fig:gantt}) montre la répartition précise des tâche ainsi qu'un découpage du projet en fonction du temps.
 
 \begin{center}
 \begin{figure}[!h]
