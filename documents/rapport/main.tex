@@ -72,7 +72,7 @@ Boris \textsc{Mansencal}
 %   DATE
 %---------------------------%
 
-{\large 22 Janvier 2018}\\[2cm] 
+{\large \today}\\[2cm] 
 
 
 \vfill % Fill the rest of the page with whitespace
@@ -180,7 +180,7 @@ répartissant les triangles dans les différents niveaux de détails.\\
 Du code d'exemple est fournit par l'auteur du papier de référence,
 cependant il utilise la bibliothèque graphique DirectX. Il est
 uniquement compatible avec Windows et ne peut pas être utilisé tel quel
-dans notre projet.  Pour être compatible avec le système d'explotation
+dans notre projet.  Pour être compatible avec le système d'exploitation
 cible, il est nécessaire d'utiliser la bibliothèque graphique OpenGl à la
 place. De plus, les algorithmes utilisé comme base par \cite{CDLOD} sont
 implémentés sur \emph{GPU}.  Une autre approche serait de mettre à jour
@@ -192,7 +192,7 @@ L'algorithme de CDLOD a déjà été implémenté dans \cite{WorldGenerator}.
 \cite{WorldGenerator} est implémenté en C++, l'algorithme est
 réutilisable. La partie rendue est écrite en shaders OpenGL.
 
-On peut voir que la pluparts des algorithmes modernes sont développés
+On peut voir que la plupart des algorithmes modernes sont développés
 sur \emph{GPU}.  En effet, la possibilité de développer au sein d'une
 carte graphique remonte à environ 1995 comme on peut le voir dans
 \cite{EvoGPU}. Notre objectif ici est de montrer à quelle point les
@@ -233,8 +233,14 @@ Afficher dans un coin de l'écran les informations sur les performances
 sous forme du nombre d'images par seconde.\\
 
 Cette partie a une priorité haute car nécessaire pour tester les
-algorithmes. Nous estimons la durée d'implémentation à trois semaines.\\
-
+algorithmes. Cette partie est séparable en plusieurs sous parties:
+\begin{itemize}
+  \item Création de la fenêtre
+  \item Génération de la sphère
+  \item Génération du maillage
+  \item Affichage dans la scène 3D
+\end{itemize}
+Nous estimons le temps nécessaire à cette partie à deux semaines.
 
 \subsection{Génération de terrain}
 
@@ -263,8 +269,12 @@ quadtree.\\
 
 Priorité moyenne, le terrain généré est nécessaire aux tests de
 l'interface graphique et des algorithmes, mais n'est pas requis pour
-commencer leurs développements.\\
-
+commencer leurs développements. Cette partie se découpe en:
+\begin{itemize}
+  \item Génération de la carte de hauteur
+  \item Appliquer la carte de hauteur sur la maillage
+\end{itemize}
+Le temps de développement est estimé à une semaine.
 
 \subsection{Structure de donnée}
 
@@ -320,7 +330,7 @@ transitions sont plus longues sur les niveaux les moins détaillés.
 
 L'algorithme de CDLOD est de priorité moyenne car nécessite
 l'implémentation de la structure de donnée en premier. Son
-développement prendra quatre semaines selon nos estimations.\\
+développement prendra trois semaines selon nos estimations.\\
 
 \subsection{Mesure des performances}
 
@@ -331,8 +341,7 @@ Afficher les résultats dans la sortie standard à la fin de l'exécution
 du programme.\\
 
 Les tests de performance sont de priorité faible. Il seront implémenté
-en dernier. Nous estimons que leur développement prendra deux à trois
-semaines.\\
+en dernier. Nous estimons que leur développement prendra une semaine.\\
 
 %---------------------------%
 %   BESOINS NON FONCTIONNELS
@@ -407,7 +416,7 @@ ses plus proches voisins.
 \newpage
 
 \chapter*{Mise en Œuvre}
-\addcontentsline{toc}{chapter}{Mise en Oeuvre}
+\addcontentsline{toc}{chapter}{Mise en Œuvre}
 \setcounter{chapter}{4}
 
 
@@ -426,8 +435,11 @@ ses plus proches voisins.
 \end{figure}
 \end{center}
 
-Comme montré dans la figure \ref{fig:tache}, le projet peut être découpé en quatre grandes parties.
-Chaque partie est indépendante et parallélisable. Chaque tâche peut aussi être divisée, le diagramme de Gannt ci-contre (figure \ref{fig:gantt}) montre la répartition précise des tâche ainsi qu'un découpage du projet en fonction du temps.
+Comme montré dans la figure \ref{fig:tache}, le projet peut être découpé
+en quatre grandes parties.  Chaque partie est indépendante et
+parallélisable. Chaque tâche peut aussi être divisée, le diagramme de
+Gantt ci-contre (figure \ref{fig:gantt}) montre la répartition précise
+des tâche ainsi qu'un découpage du projet en fonction du temps.
 
 \begin{center}
 \begin{figure}[!h]
