@@ -188,16 +188,17 @@ progressive c'est à dire sans frontières intermédiaires, rendant le
 résultat homogène.  Un autre avantage de cette méthode est de garder le
 nombre de triangles affichés constant, en répartissant les triangles
 dans les différents niveaux de détails.\\
-Du code d'exemple est fournit par l'auteur du papier de référence, cependant
-il utilise la bibliothèque graphique DirectX. Il est uniquement compatible
-avec windows et ne peut pas être utilisé tel quel dans notre projet.
-Pour être compatible avec le système d'explotation cible, il est nécessaire 
-d'utiliser la bibliothque graphique OpenGl à la place. De plus, les 
-algorithmes utilisé comme base par \cite{CDLOD} sont implémentés sur \emph{GPU}.
-Une autre approche serait de mettre à jour des zones entière de terrain,
-comme détaillé par \cite{MassiveTerrain}. Cet algorithme ne permet pas
-de garder un nombre constant de triangles affichés par le fait qu'ils
-s'affichent par groupe. Il est aussi implémenté sur \emph{GPU}.\\
+Du code d'exemple est fournit par l'auteur du papier de référence,
+cependant il utilise la bibliothèque graphique DirectX. Il est
+uniquement compatible avec windows et ne peut pas être utilisé tel quel
+dans notre projet.  Pour être compatible avec le système d'explotation
+cible, il est nécessaire d'utiliser la bibliothque graphique OpenGl à la
+place. De plus, les algorithmes utilisé comme base par \cite{CDLOD} sont
+implémentés sur \emph{GPU}.  Une autre approche serait de mettre à jour
+des zones entière de terrain, comme détaillé par \cite{MassiveTerrain}.
+Cet algorithme ne permet pas de garder un nombre constant de triangles
+affichés par le fait qu'ils s'affichent par groupe. Il est aussi
+implémenté sur \emph{GPU}.\\
 
 On peut voir que la pluparts des algorithmes modernes sont développés sur \emph{GPU}.
 En effet, la possibilité de développer au sein d'une carte graphique remonte à environ
@@ -271,16 +272,12 @@ La génération se fera à partir d'un algorithme de bruit de perlin déjà
 implémenté dans une dépendance, par exemple \cite{libnoise}. Ce type
 d'algorithme est souvent utilisé dans le cadre de génération
 procédurale pour sa simplicité.\\
-Construire une sphère à partir de la carte rectangulaire afin d'obtenir
-une planète.\\
-Nous aurons besoin d'une méthode pour transformer les points dans la
-carte 2D en point cartésiens 3D.
-Pour cela, nous comptons pour l'instant prendre le premier point de la
-carte de hauteur et le transposer sur une une vraie coordonnée 3D (A,B,C) (non
-nulle). Pour retrouver la position 3D d'un point quelconque  P (x,y), il suffit
-d'exécuter une rotation proportionnelle en x et en y du vecteur formé
-par (A,B,C) et le centre de la planète. Ensuite, on norme le vecteur à la
-valeur contenue dans la carte de hauteur. \\
+Pour former la sphère, il suffit de construire un cube cadrillé et de le
+déformer en sphère, par exemple en utilisant les formules de
+\cite{Cube2Sphere}. Cette technique est adaptable à notre projet, car
+c'est celle utilisée dans \cite{WorldGenerator}. Elle permet de garder
+des découpages carrés, ce qui simplifie les opérations dans le
+quadtree.\\
 
 Priorité moyenne, le terrain généré est nécessaire aux tests de
 l'interface graphique et des algorithmes, mais n'est pas requis pour
