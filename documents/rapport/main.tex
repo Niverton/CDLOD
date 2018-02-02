@@ -181,13 +181,12 @@ planètes et une galaxie.
 %LOD et dérivé
 Plusieurs algorithmes peuvent être utilisé dans la mise en place d'un
 système de niveau de détail dynamique, tous d'abord le \cite{CDLOD} qui
-est utilisé comme référence dans le cadre de se projet.
-Il a l'avantage de rattacher les
-maillages des différents niveaux de détails de manière lisse et
-progressive c'est à dire sans frontières intermédiaires, rendant le
-résultat homogène.  Un autre avantage de cette méthode est de garder le
-nombre de triangles affichés constant, en répartissant les triangles
-dans les différents niveaux de détails.\\
+est utilisé comme référence dans le cadre de se projet.  Il a l'avantage
+de rattacher les maillages des différents niveaux de détails de manière
+lisse et progressive c'est à dire sans frontières intermédiaires,
+empéchant l'apparition de discontinuités.  Un autre avantage de cette
+méthode est de garder le nombre de triangles affichés constant, en
+répartissant les triangles dans les différents niveaux de détails.\\
 Du code d'exemple est fournit par l'auteur du papier de référence,
 cependant il utilise la bibliothèque graphique DirectX. Il est
 uniquement compatible avec windows et ne peut pas être utilisé tel quel
@@ -199,6 +198,9 @@ des zones entière de terrain, comme détaillé par \cite{MassiveTerrain}.
 Cet algorithme ne permet pas de garder un nombre constant de triangles
 affichés par le fait qu'ils s'affichent par groupe. Il est aussi
 implémenté sur \emph{GPU}.\\
+L'algorithme de CDLOD a déjà été implémenté dans \cite{WorldGenerator}.
+\cite{WorldGenerator} est implémenté en C++, l'algorithme est
+réutilisable. la partie rendue est écrite en shaders OpenGL.
 
 On peut voir que la pluparts des algorithmes modernes sont développés sur \emph{GPU}.
 En effet, la possibilité de développer au sein d'une carte graphique remonte à environ
@@ -322,8 +324,12 @@ L'API peut être vue comme une base de donnée, des requêtes sont faites
 en lui donnant comme données de départ deux coordonnées polaire
 représentant une zone sur la sphère ainsi que les coordonnées de la
 caméra.\\
+Les coordonnées polaires sont 
+
 La bibliothèque retournera un arbre composé des différentes cartes de
 hauteurs.\\
+
+
 
 L'algorithme de CDLOD est de priorité moyenne car nécessite
 l'implémentation de la structure de donnée en premier. Son
