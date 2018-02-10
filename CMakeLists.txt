@@ -13,6 +13,7 @@ set(SRCS
   src/glUtils.cpp
   src/viewer.cpp
   src/camera.cpp
+  src/shader.cpp
 )
 set(EXEC cdlod_viewer)
 add_executable(${EXEC} ${SRCS})

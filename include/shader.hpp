@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <string>
 
 class Shader{
@@ -15,7 +15,11 @@ public:
 
   void activate() const;
   void deactivate() const;
+  
+  GLint getAttribLocation(const std::string& name) const;
+  GLint getUniformLocation(const std::string& name) const;
 
 private:
+  bool is_valide = false;
   GLuint programID;
 };
