@@ -15,6 +15,8 @@ bool Shader::loadFromFile(const std::string& path, enum Type type){
   while (!in.eof()){
     src.push_back(in.get());
   }
+
+  return loadFromSource(src, type);
 }
 
 bool Shader::loadFromSource(const std::string& source, enum Type type){
@@ -23,31 +25,38 @@ bool Shader::loadFromSource(const std::string& source, enum Type type){
   GLuint shaderID;
 
   switch(type){
-  case Type::Vertex:
+  case Type::VERTEX:
     shaderID = glCreateShader(GL_VERTEX_SHADER);
     break;
-  case Type::Fragment:
+  case Type::FRAGMENT:
     shaderID = glCreateShader(GL_FRAGMENT_SHADER);
     break;
   default:
     return false;
   }
 
-  glShaderSource(shaderID, 1, source.c_str(), 0);
+  const GLchar* src = source.c_str();
+  glShaderSource(shaderID, 1, static_cast<const GLchar**>(&src), 0);
   glCompileShader(shaderID);
 
   int compiled;
-  glGetShaderiv(ShaderID, GL_COMPILE_STATUS, &compiled);  //Get errors
+  glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compiled);  //Get errors
   if (compiled){
     glAttachShader(programID, shaderID);
-    return false;
+   
+    glLinkProgram(programID);
+    GLint status;
+    glGetProgramiv(programID, GL_LINK_STATUS, &status);
+    is_valide = (bool) status;
+    
+    return true;
   } else {
-    std::cerr << []() {
-      switch (type){
-        case Type::Vertex:
+    std::cerr << [](enum Type t) {
+      switch (t){
+        case Type::VERTEX:
             return "Could not compile Vertex Shader. :(";
           break;
-        case Type::Fragment:
+        case Type::FRAGMENT:
             return "Could not compile Fragment shader. :(";
           break;
         default:
@@ -56,4 +65,20 @@ bool Shader::loadFromSource(const std::string& source, enum Type type){
     } << '\n';
     return false;
   }
+}
+
+void Shader::activate() const {
+  glUseProgram(programID);
+}
+
+void Shader::deactivate() const {
+  glUseProgram(0);
+}
+
+GLint Shader::getAttribLocation(const std::string& name) const {
+  return glGetAttribLocation(programID, name.c_str());
+}
+
+GLint Shader::getUniformLocation(const std::string& name) const {
+  return glGetUniformLocation(programID, name.c_str());
 }
