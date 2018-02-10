@@ -10,6 +10,7 @@ add_definitions(-DGLM_FORCE_PURE)  #Disable SIMD optimizations.
 set(SRCS
   # Sources src/*
   src/main.cpp
+  src/glUtils.cpp
   src/viewer.cpp
   src/camera.cpp
 )
