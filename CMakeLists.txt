@@ -12,7 +12,6 @@ set(SRCS
   src/main.cpp
   src/viewer.cpp
   src/camera.cpp
-  src/shader.cpp
 )
 set(EXEC cdlod_viewer)
 add_executable(${EXEC} ${SRCS})
@@ -43,3 +42,5 @@ else()
   set(GlmIncludeDir ${source_dir})
   target_include_directories(${EXEC} PRIVATE ${GlmIncludeDir})
 endif()
+
+target_link_libraries(${EXEC} "GLEW")
