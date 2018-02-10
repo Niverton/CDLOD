@@ -1,7 +1,7 @@
-#include <GL/gl.h>
 #include <iostream>
 
 #include <glm/glm.hpp>
+#include "glUtils.hpp"
 #include <GLFW/glfw3.h>
 
 #include "viewer.hpp"
@@ -26,7 +26,10 @@ int main(int argc, char **argv) {
     std::cerr << "Could not initialize GLFW. :(\n";
     exit(-1);
   }
-  
+
+  glUtils::initGL();
+
+
   Viewer viewer(800, 600, "PDP");
   glfwSetKeyCallback(viewer.getGlfwWindow(), input::key_callback);
 
