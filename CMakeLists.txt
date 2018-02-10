@@ -2,12 +2,17 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(cdlod)
 
+include_directories(include)
+
+add_definitions(-DGLM_FORCE_PURE)  #Disable SIMD optimizations.
+
 # Fichiers source
 set(SRCS
-  # Headers include/*
-
   # Sources src/*
   src/main.cpp
+  src/viewer.cpp
+  src/camera.cpp
+  src/shader.cpp
 )
 set(EXEC cdlod_viewer)
 add_executable(${EXEC} ${SRCS})
@@ -20,7 +25,7 @@ target_link_libraries(${EXEC} ${OPENGL_gl_LIBRARY})
 target_include_directories(${EXEC} PRIVATE ${OPENGL_INCLUDE_DIR})
 
 find_package(glfw3 REQUIRED)
-target_link_libraries(${EXEC} ${GLFW3_LIBRARY})
+target_link_libraries(${EXEC} "glfw")
 
 find_package(glm)
 if(${glm_FOUND})
