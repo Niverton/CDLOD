@@ -2,6 +2,7 @@
 #include "viewer.hpp"
 #include "glUtils.hpp"
 #include "terrain.hpp"
+#include "camera.hpp"
 
 Viewer::Viewer(int width, int height, const std::string& title):
   width(width), height(height){
@@ -18,11 +19,14 @@ Viewer::Viewer(int width, int height, const std::string& title):
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   glUtils::initGL();
-
+  
+  glFrontFace(GL_CW);
+  glCullFace(GL_FRONT_AND_BACK);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_LINE_SMOOTH);
 
 
+  reshape(width, height);
   try{
     terrain = std::make_unique<Terrain>();
   }catch(std::string& exception){
@@ -40,9 +44,13 @@ Viewer::~Viewer(){
 }
 
 void Viewer::draw(){
+  /*
   terrain_shader->activate();
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glDepthFunc(GL_LESS);
   terrain->draw(*terrain_shader);
   terrain_shader->deactivate();
+  */
 }
 
 void Viewer::reshape(int width, int height){
