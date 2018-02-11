@@ -13,7 +13,7 @@ namespace type{
   using Vec4i = glm::ivec4;
 
   struct Vertex{
-    Vec4 position;
+    Vec3 position;
   };
 
   using Face = Vec3i;
