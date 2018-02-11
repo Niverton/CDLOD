@@ -16,7 +16,7 @@ void glUtils::initGL(){
     exit(-1);
   }
 
-  glEnable(GL_DEBUG_OUTPUT);
+//  glEnable(GL_DEBUG_OUTPUT);    //OpenGL 4.5 or greater
   glDebugMessageCallback( (GLDEBUGPROC) callback_error, 0);
 }
 
