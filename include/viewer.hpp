@@ -1,6 +1,8 @@
 #pragma once
 
+#include <GL/glew.h>      //glew need to be include before glfw
 #include <GLFW/glfw3.h>
+#include "terrain.hpp"
 #include <string>
 
 class Viewer{
@@ -18,4 +20,7 @@ class Viewer{
     int width = 800;
     int height = 600;
     GLFWwindow* window = nullptr;
+
+    Terrain terrain;
+    Shader terrain_shader;
 };
