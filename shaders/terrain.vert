@@ -1,7 +1,7 @@
 #version 330 core
 
 in vec3 a_pos;
-out var_color;
+out vec3 var_color;
 
 void main(){
   gl_Position = vec4(a_pos, 1.0);
