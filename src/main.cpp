@@ -6,9 +6,8 @@
 
 #include "viewer.hpp"
 
-namespace input{
+namespace callback{
   void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-    std::cout << key << '\n';
     switch (key){
       case GLFW_KEY_ESCAPE:
         glfwSetWindowShouldClose(window, GLFW_TRUE);
@@ -17,6 +16,10 @@ namespace input{
       default:
         break;
     }
+  }
+
+  void error_callback(int error, const char* des){
+    std::cerr << "Error: " << error << " " << des << '\n';
   }
 }
 
@@ -28,13 +31,17 @@ int main(int argc, char **argv) {
   }
 
   Viewer viewer(800, 600, "PDP");
-  glfwSetKeyCallback(viewer.getGlfwWindow(), input::key_callback);
-
+  glfwSetKeyCallback(viewer.getGlfwWindow(), callback::key_callback);
+  glfwSetErrorCallback(callback::error_callback);
   
 
 
   while(!viewer.shouldClose()){
-    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.2f, 0.2f, 0.5f, 1.0f);
+    viewer.draw();
+
+    glfwSwapBuffers(viewer.getGlfwWindow());
     glfwPollEvents();
   }
 
