@@ -1,5 +1,6 @@
 #include <iostream>
 #include "viewer.hpp"
+#include "terrain.hpp"
 
 Viewer::Viewer(int width, int height, const std::string& title):
   width(width), height(height){
@@ -14,6 +15,11 @@ Viewer::Viewer(int width, int height, const std::string& title):
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_LINE_SMOOTH);
+
+  Shader terrain_shader;
+
+  terrain_shader.loadFromFile("shader/terrain.vert", Shader::Type::VERTEX);
+  terrain_shader.loadFromFile("shader/terrain.frag", Shader::Type::FRAGMENT);
 }
 
 Viewer::~Viewer(){
@@ -21,7 +27,9 @@ Viewer::~Viewer(){
 }
 
 void Viewer::draw(){
-  // OpenGL code here;
+  terrain_shader.activate();
+  terrain.draw(terrain_shader);
+  terrain_shader.deactivate();
 }
 
 void Viewer::reshape(int width, int height){
