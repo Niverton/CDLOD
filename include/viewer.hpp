@@ -21,6 +21,6 @@ class Viewer{
     int height = 600;
     GLFWwindow* window = nullptr;
 
-    Terrain terrain;
-    Shader terrain_shader;
+    Terrain* terrain;
+    Shader* terrain_shader;
 };
