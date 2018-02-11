@@ -2,6 +2,7 @@
 #include <iostream>
 
 void glUtils::initGL(){
+  glewExperimental=true;
   GLenum status = glewInit();
   if (status != GLEW_OK){
     std::cerr << "Error: could not initialize GLEW: " << glewGetErrorString(status) << ". :(\n";
