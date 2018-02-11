@@ -3,10 +3,18 @@
 #include <glm/glm.hpp>
 
 namespace type{
+  using Vec2 = glm::vec2;           //glm::mediump_dvec2;
+  using Vec3 = glm::vec3;           //glm::mediump_dvec3;
+  using Vec4 = glm::vec4;           //glm::mediump_dvec4;
+
+  using Vec2i = glm::ivec2;
+  using Vec3i = glm::ivec3;
+  using Vec4i = glm::ivec4;
+
   struct Vertex{
-    glm::vec4 position;
-    glm::vec4 color;
+    Vec4 position;
+    Vec4 color;
   };
 
-  using Face = glm::ivec3;
+  using Face = Vec3i;
 }
