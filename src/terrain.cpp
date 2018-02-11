@@ -4,10 +4,10 @@
 Terrain::Terrain(){
   /* Create buffer for vertices */
   glGenBuffers(1, &vertex_buffer_ID);
-  if (!(glGetError() != GL_NO_ERROR)){
+  /*if (!(glGetError() != GL_NO_ERROR)){
     std::cerr << "Error: could not generate OpenGL vertex buffer.\n";
     exit(-1);
-  }
+  }*/
 
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_ID);
   glBufferData(
@@ -19,10 +19,10 @@ Terrain::Terrain(){
 
   /* create buffer for faces */
   glGenBuffers(1, &index_buffer_ID);
-  if (!(glGetError() != GL_NO_ERROR)){
+/*  if (!(glGetError() != GL_NO_ERROR)){
     std::cerr << "Error: could not generate OpenGL index buffer.\n";
     exit(-1);
-  }
+  }*/
   
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_ID);
   glBufferData(
@@ -33,10 +33,10 @@ Terrain::Terrain(){
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
   glGenVertexArrays(1, &vertex_array_ID);
-  if (!(glGetError() != GL_NO_ERROR)){
+  /*if (!(glGetError() != GL_NO_ERROR)){
     std::cerr << "Error: could not generate OpenGL vertex array.\n";
     exit(-1);
-  }
+  }*/
 }
 
 Terrain::~Terrain(){
