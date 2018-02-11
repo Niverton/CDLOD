@@ -1,12 +1,10 @@
 #include "terrain.hpp"
-#include <iostream>
 
 Terrain::Terrain(){
   /* Create buffer for vertices */
   glGenBuffers(1, &vertex_buffer_ID);
   if (!(glGetError() == GL_NO_ERROR)){
-    std::cerr << "Error: could not generate OpenGL vertex buffer.\n";
-    exit(-1);
+    throw "Error: could not generate OpenGL vertex buffer.\n";
   }
 
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_ID);
@@ -20,8 +18,7 @@ Terrain::Terrain(){
   /* create buffer for faces */
   glGenBuffers(1, &index_buffer_ID);
   if (!(glGetError() == GL_NO_ERROR)){
-    std::cerr << "Error: could not generate OpenGL index buffer.\n";
-    exit(-1);
+    throw "Error: could not generate OpenGL index buffer.\n";
   }
   
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_ID);
@@ -34,8 +31,7 @@ Terrain::Terrain(){
 
   glGenVertexArrays(1, &vertex_array_ID);
   if (!(glGetError() == GL_NO_ERROR)){
-    std::cerr << "Error: could not generate OpenGL vertex array.\n";
-    exit(-1);
+    throw "Error: could not generate OpenGL vertex array.\n";
   }
 }
 
