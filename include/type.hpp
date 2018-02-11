@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 namespace type{
@@ -13,7 +14,6 @@ namespace type{
 
   struct Vertex{
     Vec4 position;
-    Vec4 color;
   };
 
   using Face = Vec3i;
