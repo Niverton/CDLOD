@@ -1,6 +1,6 @@
 #version 330 core
 
-in vec4 a_pos;
+in vec3 a_pos;
 out var_color;
 
 void main(){
