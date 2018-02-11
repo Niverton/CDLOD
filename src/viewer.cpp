@@ -26,8 +26,8 @@ Viewer::Viewer(int width, int height, const std::string& title):
   terrain = new Terrain();
   terrain_shader = new Shader();
 
-  terrain_shader->loadFromFile("shader/terrain.vert", Shader::Type::VERTEX);
-  terrain_shader->loadFromFile("shader/terrain.frag", Shader::Type::FRAGMENT);
+  terrain_shader->loadFromFile("shaders/terrain.vert", Shader::Type::VERTEX);
+  terrain_shader->loadFromFile("shaders/terrain.frag", Shader::Type::FRAGMENT);
 }
 
 Viewer::~Viewer(){
