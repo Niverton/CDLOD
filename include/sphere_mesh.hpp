@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "type.hpp"
 #include <ostream>
 #include <vector>
 
@@ -12,6 +13,9 @@ public:
   SphereMesh(int radius_, int density);
   std::ostream &operator<<(std::ostream &o);
 
+  std::vector<type::Vertex>& getVertices()   { return vertices; }
+  std::vector<type::Face>& getFaces()      { return faces; }
+
 private:
   void Generate(int density);
 
@@ -20,7 +24,7 @@ private:
   void addQuadAlt(int a, int b, int c, int d);
 
   int radius;
-
-  std::vector<glm::vec3> vertices;
-  std::vector<glm::vec3> faces;
+  
+  std::vector<type::Vertex> vertices;
+  std::vector<type::Face> faces;
 };
