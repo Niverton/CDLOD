@@ -118,21 +118,24 @@ void SphereMesh::Generate(int density) {
 }
 
 int SphereMesh::addVertex(Vec3 v) {
-  vertices.emplace_back(std::move(v));
+  type::Vertex vertex;
+  vertex.position = v;
+
+  vertices.emplace_back(std::move(vertex));
   return vertices.size() - 1;
 }
 
 std::ostream &operator<<(std::ostream &o, const SphereMesh &mesh) {
   o << "OFF\n";
   o << mesh.vertices.size() << ' ' << mesh.faces.size() << " 0\n";
-  for (const Vec3 &v : mesh.vertices) {
+  for (const type::Vertex &v : mesh.vertices) {
     for (int i = 0; i < 3; i++) {
-      o << v[i] << " ";
+      o << v.position[i] << " ";
     }
     o << '\n';
   }
   o << '\n';
-  for (const Vec3i &f : mesh.faces) {
+  for (const type::Face &f : mesh.faces) {
     o << "3 "; // Number of vertex per face (we're drawing triangles)
     for (int i = 0; i < 3; i++) {
       o << f[i] << " ";
