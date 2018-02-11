@@ -14,6 +14,7 @@ set(SRCS
   src/viewer.cpp
   src/camera.cpp
   src/shader.cpp
+  src/terrain.cpp
 )
 set(EXEC cdlod_viewer)
 add_executable(${EXEC} ${SRCS})
