@@ -9,6 +9,8 @@ public:
     VERTEX,
     FRAGMENT,
   };
+  Shader() {}
+  ~Shader() {}
 
   bool loadFromFile(const std::string& path, enum Type type);
   bool loadFromSource(const std::string& source, enum Type type);
@@ -21,5 +23,5 @@ public:
 
 private:
   bool is_valide = false;
-  GLuint programID;
+  GLuint program_ID;
 };

@@ -20,7 +20,7 @@ bool Shader::loadFromFile(const std::string& path, enum Type type){
 }
 
 bool Shader::loadFromSource(const std::string& source, enum Type type){
-  programID = glCreateProgram();
+  program_ID = glCreateProgram();
 
   GLuint shaderID;
 
@@ -42,11 +42,11 @@ bool Shader::loadFromSource(const std::string& source, enum Type type){
   int compiled;
   glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compiled);  //Get errors
   if (compiled){
-    glAttachShader(programID, shaderID);
+    glAttachShader(program_ID, shaderID);
    
-    glLinkProgram(programID);
+    glLinkProgram(program_ID);
     GLint status;
-    glGetProgramiv(programID, GL_LINK_STATUS, &status);
+    glGetProgramiv(program_ID, GL_LINK_STATUS, &status);
     is_valide = (bool) status;
     
     return true;
@@ -68,7 +68,7 @@ bool Shader::loadFromSource(const std::string& source, enum Type type){
 }
 
 void Shader::activate() const {
-  glUseProgram(programID);
+  glUseProgram(program_ID);
 }
 
 void Shader::deactivate() const {
@@ -76,9 +76,9 @@ void Shader::deactivate() const {
 }
 
 GLint Shader::getAttribLocation(const std::string& name) const {
-  return glGetAttribLocation(programID, name.c_str());
+  return glGetAttribLocation(program_ID, name.c_str());
 }
 
 GLint Shader::getUniformLocation(const std::string& name) const {
-  return glGetUniformLocation(programID, name.c_str());
+  return glGetUniformLocation(program_ID, name.c_str());
 }
