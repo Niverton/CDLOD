@@ -15,9 +15,11 @@ set(SRCS
   src/camera.cpp
   src/shader.cpp
   src/terrain.cpp
+  src/sphere_mesh.cpp
 )
 set(EXEC cdlod_viewer)
 add_executable(${EXEC} ${SRCS})
+target_include_directories(${EXEC} PRIVATE include)
 #Forcer le C++14, cxx_std_14 pas disponible sur la version 3.7 de cmake
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
