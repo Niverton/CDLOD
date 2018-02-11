@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "terrain.hpp"
 #include <string>
+#include <memory>
 
 class Viewer{
   public:
@@ -21,6 +22,6 @@ class Viewer{
     int height = 600;
     GLFWwindow* window = nullptr;
 
-    Terrain* terrain;
-    Shader* terrain_shader;
+    std::unique_ptr<Terrain> terrain;
+    std::unique_ptr<Shader> terrain_shader;
 };

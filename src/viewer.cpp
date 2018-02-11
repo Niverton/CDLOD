@@ -23,8 +23,13 @@ Viewer::Viewer(int width, int height, const std::string& title):
   glEnable(GL_LINE_SMOOTH);
 
 
-  terrain = new Terrain();
-  terrain_shader = new Shader();
+  try{
+    terrain = std::make_unique<Terrain>();
+  }catch(std::string& exception){
+    std::cerr << exception;
+    exit(-1);
+  }
+  terrain_shader = std::make_unique<Shader>();
 
   terrain_shader->loadFromFile("shaders/terrain.vert", Shader::Type::VERTEX);
   terrain_shader->loadFromFile("shaders/terrain.frag", Shader::Type::FRAGMENT);
