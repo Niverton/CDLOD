@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <glm/glm.hpp>
-#include "glUtils.hpp"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "viewer.hpp"
@@ -27,11 +27,11 @@ int main(int argc, char **argv) {
     exit(-1);
   }
 
-  glUtils::initGL();
-
-
   Viewer viewer(800, 600, "PDP");
   glfwSetKeyCallback(viewer.getGlfwWindow(), input::key_callback);
+
+  
+
 
   while(!viewer.shouldClose()){
     
