@@ -35,9 +35,7 @@ Viewer::Viewer(int width, int height, const std::string& title):
   }
   terrain_shader = std::make_unique<Shader>();
 
-  terrain_shader->loadFromFile("shaders/terrain.vert", Shader::Type::VERTEX);
-  terrain_shader->loadFromFile("shaders/terrain.frag", Shader::Type::FRAGMENT);
-  terrain_shader->link();
+
 }
 
 Viewer::~Viewer(){
@@ -45,11 +43,8 @@ Viewer::~Viewer(){
 }
 
 void Viewer::draw(){
-  terrain_shader->activate();
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glDepthFunc(GL_LESS);
-  terrain->draw(*terrain_shader);
-  terrain_shader->deactivate();
+  terrain->draw();
+
 
   
 }
