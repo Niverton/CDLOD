@@ -1,6 +1,8 @@
-in vec4 var_color;
+#version 330 core
+
 out vec4 out_color;
 
-void main(){
-  out_color = var_color;
+void main(void) {
+    out_color = vec4(0.0, 1.0, 0.0, 1.0);
 }
+
