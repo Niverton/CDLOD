@@ -3,234 +3,219 @@
 
 using namespace std;
 
-TextureManager::TextureManager()
-{
+TextureManager::TextureManager() {}
 
+TextureManager::~TextureManager() { clear(); }
+
+void TextureManager::clear() {
+  auto end = mTextureMap.end();
+  for (auto it = mTextureMap.begin(); it != end; ++it) {
+    delete it->second;
+  }
+
+  mTextureMap.clear();
 }
 
-TextureManager::~TextureManager()
-{
-	clear();
+bool TextureManager::loadTexture(const char *path) {
+  string extension = getExtensionFromPath(path);
+
+  auto find = mTextureMap.find(path);
+
+  if (find != mTextureMap.end()) {
+    // cout << "Skipped loading texture from: " << find->first << " since it is
+    // already loaded." << endl;
+    return true;
+  }
+
+  if (extension == ".dds")
+    return loadDDSTexture(path);
+  else if (extension == ".tga")
+    return loadTGATexture(path);
+  else {
+    cout << "Could not load file: " << path
+         << " because it has an unsupported extension." << endl;
+  }
+
+  return false;
 }
 
-void TextureManager::clear()
-{
-	auto end = mTextureMap.end();
-	for (auto it = mTextureMap.begin(); it != end; ++it)
-	{
-		delete it->second;
-	}
+Texture *TextureManager::getTexture(const char *path) {
+  auto texture = mTextureMap.find(path);
 
-	mTextureMap.clear();
+  if (texture != mTextureMap.end())
+    return texture->second;
+
+  return NULL;
 }
 
-bool TextureManager::loadTexture(const char* path)
-{
-	string extension = getExtensionFromPath(path);
+bool TextureManager::loadDDSTexture(const char *path) {
+  nv_dds::CDDSImage image;
 
-	auto find = mTextureMap.find(path);
+  if (!image.load(path)) {
+    // cout << "Could not load texture from " << path << endl;
+    return false;
+  }
 
-	if (find != mTextureMap.end())
-	{
-		//cout << "Skipped loading texture from: " << find->first << " since it is already loaded." << endl;
-		return true;
-	}
+  GLuint textureRef = 0;
+  bool hasMipmaps = false;
 
-	if (extension == ".dds")
-		return loadDDSTexture(path);
-	else if (extension == ".tga")
-		return loadTGATexture(path);
-	else
-	{
-		cout << "Could not load file: " << path << " because it has an unsupported extension." << endl;
-	}
+  if (image.is_compressed()) {
+    if (image.is_cubemap()) {
+      cout << "Compressed cube maps not supported at this time" << endl;
+      return false;
+    }
 
-	return false;
+    textureRef = loadCompressedDDSTexture(image, hasMipmaps);
+  } else {
+    if (image.is_cubemap())
+      textureRef = loadCubeMapDDSTexture(image, hasMipmaps);
+    else
+      textureRef = loadUncompressedDDSTexture(image, hasMipmaps);
+  }
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  if (hasMipmaps)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                    GL_LINEAR_MIPMAP_LINEAR);
+  else
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+  Texture *newTex = new Texture();
+  newTex->mpTexture = textureRef;
+
+  mTextureMap[path] = newTex;
+
+  return true;
 }
 
-Texture* TextureManager::getTexture(const char* path)
-{
-	auto texture = mTextureMap.find(path);
+GLuint TextureManager::loadCubeMapDDSTexture(nv_dds::CDDSImage &image,
+                                             bool &hasMipmaps) {
+  GLuint textureRef;
+  GLenum target;
 
-	if (texture != mTextureMap.end())
-		return texture->second;
+  glGenTextures(1, &textureRef);
+  glEnable(GL_TEXTURE_CUBE_MAP_ARB);
+  glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, textureRef);
 
-	return NULL;
+  for (int n = 0; n < 6; n++) {
+    target = GL_TEXTURE_CUBE_MAP_POSITIVE_X_ARB + n;
+
+    glTexImage2D(target, 0, image.get_components(),
+                 image.get_cubemap_face(n).get_width(),
+                 image.get_cubemap_face(n).get_height(), 0, image.get_format(),
+                 GL_UNSIGNED_BYTE, image.get_cubemap_face(n));
+
+    for (unsigned i = 0; i < image.get_cubemap_face(n).get_num_mipmaps(); i++) {
+      hasMipmaps = true;
+      glTexImage2D(target, i + 1, image.get_components(),
+                   image.get_cubemap_face(n).get_mipmap(i).get_width(),
+                   image.get_cubemap_face(n).get_mipmap(i).get_height(), 0,
+                   image.get_format(), GL_UNSIGNED_BYTE,
+                   image.get_cubemap_face(n).get_mipmap(i));
+    }
+  }
+
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  if (hasMipmaps)
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,
+                    GL_LINEAR_MIPMAP_LINEAR);
+  else
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+  return textureRef;
 }
 
-bool TextureManager::loadDDSTexture(const char* path)
-{
-	nv_dds::CDDSImage image;
+GLuint TextureManager::loadUncompressedDDSTexture(nv_dds::CDDSImage &image,
+                                                  bool &hasMipmaps) {
+  GLuint textureRef;
 
-	if (!image.load(path))
-	{
-		//cout << "Could not load texture from " << path << endl;
-		return false;
-	}
+  glGenTextures(1, &textureRef);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, textureRef);
 
-	GLuint textureRef = 0;
-	bool hasMipmaps = false;
+  glTexImage2D(GL_TEXTURE_2D, 0, image.get_components(), image.get_width(),
+               image.get_height(), 0, image.get_format(), GL_UNSIGNED_BYTE,
+               image);
 
-	if (image.is_compressed())
-	{
-		if (image.is_cubemap())
-		{
-			cout << "Compressed cube maps not supported at this time" << endl;
-			return false;
-		}
+  for (unsigned i = 0; i < image.get_num_mipmaps(); i++) {
+    hasMipmaps = true;
+    glTexImage2D(GL_TEXTURE_2D, i + 1, image.get_components(),
+                 image.get_mipmap(i).get_width(),
+                 image.get_mipmap(i).get_height(), 0, image.get_format(),
+                 GL_UNSIGNED_BYTE, image.get_mipmap(i));
+  }
 
-		textureRef = loadCompressedDDSTexture(image, hasMipmaps);
-	}
-	else
-	{
-		if (image.is_cubemap())
-			textureRef = loadCubeMapDDSTexture(image, hasMipmaps);
-		else
-			textureRef = loadUncompressedDDSTexture(image, hasMipmaps);
-	}
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	if (hasMipmaps)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	else
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	Texture* newTex = new Texture();
-	newTex->mpTexture = textureRef;
-
-	mTextureMap[path] = newTex;
-
-	return true;
+  return textureRef;
 }
 
-GLuint TextureManager::loadCubeMapDDSTexture(nv_dds::CDDSImage& image, bool& hasMipmaps)
-{
-	GLuint textureRef;
-	GLenum target;
+GLuint TextureManager::loadCompressedDDSTexture(nv_dds::CDDSImage &image,
+                                                bool &hasMipmaps) {
+  GLuint textureRef;
 
-	glGenTextures(1, &textureRef);
-	glEnable(GL_TEXTURE_CUBE_MAP_ARB);
-	glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, textureRef);
+  glGenTextures(1, &textureRef);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, textureRef);
 
-	for (int n = 0; n < 6; n++)
-	{
-		target = GL_TEXTURE_CUBE_MAP_POSITIVE_X_ARB+n;
+  glCompressedTexImage2DARB(GL_TEXTURE_2D, 0, image.get_format(),
+                            image.get_width(), image.get_height(), 0,
+                            image.get_size(), image);
 
-		glTexImage2D(target, 0, image.get_components(), image.get_cubemap_face(n).get_width(),
-			image.get_cubemap_face(n).get_height(), 0, image.get_format(), GL_UNSIGNED_BYTE, image.get_cubemap_face(n));
+  for (unsigned i = 0; i < image.get_num_mipmaps(); i++) {
+    hasMipmaps = true;
+    nv_dds::CSurface mipmap = image.get_mipmap(i);
 
-		for (unsigned i = 0; i < image.get_cubemap_face(n).get_num_mipmaps(); i++)
-		{
-			hasMipmaps = true;
-			glTexImage2D(target, i+1, image.get_components(), 
-				image.get_cubemap_face(n).get_mipmap(i).get_width(), 
-				image.get_cubemap_face(n).get_mipmap(i).get_height(), 0,
-				image.get_format(), GL_UNSIGNED_BYTE, image.get_cubemap_face(n).get_mipmap(i));
-		}
-	}
+    glCompressedTexImage2DARB(GL_TEXTURE_2D, i + 1, image.get_format(),
+                              mipmap.get_width(), mipmap.get_height(), 0,
+                              mipmap.get_size(), mipmap);
+  }
 
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (hasMipmaps)
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	else
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	return textureRef;
+  return textureRef;
 }
 
-GLuint TextureManager::loadUncompressedDDSTexture(nv_dds::CDDSImage& image, bool& hasMipmaps)
-{
-	GLuint textureRef;
+bool TextureManager::loadTGATexture(const char *path) {
+  NS_TGALOADER::IMAGE image;
 
-	glGenTextures(1, &textureRef);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureRef);
+  if (!image.LoadTGA(path)) {
+    // cout << "Could not load texture from " << path << endl;
+    return false;
+  }
 
-	glTexImage2D(GL_TEXTURE_2D, 0, image.get_components(), image.get_width(), image.get_height(),
-				 0, image.get_format(), GL_UNSIGNED_BYTE, image);
+  GLuint textureRef;
 
-	for (unsigned i = 0; i < image.get_num_mipmaps(); i++)
-	{
-		hasMipmaps = true;
-		glTexImage2D(GL_TEXTURE_2D, i+1, image.get_components(), 
-					 image.get_mipmap(i).get_width(), image.get_mipmap(i).get_height(),
-					 0, image.get_format(), GL_UNSIGNED_BYTE, image.get_mipmap(i));
-	}
+  glGenTextures(1, &textureRef);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, textureRef);
 
-	return textureRef;
+  glTexImage2D(GL_TEXTURE_2D, 0, 4, image.getWidth(), image.getHeight(), 0,
+               GL_BGRA, GL_UNSIGNED_BYTE, image.getDataForOpenGL());
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+  Texture *newTex = new Texture();
+  newTex->mpTexture = textureRef;
+
+  mTextureMap[path] = newTex;
+
+  return true;
 }
 
-GLuint TextureManager::loadCompressedDDSTexture(nv_dds::CDDSImage& image, bool& hasMipmaps)
-{
-	GLuint textureRef;
+std::string TextureManager::getExtensionFromPath(const char *path) {
+  const char *currentPtr = path;
 
-	glGenTextures(1, &textureRef);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureRef);
+  while (*currentPtr != '\0')
+    currentPtr++;
 
-	glCompressedTexImage2DARB(GL_TEXTURE_2D, 0, image.get_format(), 
-						      image.get_width(), image.get_height(),
-							  0, image.get_size(), image);
+  while (*currentPtr != '.' && currentPtr != path)
+    currentPtr--;
 
-	for (unsigned i = 0; i < image.get_num_mipmaps(); i++)
-	{
-		hasMipmaps = true;
-		nv_dds::CSurface mipmap = image.get_mipmap(i);
-
-		glCompressedTexImage2DARB(GL_TEXTURE_2D, i+1, image.get_format(), 
-					 mipmap.get_width(), mipmap.get_height(),
-					 0, mipmap.get_size(), mipmap);
-	}
-
-	return textureRef;
-}
-
-bool TextureManager::loadTGATexture(const char* path)
-{
-	NS_TGALOADER::IMAGE image;
-
-	if (!image.LoadTGA(path))
-	{
-		//cout << "Could not load texture from " << path << endl;
-		return false;
-	}
-
-	GLuint textureRef;
-
-	glGenTextures(1, &textureRef);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureRef);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, image.getWidth(), image.getHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.getDataForOpenGL());
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	Texture* newTex = new Texture();
-	newTex->mpTexture = textureRef;
-	
-	mTextureMap[path] = newTex;
-
-	return true;
-}
-
-std::string TextureManager::getExtensionFromPath(const char* path)
-{
-	const char* currentPtr = path;
-
-	while (*currentPtr != '\0')
-		currentPtr++;
-
-	while (*currentPtr != '.' && currentPtr != path)
-		currentPtr--;
-
-	return std::string(currentPtr);
+  return std::string(currentPtr);
 }

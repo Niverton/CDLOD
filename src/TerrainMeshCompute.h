@@ -2,49 +2,48 @@
 
 #include "glStd.h"
 
-class TerrainMeshCompute
-{
-	struct MeshGenerationBuffer
-	{
-		dvec2 offset;
-		double scale;
-		double pad;
-		glm::dmat3 normalTransform;
-		glm::ivec2 gridDimensions;
-		int test;
-	};
+class TerrainMeshCompute {
+  struct MeshGenerationBuffer {
+    dvec2 offset;
+    double scale;
+    double pad;
+    glm::dmat3 normalTransform;
+    glm::ivec2 gridDimensions;
+    int test;
+  };
 
 public:
-	TerrainMeshCompute(int resolution, float scale);
-	~TerrainMeshCompute();
+  TerrainMeshCompute(int resolution, float scale);
+  ~TerrainMeshCompute();
 
-	void Initialize();
+  void Initialize();
 
-	void Generate(const dvec2& offset, double scale, const vec3& surfaceNorm);
+  void Generate(const dvec2 &offset, double scale, const vec3 &surfaceNorm);
 
-	void Render();
+  void Render();
 
-	void resetRenderParams() { renderUL = renderUR = renderBL = renderBR = true; }
+  void resetRenderParams() { renderUL = renderUR = renderBL = renderBR = true; }
 
 public:
-	bool renderUL, renderUR, renderBL, renderBR;
+  bool renderUL, renderUR, renderBL, renderBR;
 
 private:
-	void generateMesh(int resolution, float scale, std::vector<vec4>& vertexOut, std::vector<std::vector<GLushort>>& indexOut);
+  void generateMesh(int resolution, float scale, std::vector<vec4> &vertexOut,
+                    std::vector<std::vector<GLushort>> &indexOut);
 
 private:
-	int mResolution;
-	float mScale;
+  int mResolution;
+  float mScale;
 
-	int mIndexCount;
+  int mIndexCount;
 
-	GLuint mComputeProgram;
+  GLuint mComputeProgram;
 
-	GLuint mpVertexBuffer;
-	GLuint mpVertexArray;
-	GLuint* mpIndexBuffers;
+  GLuint mpVertexBuffer;
+  GLuint mpVertexArray;
+  GLuint *mpIndexBuffers;
 
-	GLuint mpUniformBuffer;
+  GLuint mpUniformBuffer;
 
-	GLuint mpVertexTexture;
+  GLuint mpVertexTexture;
 };

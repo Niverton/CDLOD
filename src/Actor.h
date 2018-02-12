@@ -1,7 +1,6 @@
 #pragma once
 
-class Actor
-{
+class Actor {
 public:
-	Actor();
+  Actor();
 };

@@ -2,49 +2,47 @@
 #include "GameTimer.h"
 
 HeightmapManager::HeightmapManager(int resolution, int cacheSize)
-	:mResolution(resolution),
-	mCacheSize(cacheSize)
-{
-	mpCache = new HeightmapCache(cacheSize, mResolution);
-	mpGenerator = new HeightmapGenerator(mResolution);
+    : mResolution(resolution), mCacheSize(cacheSize) {
+  mpCache = new HeightmapCache(cacheSize, mResolution);
+  mpGenerator = new HeightmapGenerator(mResolution);
 }
 
-HeightmapManager::~HeightmapManager()
-{
-	delete mpCache;
-	delete mpGenerator;
+HeightmapManager::~HeightmapManager() {
+  delete mpCache;
+  delete mpGenerator;
 
-	mpCache = NULL;
-	mpGenerator = NULL;
+  mpCache = NULL;
+  mpGenerator = NULL;
 }
 
-void HeightmapManager::Initialize()
-{
-	mpCache->Initialize();
-	mpGenerator->Initialize();
+void HeightmapManager::Initialize() {
+  mpCache->Initialize();
+  mpGenerator->Initialize();
 }
 
-Texture* HeightmapManager::getHeightmap(const unsigned __int64& id, const dvec2& offset, double scale, const vec3& faceNormal)
-{
-	Texture* texture = mpCache->getTexture(id, true);
+Texture *HeightmapManager::getHeightmap(const unsigned long long int &id,
+                                        const dvec2 &offset, double scale,
+                                        const vec3 &faceNormal) {
+  Texture *texture = mpCache->getTexture(id, true);
 
-	if (texture != NULL)
-		return texture;
+  if (texture != NULL)
+    return texture;
 
-	GameTimer timer;
-	timer.Reset();
-	timer.Start();
+  GameTimer timer;
+  timer.Reset();
+  timer.Start();
 
-	texture = mpCache->getFreeTexture(id);
+  texture = mpCache->getFreeTexture(id);
 
-	mpGenerator->setGenerationTarget(texture);
-	mpGenerator->generateHeightmap(offset, scale, faceNormal);
+  mpGenerator->setGenerationTarget(texture);
+  mpGenerator->generateHeightmap(offset, scale, faceNormal);
 
-	timer.Tick();
+  timer.Tick();
 
-	std::cout << "Generated id: " << id << " in " << (timer.DeltaTime() * 1000.0) << "MS "
-		      << " Cache size: " << mpCache->getActiveCount() << " Free count: "
-			  << mpCache->getInactiveCount() << std::endl;
+  std::cout << "Generated id: " << id << " in " << (timer.DeltaTime() * 1000.0)
+            << "MS "
+            << " Cache size: " << mpCache->getActiveCount()
+            << " Free count: " << mpCache->getInactiveCount() << std::endl;
 
-	return texture;
+  return texture;
 }
