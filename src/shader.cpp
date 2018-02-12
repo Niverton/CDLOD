@@ -3,6 +3,16 @@
 #include <iostream>
 #include <fstream>
 
+bool Shader::is_linked = false;
+
+Shader::Shader(){
+  program_ID = glCreateProgram();
+}
+
+Shader::~Shader(){
+
+}
+
 bool Shader::loadFromFile(const std::string& path, enum Type type){
   std::string src;
 
@@ -20,7 +30,6 @@ bool Shader::loadFromFile(const std::string& path, enum Type type){
 }
 
 bool Shader::loadFromSource(const std::string& source, enum Type type){
-  program_ID = glCreateProgram();
 
   GLuint shaderID;
 
@@ -43,26 +52,24 @@ bool Shader::loadFromSource(const std::string& source, enum Type type){
   glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compiled);  //Get errors
   if (compiled){
     glAttachShader(program_ID, shaderID);
-   
-    glLinkProgram(program_ID);
-    GLint status;
-    glGetProgramiv(program_ID, GL_LINK_STATUS, &status);
-    is_valide = (bool) status;
-    
+    shaders_ID.push_back(shaderID);
     return true;
   } else {
-    std::cerr << [](enum Type t) {
+    char info[512];
+    glGetShaderInfoLog(shaderID, 512, NULL, info);
+
+    std::cerr <<  [](enum Type t) {
       switch (t){
         case Type::VERTEX:
-            return "Could not compile Vertex Shader. :(";
+            return "Could not compile Vertex Shader";
           break;
         case Type::FRAGMENT:
-            return "Could not compile Fragment shader. :(";
+            return "Could not compile Fragment shader";
           break;
         default:
-          return "Unknow error. :(";
+          return "Unknow error :(";
       }
-    } << '\n';
+    } << ": " << info << '\n';
     return false;
   }
 }
@@ -82,3 +89,23 @@ GLint Shader::getAttribLocation(const std::string& name) const {
 GLint Shader::getUniformLocation(const std::string& name) const {
   return glGetUniformLocation(program_ID, name.c_str());
 }
+
+bool Shader::link(){
+  if (!is_linked){
+    glLinkProgram(program_ID);
+    GLint status;
+    glGetProgramiv(program_ID, GL_LINK_STATUS, &status);
+    if (!status) {
+      char info[512];  
+      glGetProgramInfoLog(program_ID, 512, NULL, info);
+      std::cerr << "Error: could not link shader program: \n" << info << '\n';
+    }
+    for (GLuint shader : shaders_ID){
+      glDeleteShader(shader);
+    }
+    is_linked = true;
+    return true;
+  }
+  return false;
+}
+

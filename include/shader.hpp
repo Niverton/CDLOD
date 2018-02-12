@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <string>
+#include <vector>
 
 class Shader{
 public:
@@ -9,11 +10,12 @@ public:
     VERTEX,
     FRAGMENT,
   };
-  Shader() {}
-  ~Shader() {}
+  Shader();
+  ~Shader();
 
   bool loadFromFile(const std::string& path, enum Type type);
   bool loadFromSource(const std::string& source, enum Type type);
+  bool link();
 
   void activate() const;
   void deactivate() const;
@@ -24,4 +26,9 @@ public:
 private:
   bool is_valide = false;
   GLuint program_ID;
+  std::vector<GLuint> shaders_ID;
+
+  
+  static bool is_linked;
 };
+
