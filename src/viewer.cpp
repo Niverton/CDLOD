@@ -1,8 +1,6 @@
 #include <iostream>
 #include "viewer.hpp"
 #include "glUtils.hpp"
-#include "terrain.hpp"
-#include "camera.hpp"
 
 Viewer::Viewer(int width, int height, const std::string& title):
   width(width), height(height){
@@ -14,12 +12,14 @@ Viewer::Viewer(int width, int height, const std::string& title):
   }
 
   glfwMakeContextCurrent(window);
+
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   glUtils::initGL();
   
+  reshape(width, height);
   glFrontFace(GL_CW);
   glCullFace(GL_FRONT_AND_BACK);
   glEnable(GL_DEPTH_TEST);
@@ -37,6 +37,7 @@ Viewer::Viewer(int width, int height, const std::string& title):
 
   terrain_shader->loadFromFile("shaders/terrain.vert", Shader::Type::VERTEX);
   terrain_shader->loadFromFile("shaders/terrain.frag", Shader::Type::FRAGMENT);
+  terrain_shader->link();
 }
 
 Viewer::~Viewer(){
@@ -44,13 +45,13 @@ Viewer::~Viewer(){
 }
 
 void Viewer::draw(){
-  /*
   terrain_shader->activate();
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glDepthFunc(GL_LESS);
   terrain->draw(*terrain_shader);
   terrain_shader->deactivate();
-  */
+
+  
 }
 
 void Viewer::reshape(int width, int height){
