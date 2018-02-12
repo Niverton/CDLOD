@@ -383,7 +383,7 @@ void GLApp::Render() {
   mat4 view = mCamera.getView();
   mat4 world = glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f));
 
-  mpSkybox->Render(perFrame, perObjectBuffer, renderProgram);
+  //mpSkybox->Render(perFrame, perObjectBuffer, renderProgram);
 
   // mpVoxels->Render(perFrame, perObjectBuffer, renderProgram);
 
