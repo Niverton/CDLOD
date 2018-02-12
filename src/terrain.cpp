@@ -1,5 +1,6 @@
 #include "terrain.hpp"
 #include "sphere_mesh.hpp"
+#include <iostream>
 
 Terrain::Terrain(){
   bool vert_status, frag_status, link_status;
@@ -11,10 +12,14 @@ Terrain::Terrain(){
      throw "Error: could not create shader.";
   }
   
-  SphereMesh sphere_generator(1, 10);
+  SphereMesh sphere_generator(1, 1000);
   
   vertices = sphere_generator.getVertices();
   faces = sphere_generator.getFaces();
+  
+  std::cout << "Vertices count: "<< vertices.size() << '\n';
+  std::cout << "Faces count: "<< faces.size() << '\n';
+  
   
   /*
   type::Vertex v1;
