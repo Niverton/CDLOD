@@ -2,7 +2,7 @@
 #include "sphere_mesh.hpp"
 #include <iostream>
 
-Terrain::Terrain(){
+Terrain::Terrain(float sphere_radius, int sphere_density){
   bool vert_status, frag_status, link_status;
   vert_status = shader.loadFromFile("shaders/terrain.vert", Shader::Type::VERTEX);
   frag_status = shader.loadFromFile("shaders/terrain.frag", Shader::Type::FRAGMENT);
@@ -12,7 +12,7 @@ Terrain::Terrain(){
      throw "Error: could not create shader.";
   }
   
-  SphereMesh sphere_generator(1, 1000);
+  SphereMesh sphere_generator(sphere_radius, sphere_density);
   
   vertices = sphere_generator.getVertices();
   faces = sphere_generator.getFaces();

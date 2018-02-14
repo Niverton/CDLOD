@@ -1,14 +1,15 @@
 #pragma once
+
 #include "mesh.hpp"
 #include "shader.hpp"
 
-class Terrain : public Mesh{
+class Terrain : public Mesh {
 public:
-  Terrain();
+  Terrain(float sphere_radius, int sphere_density);
   ~Terrain();
 
   void draw();
-  
+
 private:
   Shader shader;
 };

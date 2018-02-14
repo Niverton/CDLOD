@@ -2,15 +2,6 @@
 
 #include <glm/gtc/noise.hpp>
 
-// TODO clean up
-using Vec2 = glm::vec2;
-using Vec3 = glm::vec3;
-using Vec4 = glm::vec4;
-
-using Vec3i = glm::ivec3;
-using Vec4i = glm::ivec4;
-//
-
 // ---------------------------------- EXTERN ----------------------------------
 /* Taken from https://github.com/caosdoar/spheres
  * License:
@@ -32,6 +23,8 @@ using Vec4i = glm::ivec4;
  * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+using namespace type;
 
 namespace CubeToSphere {
 static const Vec3 origins[6] = {Vec3(-1.0, -1.0, -1.0), Vec3(1.0, -1.0, -1.0),
@@ -99,7 +92,7 @@ void SphereMesh::addQuadAlt(int a, int b, int c, int d) {
 
 // -------------------------------- END EXTERN --------------------------------
 
-SphereMesh::SphereMesh(int radius_, int density) : radius(radius_) {
+SphereMesh::SphereMesh(float radius_, int density) : radius(radius_) {
   Generate(density);
 }
 
@@ -108,13 +101,15 @@ void SphereMesh::Generate(int density) {
   SpherifiedCube(density / 6, *this);
 
   // 2) Heightmap
-  /* TODO borner valeurs + ajouter rayon
-  Vec3 origin{0.,0.,0.};
-  for (Vec3& vertex : vertices) {
-    Vec3 normal = vertex - origin;
-    vertex += normal * (glm::simplex(vertex) * (100. - (-100.)) + 100.);
+  Vec3 origin{0., 0., 0.};
+  for (auto &vertex : vertices) {
+    auto &v = vertex.position;
+    Vec3 normal = glm::normalize(v - origin);
+    // First we extend the sphere outwards to the real radius
+    v += normal * radius;
+    // Next we can apply the noise
+    v += normal * glm::simplex(v) / 10.f;
   }
-  */
 }
 
 int SphereMesh::addVertex(Vec3 v) {
