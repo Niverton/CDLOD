@@ -8,14 +8,18 @@
 
 class Camera{
 public:
-  Camera(const glm::vec3& position, float fov, float aspect, float near, float far);
+  Camera(const glm::vec3& position, const glm::vec3& target,
+          float fov, float aspect, float near, float far);
+
   ~Camera() {};
 
-  glm::mat4 getViewProjectionMatrix() const{
-    return projection_matrix * glm::lookAt(position, position + glm::vec3(0.0, 0.0, 1.0), up);
+  glm::mat4 getCameraMatrix(){
+    return glm::lookAt(position, target, glm::vec3(0.0, 1.0, 0.0));
   }
-  
-  void update(const Shader& shader);
+
+  glm::mat4 getProjectionMatrix(){
+    return projection_matrix;
+  }
 
 protected:
   glm::vec3 position;
@@ -30,5 +34,4 @@ protected:
   float far;
   float fov;
   float aspect;
-  Transform transform;
 };
