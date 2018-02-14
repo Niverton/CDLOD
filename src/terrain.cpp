@@ -3,15 +3,7 @@
 #include <iostream>
 
 Terrain::Terrain(float sphere_radius, int sphere_density){
-  bool vert_status, frag_status, link_status;
-  vert_status = shader.loadFromFile("shaders/terrain.vert", Shader::Type::VERTEX);
-  frag_status = shader.loadFromFile("shaders/terrain.frag", Shader::Type::FRAGMENT);
-  link_status = shader.link();
-  
-  if (!vert_status || !frag_status || !link_status){
-     throw "Error: could not create shader.";
-  }
-  
+
   SphereMesh sphere_generator(sphere_radius, sphere_density);
   
   vertices = sphere_generator.getVertices();
@@ -19,24 +11,6 @@ Terrain::Terrain(float sphere_radius, int sphere_density){
   
   std::cout << "Vertices count: "<< vertices.size() << '\n';
   std::cout << "Faces count: "<< faces.size() << '\n';
-  
-  
-  /*
-  type::Vertex v1;
-  type::Vertex v2;
-  type::Vertex v3;
-
-  v1.position = type::Vec3(-0.5, -0.5, 0);
-  v2.position = type::Vec3(0.5, -0.5, 0);
-  v3.position = type::Vec3(0.5, 0.5, 0);
-
-  vertices.push_back(v1);
-  vertices.push_back(v2);
-  vertices.push_back(v3);
-
-  type::Face f1(0, 1, 2);
-  faces.push_back(f1);
-  */
   
   /* Create buffer for vertices */
   glGenBuffers(1, &vertex_buffer_ID);
@@ -84,11 +58,8 @@ Terrain::~Terrain(){
   glDeleteBuffers(1, &index_buffer_ID);
 }
 
-void Terrain::draw(){
-  shader.activate();
-  
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glDepthFunc(GL_LESS);
+void Terrain::draw(const Shader& shader){
+
 
   glBindVertexArray(vertex_array_ID);
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_ID);
@@ -109,5 +80,4 @@ void Terrain::draw(){
 
   glDisableVertexAttribArray(vertex_location);
   
-  shader.deactivate();
 }

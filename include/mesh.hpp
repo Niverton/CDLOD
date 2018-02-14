@@ -9,7 +9,7 @@ class Mesh{
 public:
   virtual ~Mesh(){};
 
-  virtual void draw() = 0;
+  virtual void draw(const Shader& shader) = 0;
 protected:
   
   std::vector<type::Vertex> vertices;
