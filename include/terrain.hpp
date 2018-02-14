@@ -9,4 +9,7 @@ public:
   ~Terrain();
 
   void draw(const Shader& shader);
+  glm::mat4 getModelMatrix(){
+    return glm::mat4(1.0);
+  }
 };

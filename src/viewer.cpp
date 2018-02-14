@@ -43,9 +43,11 @@ Viewer::Viewer(int width, int height, const std::string &title,
      throw "Error: could not create shader.";
   }
 
-  glm::vec3 cam_position = glm::vec3(0.0, 0.0, 15.0);
+  glm::vec3 cam_position = glm::vec3(-5.0, 0.0, -2.0);
+  glm::vec3 cam_target = glm::vec3(0.0, 2.0, 0.0);
   camera = std::make_unique<Camera>(
     cam_position, 
+    cam_target,
     70.0f, 
     static_cast<float>(width) / static_cast<float>(height), 
     0.1f, 
@@ -57,11 +59,23 @@ Viewer::~Viewer() {
 }
 
 void Viewer::draw() {
+  /*Get all matrix*/
+  glm::mat4 model_matrix = terrain->getModelMatrix();
+  glm::mat4 camera_matrix = camera->getCameraMatrix();
+  glm::mat4 projection_matrix = camera->getProjectionMatrix();
+
+  glm::mat4 mvp = projection_matrix * camera_matrix * model_matrix;
+
+
   terrain_shader->activate();  
+  //Send mvp matrix to gc
+  int mvp_location = terrain_shader->getUniformLocation("a_MVP");
+  glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
+
+
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glDepthFunc(GL_LESS);
   terrain->draw(*terrain_shader);
-  camera->update(*terrain_shader);
   terrain_shader->deactivate();
 }
 
