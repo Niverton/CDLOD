@@ -42,6 +42,14 @@ Viewer::Viewer(int width, int height, const std::string &title,
   if (!vert_status || !frag_status || !link_status){
      throw "Error: could not create shader.";
   }
+
+  glm::vec3 cam_position = glm::vec3(0.0, 0.0, 15.0);
+  camera = std::make_unique<Camera>(
+    cam_position, 
+    70.0f, 
+    static_cast<float>(width) / static_cast<float>(height), 
+    0.1f, 
+    1000.0f);
 }
 
 Viewer::~Viewer() {
@@ -49,11 +57,11 @@ Viewer::~Viewer() {
 }
 
 void Viewer::draw() {
-  terrain_shader->activate();
-  
+  terrain_shader->activate();  
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glDepthFunc(GL_LESS);
   terrain->draw(*terrain_shader);
+  camera->update(*terrain_shader);
   terrain_shader->deactivate();
 }
 

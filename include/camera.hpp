@@ -1,28 +1,34 @@
 #pragma once
 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include "transform.hpp"
+#include "shader.hpp"
 
 class Camera{
 public:
-  Camera();
-  ~Camera();
+  Camera(const glm::vec3& position, float fov, float aspect, float near, float far);
+  ~Camera() {};
 
-  void lookAt(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up);
-  glm::mat4 projectionMatrix() const;
-
-  /*!
-      \return projection * view * model matrix.
-      /!\ the order of multiplications is important.
-  */
-  glm::mat4 getMPV() const;
+  glm::mat4 getViewProjectionMatrix() const{
+    return projection_matrix * glm::lookAt(position, position + glm::vec3(0.0, 0.0, 1.0), up);
+  }
+  
+  void update(const Shader& shader);
 
 protected:
   glm::vec3 position;
   glm::vec3 target;
-  glm::mat4 view_matrix;
+  glm::mat4 projection_matrix;
   glm::mat4 model_matrix;
-  float fov = 90.0f;
-  float near = 0.01f;
-  float far = 100000.0f;
-  float ratio = 4.0f / 3.0f;
+
+  glm::vec3 up;
+  glm::vec3 right;
+
+  float near;
+  float far;
+  float fov;
+  float aspect;
+  Transform transform;
 };

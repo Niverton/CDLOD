@@ -1,19 +1,21 @@
 #include "camera.hpp"
-#include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera()
-: model_matrix(glm::mat4(1.0f)) //set model matrix as identity
+Camera::Camera(const glm::vec3& position, float fov, float aspect, float near, float far)
+: position(position), fov(fov), aspect(aspect), near(near), far(far),
+  transform(position, glm::vec3(), glm::vec3(1.0, 1.0, 1.0))
 {
+
+  projection_matrix = glm::perspective(fov, aspect, near, far);
+  up = glm::vec3(0.0, 1.0, 0.0);
+  right = glm::vec3(1.0, 0.0, 0.0);
 }
 
-Camera::~Camera(){
+void Camera::update(const Shader& shader){
+  int mvp_location = shader.getUniformLocation("a_MVP");
 
-}
-
-void Camera::lookAt(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up){
-  view_matrix = glm::lookAt(position, target, up);
-}
-
-glm::mat4 Camera::projectionMatrix() const {
-  return glm::perspective(glm::radians(fov), ratio, near, far);
+  glUniformMatrix4fv(
+    mvp_location,
+    1,
+    GL_FALSE,
+    &transform.getMVP(getViewProjectionMatrix())[0][0]);
 }

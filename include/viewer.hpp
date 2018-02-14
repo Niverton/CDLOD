@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 #include <string>
+#include "camera.hpp"
 
 class Viewer {
 public:
@@ -25,6 +26,7 @@ private:
   int height = 600;
   GLFWwindow *window = nullptr;
 
+  std::unique_ptr<Camera> camera;
   std::unique_ptr<Terrain> terrain;
   std::unique_ptr<Shader> terrain_shader;
 };
