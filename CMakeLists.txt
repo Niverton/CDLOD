@@ -12,10 +12,11 @@ set(SRCS
   src/main.cpp
   src/glUtils.cpp
   src/viewer.cpp
-  src/camera.cpp
   src/shader.cpp
   src/terrain.cpp
   src/sphere_mesh.cpp
+  src/transform.cpp
+  src/camera.cpp
 )
 set(EXEC cdlod_viewer)
 add_executable(${EXEC} ${SRCS})

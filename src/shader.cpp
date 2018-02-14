@@ -108,4 +108,3 @@ bool Shader::link(){
   }
   return false;
 }
-
