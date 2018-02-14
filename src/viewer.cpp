@@ -34,6 +34,14 @@ Viewer::Viewer(int width, int height, const std::string &title,
     exit(-1);
   }
   terrain_shader = std::make_unique<Shader>();
+  bool vert_status, frag_status, link_status;
+  vert_status = terrain_shader->loadFromFile("shaders/terrain.vert", Shader::Type::VERTEX);
+  frag_status = terrain_shader->loadFromFile("shaders/terrain.frag", Shader::Type::FRAGMENT);
+  link_status = terrain_shader->link();
+  
+  if (!vert_status || !frag_status || !link_status){
+     throw "Error: could not create shader.";
+  }
 }
 
 Viewer::~Viewer() {
@@ -41,7 +49,12 @@ Viewer::~Viewer() {
 }
 
 void Viewer::draw() {
-  terrain->draw();
+  terrain_shader->activate();
+  
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glDepthFunc(GL_LESS);
+  terrain->draw(*terrain_shader);
+  terrain_shader->deactivate();
 }
 
 void Viewer::reshape(int width, int height) {

@@ -8,8 +8,5 @@ public:
   Terrain(float sphere_radius, int sphere_density);
   ~Terrain();
 
-  void draw();
-
-private:
-  Shader shader;
+  void draw(const Shader& shader);
 };
