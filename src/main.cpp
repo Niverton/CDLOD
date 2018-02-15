@@ -4,24 +4,6 @@
 #include <iostream>
 #include <string>
 
-namespace callback {
-void key_callback(GLFWwindow *window, int key, int scancode, int action,
-                  int mods) {
-  switch (key) {
-  case GLFW_KEY_ESCAPE:
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
-    break;
-
-  default:
-    break;
-  }
-}
-
-void error_callback(int error, const char *des) {
-  std::cerr << "Error: " << error << " " << des << '\n';
-}
-} // namespace callback
-
 [[noreturn]]
 void usage(const char *cmd) {
   std::cerr << "Usage:\n" << cmd << ": <density (default=200)>\n";
@@ -55,8 +37,7 @@ int main(int argc, char **argv) {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   Viewer viewer(800, 600, "Projet de PDP", sphere_density);
-  glfwSetKeyCallback(viewer.getGlfwWindow(), callback::key_callback);
-  glfwSetErrorCallback(callback::error_callback);
+
 
   while (!viewer.shouldClose()) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
