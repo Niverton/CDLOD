@@ -21,6 +21,37 @@ public:
     return projection_matrix;
   }
 
+  glm::vec3 getPosition() { return position; }
+  void setPosition(const glm::vec3& position){
+    this->position = position;
+  }
+
+  glm::vec3 getTarget() { return target; }
+  void setTarget(const glm::vec3& target){
+    this->position = target;
+  }
+
+  float getFov(){ return fov; }
+  void setFov(float fov){
+    this->fov = fov;
+  }
+
+  float getNear(){ return near; }
+  void setNear(float near){
+    this->near = near;
+  } 
+
+  float getFar(){ return near; }
+  void setFar(float near){
+    this->far = far;
+  } 
+
+
+  float getAspect(){ return near; }
+  void setAscpect(float ascpect){
+    this->aspect = aspect;
+  } 
+
 protected:
   glm::vec3 position;
   glm::vec3 target;

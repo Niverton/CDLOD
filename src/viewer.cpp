@@ -18,6 +18,8 @@ Viewer::Viewer(int width, int height, const std::string &title,
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+  glfwSetWindowUserPointer(getGlfwWindow(), this);
+  glfwSetKeyCallback(getGlfwWindow(), key_callback);
   glUtils::initGL();
 
   reshape(width, height);
@@ -45,7 +47,7 @@ Viewer::Viewer(int width, int height, const std::string &title,
 
   glm::vec3 cam_position = glm::vec3(-5.0, 0.0, -2.0);
   glm::vec3 cam_target = glm::vec3(0.0, 2.0, 0.0);
-  camera = std::make_unique<Camera>(
+  camera = std::make_shared<Camera>(
     cam_position, 
     cam_target,
     70.0f, 
@@ -88,4 +90,36 @@ void Viewer::reshape(int width, int height) {
 
 bool Viewer::shouldClose() {
   return glfwWindowShouldClose(window);
+}
+
+
+
+void Viewer::key_callback(GLFWwindow *window, int key, int scancode, int action,
+    int mods) {
+
+  void* ptr_viewer = glfwGetWindowUserPointer(window);
+  Viewer* viewer = static_cast<Viewer*>(ptr_viewer);
+  Camera* camera = viewer->getCamera();
+
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
+    glfwSetWindowShouldClose(window, GLFW_TRUE);
+  }
+  
+  if (action == GLFW_PRESS || action == GLFW_REPEAT){
+    switch(key){
+    case GLFW_KEY_UP:   //forward
+      camera->setPosition(camera->getPosition() + glm::vec3(0.0, 0.0, 1.0));
+      break;
+    case GLFW_KEY_DOWN:
+      camera->setPosition(camera->getPosition() + glm::vec3(0.0, 0.0, -1.0));
+      break;
+    case GLFW_KEY_LEFT:
+      camera->setPosition(camera->getPosition() + glm::vec3(-.0, -1.0, 0.0));
+      break;
+    case GLFW_KEY_RIGHT:
+      camera->setPosition(camera->getPosition() + glm::vec3(0.0, 1.0, 1.0));
+      break;
+    
+    }
+  }
 }

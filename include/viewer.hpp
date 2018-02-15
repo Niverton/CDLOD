@@ -21,12 +21,19 @@ public:
     return window;
   }
 
+  Camera* getCamera(){
+    return camera.get();
+  }
 private:
   int width = 800;
   int height = 600;
   GLFWwindow *window = nullptr;
 
-  std::unique_ptr<Camera> camera;
+  std::shared_ptr<Camera> camera;
   std::unique_ptr<Terrain> terrain;
   std::unique_ptr<Shader> terrain_shader;
+
+  static void key_callback(GLFWwindow *window, int key, int scancode, 
+    int action, int mods);
+
 };
