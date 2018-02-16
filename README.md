@@ -5,6 +5,8 @@
 Deux approches ont été proposées, développer une application de zéros et s'en tenir au cahier des besoins rédigé plus tôt, ou reprendre et adapter le code déjà existant du programme [WorldGenerator](https://github.com/Niverton/World-Generator). 
 
 ## Développer à partir de zéro
+L'application à été développé en OpenGL 3.3 core.
+
 ### Dépendance
 
 - [glm](http://glm.g-truc.net/0.9.8/index.html)
