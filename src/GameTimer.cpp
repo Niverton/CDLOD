@@ -15,7 +15,7 @@ static unsigned long long int getCurrentTime() {
     perror("system clock error GameTimer.cpp getCurrentTime");
     exit(errno);
   }
-  return time.tv_nsec / 1000000;
+  return time.tv_nsec / 1000;
 }
 
 GameTimer::GameTimer()
