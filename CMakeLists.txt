@@ -2,15 +2,24 @@ cmake_minimum_required(VERSION 3.7.2)
 
 project(cdlod)
 
+include_directories(include)
+
+add_definitions(-DGLM_FORCE_PURE)  #Disable SIMD optimizations.
+
 # Fichiers source
 set(SRCS
-  # Headers include/*
-
   # Sources src/*
   src/main.cpp
+  src/glUtils.cpp
+  src/viewer.cpp
+  src/shader.cpp
+  src/terrain.cpp
+  src/sphere_mesh.cpp
+  src/camera.cpp
 )
 set(EXEC cdlod_viewer)
 add_executable(${EXEC} ${SRCS})
+target_include_directories(${EXEC} PRIVATE include)
 #Forcer le C++14, cxx_std_14 pas disponible sur la version 3.7 de cmake
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
@@ -20,7 +29,7 @@ target_link_libraries(${EXEC} ${OPENGL_gl_LIBRARY})
 target_include_directories(${EXEC} PRIVATE ${OPENGL_INCLUDE_DIR})
 
 find_package(glfw3 REQUIRED)
-target_link_libraries(${EXEC} ${GLFW3_LIBRARY})
+target_link_libraries(${EXEC} "glfw")
 
 find_package(glm)
 if(${glm_FOUND})
@@ -38,3 +47,5 @@ else()
   set(GlmIncludeDir ${source_dir})
   target_include_directories(${EXEC} PRIVATE ${GlmIncludeDir})
 endif()
+
+target_link_libraries(${EXEC} "GLEW")
