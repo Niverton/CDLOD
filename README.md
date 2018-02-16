@@ -2,7 +2,11 @@
 
 ## Introduction
 
-Deux approches ont été proposées, développer une application de zéros et s'en tenir au cahier des besoins rédigé plus tôt, ou reprendre et adapter le code déjà existant du programme [WorldGenerator](https://github.com/Niverton/World-Generator). 
+Deux approches ont été proposées, développer une application de zéros et
+s'en tenir au cahier des besoins rédigé plus tôt, ou reprendre et
+adapter le code déjà existant du projet WorldGenerator. L'adaptation du
+projet WorldGenerator se trouve dans le dossier 'worldgen', avec un
+README explicatif.
 
 ## Développer à partir de zéro
 L'application à été développé en OpenGL 3.3 core.
