@@ -15,7 +15,6 @@ set(SRCS
   src/shader.cpp
   src/terrain.cpp
   src/sphere_mesh.cpp
-  src/transform.cpp
   src/camera.cpp
 )
 set(EXEC cdlod_viewer)
