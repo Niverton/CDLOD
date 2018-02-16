@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Deux approches ont été proposées, développer une application de zéros et s'en tenir au cahier des besoins rédigé plus tôt, ou reprendre et adapter le code déjà existant du programme [WorldGenerator](https://github.com/Niverton/World-Generator). 
+Deux approches ont été proposées, développer une application de zéro et s'en tenir au cahier des besoins rédigé plus tôt, ou reprendre et adapter le code déjà existant du programme [WorldGenerator](https://github.com/Niverton/World-Generator). 
 
 ## Développer à partir de zéro
 L'application à été développé en OpenGL 3.3 core.
@@ -27,11 +27,11 @@ Pour lancer l'application
 ``` sh
 ./cdlod_viewer
 ```
-### Control
+### Contrôles
 Utiliser les fleches du clavier pour déplacer la camera.
 La gestion de son orientation n'est pas encore prise en charge.
 
 ### Bug connu
-Sur certains pc du cremi, les controles ne fonctionnent pas.
+Sur certains pc du cremi, les contrôles ne fonctionnent pas.
 
 
