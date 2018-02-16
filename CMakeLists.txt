@@ -44,7 +44,7 @@ target_include_directories(${EXEC} PRIVATE src)
 #Forcer le C++14, cxx_std_14 pas disponible sur la version 3.7 de cmake
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
-find_package(OpenGL 3.3 REQUIRED)
+find_package(OpenGL 4.5 REQUIRED)
 #GL sans GLU
 target_link_libraries(${EXEC} ${OPENGL_gl_LIBRARY})
 target_include_directories(${EXEC} PRIVATE ${OPENGL_INCLUDE_DIR})
@@ -52,7 +52,7 @@ target_include_directories(${EXEC} PRIVATE ${OPENGL_INCLUDE_DIR})
 find_package(glfw3 REQUIRED)
 target_link_libraries(${EXEC} glfw)
 
-find_package(glm)
+find_package(glm REQUIRED)
 
 find_package(GLEW REQUIRED)
 target_link_libraries(${EXEC} GLEW)

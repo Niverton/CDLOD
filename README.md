@@ -1,3 +1,25 @@
+# PDP
+
+Le projet a été porté sous Linux et le système de build changé pour
+cmake. L'objectif était de voir si le projet était viable comme base.
+
+## Build
+
+```sh
+mkdir build && cd build
+cmake .. && cmake --build . -- -j4
+```
+
+## Dépendances
+
+OpenGL 4.5
+GLFW3
+GLM
+GLEW
+TinyXML2
+
+# Readme original
+
 World-Generator
 ===============
 
