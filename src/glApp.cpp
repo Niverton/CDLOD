@@ -417,7 +417,7 @@ void GLApp::Render() {
   }
 
   mpTerrain->Render(perFrame, perObjectBuffer, renderProgram);
-  mpAtmosphereRenderer->Render(perFrame, perObjectBuffer, renderProgram);
+  //mpAtmosphereRenderer->Render(perFrame, perObjectBuffer, renderProgram);
 
   //LeapControl::getInstance().Render(perFrame, perObjectBuffer);
 
