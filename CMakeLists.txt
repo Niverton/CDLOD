@@ -1,0 +1,150 @@
+cmake_minimum_required(VERSION 3.7.2)
+
+project(PlanetRenderer)
+
+# Fichiers source
+set(SRCS
+  PlanetFramework/BinaryReader.cpp
+  PlanetFramework/BinaryReader.h
+  PlanetFramework/Camera.cpp
+  PlanetFramework/Camera.h
+  PlanetFramework/Context.h
+  PlanetFramework/InputManager.cpp
+  PlanetFramework/InputManager.h
+  PlanetFramework/main.cpp
+  PlanetFramework/PlanetTech/Frustum.cpp
+  PlanetFramework/PlanetTech/Frustum.h
+  PlanetFramework/PlanetTech/Patch.cpp
+  PlanetFramework/PlanetTech/Patch.h
+  PlanetFramework/PlanetTech/Planet.cpp
+  PlanetFramework/PlanetTech/Planet.h
+  PlanetFramework/PlanetTech/stdafx.h
+  PlanetFramework/PlanetTech/Triangulator.cpp
+  PlanetFramework/PlanetTech/Triangulator.h
+  PlanetFramework/PlanetTech/Types/Earth.cpp
+  PlanetFramework/PlanetTech/Types/Earth.h
+  PlanetFramework/PlanetTech/Types/Moon.cpp
+  PlanetFramework/PlanetTech/Types/Moon.h
+  PlanetFramework/PlanetTech/Types/stdafx.h
+  PlanetFramework/Scene.cpp
+  PlanetFramework/Scene.h
+  PlanetFramework/Screenshot.cpp
+  PlanetFramework/Screenshot.h
+  PlanetFramework/Settings.h
+  PlanetFramework/Shader.cpp
+  PlanetFramework/Shader.h
+  PlanetFramework/Singleton.h
+  PlanetFramework/SpriteFont.cpp
+  PlanetFramework/SpriteFont.h
+  PlanetFramework/stdafx.cpp
+  PlanetFramework/stdafx.h
+  PlanetFramework/TextRenderer.cpp
+  PlanetFramework/TextRenderer.h
+  PlanetFramework/Texture.cpp
+  PlanetFramework/Texture.h
+  PlanetFramework/Time.cpp
+  PlanetFramework/Time.h
+  PlanetFramework/Transform.cpp
+  PlanetFramework/Transform.h
+  PlanetFramework/StaticDependancies/glad/glad.cpp
+  PlanetFramework/StaticDependancies/glad/glad.h
+  PlanetFramework/StaticDependancies/glad/stdafx.h
+)
+
+# --------------------------- EXTERNAL DEPENDENCIES ---------------------------
+include(ExternalProject)
+
+#externalproject_add(glad_ext
+#  GIT_REPOSITORY        "https://github.com/Dav1dde/glad.git"
+#  GIT_TAG               "v0.1.16a0"
+#  INSTALL_COMMAND       ""
+#)
+
+externalproject_add(devil_ext
+  GIT_REPOSITORY        "https://github.com/DentonW/DevIL.git"
+  GIT_TAG               "v1.8.0"
+  SOURCE_SUBDIR         "DevIL"
+  INSTALL_COMMAND       ""
+
+  #Enable opengl support
+  PATCH_COMMAND patch "DevIL/src-ILUT/CMakeLists.txt"
+                      "${CMAKE_SOURCE_DIR}/devil.patch"
+)
+
+externalproject_get_property(devil_ext source_dir)
+externalproject_get_property(devil_ext binary_dir)
+set(devil_include_dir ${source_dir}/DevIL/include)
+# To know the directory where the lib is, I need to know the
+# architecture of the system...
+# So we run uname, grab the output and set the directory as needed
+# This is stupid and probably broken
+execute_process(COMMAND uname -m OUTPUT_VARIABLE ARCHITECTURE)
+if(${ARCHITECTURE} STREQUAL "x86_64\n")
+  set(devil_lib_dir ${binary_dir}/lib/x64)
+else()
+  set(devil_lib_dir ${binary_dir}/lib/x32)
+endif()
+add_library(il SHARED IMPORTED)
+set_property(TARGET il PROPERTY IMPORTED_LOCATION
+  ${devil_lib_dir}/libIL.so)
+add_library(ilu SHARED IMPORTED)
+set_property(TARGET ilu PROPERTY IMPORTED_LOCATION
+  ${devil_lib_dir}/libILU.so)
+add_library(ilut SHARED IMPORTED)
+set_property(TARGET ilut PROPERTY IMPORTED_LOCATION
+  ${devil_lib_dir}/libILUT.so)
+
+find_package(glm)
+if(NOT ${glm_FOUND})
+  include(ExternalProject)
+  externalproject_add(glm_ext
+    GIT_REPOSITORY      "https://github.com/g-truc/glm.git"
+    GIT_TAG             "0.9.8.5"
+    CONFIGURE_COMMAND   ""
+    BUILD_COMMAND       ""
+    INSTALL_COMMAND     ""
+  )
+  externalproject_get_property(glm_ext source_dir)
+  set(GLM_INCLUDE_DIRS ${source_dir})
+endif()
+
+find_package(OpenGL 3.3 REQUIRED)
+find_package(SDL2 REQUIRED)
+
+# ------------------------------------- # -------------------------------------
+
+# link to directories
+add_custom_target(shaders ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
+  ${CMAKE_SOURCE_DIR}/PlanetFramework/Shaders Shaders)
+add_custom_target(textures ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
+  ${CMAKE_SOURCE_DIR}/PlanetFramework/Textures Textures)
+add_custom_target(fonts ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
+  ${CMAKE_SOURCE_DIR}/PlanetFramework/Fonts Fonts)
+
+# Target
+add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
+set(EXEC PlanetRenderer)
+add_executable(${EXEC} ${SRCS})
+# Build this before EXEC
+add_dependencies(${EXEC} devil_ext shaders textures)
+if(NOT ${glm_FOUND})
+  add_dependencies(${EXEC} glm_ext)
+endif()
+#DevIL
+target_include_directories(${EXEC} PRIVATE ${devil_include_dir})
+target_link_libraries(${EXEC} PRIVATE il ilu ilut)
+#GL and GLU
+target_link_libraries(${EXEC} PRIVATE ${OPENGL_gl_LIBRARY})
+target_link_libraries(${EXEC} PRIVATE ${OPENGL_glu_LIBRARY})
+target_include_directories(${EXEC} PRIVATE ${OPENGL_INCLUDE_DIR})
+#GLM
+target_include_directories(${EXEC} PRIVATE ${GLM_INCLUDE_DIRS})
+#SDL
+target_link_libraries(${EXEC} PRIVATE ${SDL2_LIBRARIES})
+target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
+
+
+#target_include_directories(${EXEC} PRIVATE include)
+#Forcer le C++14, cxx_std_14 pas disponible sur la version 3.7 de cmake
+target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
+
