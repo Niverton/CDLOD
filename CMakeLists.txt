@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.7.2)
 
-project(PlanetRenderer)
+#Export build configuration for external tools
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+project(
+  PlanetRenderer
+  VERSION 0.0.1
+  DESCRIPTION "Implementation of CDLOD algorithm on a sphere"
+  )
 
 # Fichiers source
 set(SRCS
@@ -54,12 +61,6 @@ set(SRCS
 # --------------------------- EXTERNAL DEPENDENCIES ---------------------------
 include(ExternalProject)
 
-#externalproject_add(glad_ext
-#  GIT_REPOSITORY        "https://github.com/Dav1dde/glad.git"
-#  GIT_TAG               "v0.1.16a0"
-#  INSTALL_COMMAND       ""
-#)
-
 externalproject_add(devil_ext
   GIT_REPOSITORY        "https://github.com/DentonW/DevIL.git"
   GIT_TAG               "v1.8.0"
@@ -94,7 +95,7 @@ add_library(ilut SHARED IMPORTED)
 set_property(TARGET ilut PROPERTY IMPORTED_LOCATION
   ${devil_lib_dir}/libILUT.so)
 
-find_package(glm)
+find_package(glm QUIET) #Supress package not found warning
 if(NOT ${glm_FOUND})
   include(ExternalProject)
   externalproject_add(glm_ext
@@ -143,8 +144,29 @@ target_include_directories(${EXEC} PRIVATE ${GLM_INCLUDE_DIRS})
 target_link_libraries(${EXEC} PRIVATE ${SDL2_LIBRARIES})
 target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
 
-
-#target_include_directories(${EXEC} PRIVATE include)
-#Forcer le C++14, cxx_std_14 pas disponible sur la version 3.7 de cmake
+target_include_directories(${EXEC} PRIVATE include)
+#Force c++14
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
+#Documentation
+find_package(Doxygen OPTIONAL_COMPONENTS dot)
+if(${DOXYGEN_FOUND})
+  set(DOXYGEN_OUTPUT_DIRECTORY doc)
+
+  # Doxygen configuration
+  set(DOXYGEN_EXTRACT_ALL YES)
+  set(DOXYGEN_DOT_IMAGE_FORMAT svg)
+  set(DOXYGEN_INTERACTIVE_SVG YES)
+  #Extract everything by default
+  if(NOT DOXYGEN_ONLY_PUBLIC)
+    set(DOXYGEN_EXTRACT_PRIVATE YES)
+    set(DOXYGEN_EXTRACT_STATIC YES)
+  endif()
+
+  doxygen_add_docs(
+    doxygen
+    #${CMAKE_SOURCE_DIR}/PlanetFramework
+    ${SRCS}
+    COMMENT "Generate documentation"
+  )
+endif()
