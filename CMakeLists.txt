@@ -151,10 +151,13 @@ target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 #Documentation
 find_package(Doxygen OPTIONAL_COMPONENTS dot)
 if(${DOXYGEN_FOUND})
+  message("Found Doxygen, adding doxygen target.")
   set(DOXYGEN_OUTPUT_DIRECTORY doc)
 
   # Doxygen configuration
   set(DOXYGEN_EXTRACT_ALL YES)
+  set(DOXYGEN_CALL_GRAPH YES)
+  set(DOXYGEN_CALLER_GRAPH YES)
   set(DOXYGEN_DOT_IMAGE_FORMAT svg)
   set(DOXYGEN_INTERACTIVE_SVG YES)
   #Extract everything by default
