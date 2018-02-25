@@ -153,6 +153,10 @@ void TextRenderer::UpdateBuffer() {
               continue;
             }
 
+            /* Note: OpenGL 3.0 backport
+             * Do the job of the geometry shader here
+             */
+
             TextVertex vText;
             vText.Position.x =
                 cache.Position.x + totalAdvanceX + metric.OffsetX;
@@ -163,7 +167,32 @@ void TextRenderer::UpdateBuffer() {
             vText.CharacterDimension = glm::vec2(metric.Width, metric.Height);
             vText.ChannelId = metric.Channel;
 
+            // tVerts.push_back(vText);
+
+            auto vTL = vText;
+            vTL.Position.y += metric.Height;
+            vTL.TexCoord +=
+                glm::vec2(0, metric.Height) /
+                glm::vec2(pFont->m_TextureWidth, pFont->m_TextureHeight);
+            tVerts.push_back(vTL);
+
+            auto vTR = vText;
+            vTR.Position.x += metric.Width;
+            vTR.Position.y += metric.Height;
+            vTR.TexCoord +=
+                glm::vec2(metric.Width, metric.Height) /
+                glm::vec2(pFont->m_TextureWidth, pFont->m_TextureHeight);
+            tVerts.push_back(vTR);
+
+            // vBL bottom left
             tVerts.push_back(vText);
+
+            auto vBR = vText;
+            vTR.Position.x += metric.Width;
+            vBR.TexCoord +=
+                glm::vec2(metric.Width, 0) /
+                glm::vec2(pFont->m_TextureWidth, pFont->m_TextureHeight);
+            tVerts.push_back(vBR);
 
             totalAdvanceX += metric.AdvanceX;
           } else

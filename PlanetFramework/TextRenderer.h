@@ -5,7 +5,6 @@ class Shader;
 
 class TextRenderer : public Singleton<TextRenderer> {
 public:
-#undef DrawText
   void DrawText(std::string &text, glm::vec2 pos);
   void SetFont(SpriteFont *pFont);
   void SetColor(glm::vec4 color) {
