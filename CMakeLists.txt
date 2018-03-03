@@ -3,11 +3,10 @@ cmake_minimum_required(VERSION 3.7.2)
 #Export build configuration for external tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(
-  PlanetRenderer
-  VERSION 0.0.1
-  DESCRIPTION "Implementation of CDLOD algorithm on a sphere"
-  )
+project(PlanetRenderer)
+
+set(GLM_USE_NATIVE NO CACHE BOOL "Pretend CMake found GLM and use native\
+lib ?")
 
 # Fichiers source
 set(SRCS
@@ -95,18 +94,27 @@ add_library(ilut SHARED IMPORTED)
 set_property(TARGET ilut PROPERTY IMPORTED_LOCATION
   ${devil_lib_dir}/libILUT.so)
 
-find_package(glm QUIET) #Supress package not found warning
-if(NOT ${glm_FOUND})
-  include(ExternalProject)
-  externalproject_add(glm_ext
-    GIT_REPOSITORY      "https://github.com/g-truc/glm.git"
-    GIT_TAG             "0.9.8.5"
-    CONFIGURE_COMMAND   ""
-    BUILD_COMMAND       ""
-    INSTALL_COMMAND     ""
-  )
-  externalproject_get_property(glm_ext source_dir)
-  set(GLM_INCLUDE_DIRS ${source_dir})
+find_package(glm 0.9.7 QUIET) #Supress package not found warning
+if(${glm_FOUND})
+  message(STATUS "Found GLM version ${glm_VERSION}")
+else()
+  message(STATUS "CMake didn't find GLM.")
+  if(NOT ${GLM_USE_NATIVE})
+    message(WARNING "Will download with make.\n\
+If you have GLM installed, you can disable the download by passing \
+-DGLM_USE_NATIVE=YES to cmake. Required version is at least 0.9.7")
+    externalproject_add(glm_ext
+      GIT_REPOSITORY      "https://github.com/g-truc/glm.git"
+      GIT_TAG             "0.9.8.5"
+      CONFIGURE_COMMAND   ""
+      BUILD_COMMAND       ""
+      INSTALL_COMMAND     ""
+    )
+    externalproject_get_property(glm_ext source_dir)
+    set(GLM_INCLUDE_DIRS ${source_dir})
+  else()
+    message(STATUS "Expecting glm to be available in /usr/include.")
+  endif()
 endif()
 
 find_package(OpenGL 3.3 REQUIRED)
@@ -116,11 +124,14 @@ find_package(SDL2 REQUIRED)
 
 # link to directories
 add_custom_target(shaders ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
-  ${CMAKE_SOURCE_DIR}/PlanetFramework/Shaders Shaders)
+  ${CMAKE_SOURCE_DIR}/PlanetFramework/Shaders Shaders
+  COMMENT "Creating symlink to Shaders")
 add_custom_target(textures ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
-  ${CMAKE_SOURCE_DIR}/PlanetFramework/Textures Textures)
+  ${CMAKE_SOURCE_DIR}/PlanetFramework/Textures Textures
+  COMMENT "Creating symlink to Textures")
 add_custom_target(fonts ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
-  ${CMAKE_SOURCE_DIR}/PlanetFramework/Fonts Fonts)
+  ${CMAKE_SOURCE_DIR}/PlanetFramework/Fonts Fonts
+COMMENT "Creating symlink to Fonts")
 
 # Target
 add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
@@ -128,9 +139,10 @@ set(EXEC PlanetRenderer)
 add_executable(${EXEC} ${SRCS})
 # Build this before EXEC
 add_dependencies(${EXEC} devil_ext shaders textures)
-if(NOT ${glm_FOUND})
+if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
   add_dependencies(${EXEC} glm_ext)
 endif()
+
 #DevIL
 target_include_directories(${EXEC} PRIVATE ${devil_include_dir})
 target_link_libraries(${EXEC} PRIVATE il ilu ilut)
@@ -148,28 +160,33 @@ target_include_directories(${EXEC} PRIVATE include)
 #Force c++14
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
-#Documentation
+# Export documentation, only available if doxygen and doxygen_add_docs
+# are available
 find_package(Doxygen OPTIONAL_COMPONENTS dot)
-if(${DOXYGEN_FOUND})
-  message("Found Doxygen, adding doxygen target.")
-  set(DOXYGEN_OUTPUT_DIRECTORY doc)
+if(COMMAND doxygen_add_docs)
+  if(${DOXYGEN_FOUND})
+    message(STATUS "Found Doxygen, adding doxygen target.")
+    set(DOXYGEN_OUTPUT_DIRECTORY doc)
 
-  # Doxygen configuration
-  set(DOXYGEN_EXTRACT_ALL YES)
-  set(DOXYGEN_CALL_GRAPH YES)
-  set(DOXYGEN_CALLER_GRAPH YES)
-  set(DOXYGEN_DOT_IMAGE_FORMAT svg)
-  set(DOXYGEN_INTERACTIVE_SVG YES)
-  #Extract everything by default
-  if(NOT DOXYGEN_ONLY_PUBLIC)
-    set(DOXYGEN_EXTRACT_PRIVATE YES)
-    set(DOXYGEN_EXTRACT_STATIC YES)
+    # Doxygen configuration
+    set(DOXYGEN_EXTRACT_ALL YES)
+    set(DOXYGEN_CALL_GRAPH YES)
+    set(DOXYGEN_CALLER_GRAPH YES)
+    set(DOXYGEN_DOT_IMAGE_FORMAT svg)
+    set(DOXYGEN_INTERACTIVE_SVG YES)
+    #Disable with -DDOXYGEN_ONLY_PUBLIC:NO
+    if(NOT DOXYGEN_ONLY_PUBLIC)
+      set(DOXYGEN_EXTRACT_PRIVATE YES)
+      set(DOXYGEN_EXTRACT_STATIC YES)
+    endif()
+
+    doxygen_add_docs(
+      doxygen
+      ${SRCS}
+      COMMENT "Generate documentation"
+    )
   endif()
-
-  doxygen_add_docs(
-    doxygen
-    #${CMAKE_SOURCE_DIR}/PlanetFramework
-    ${SRCS}
-    COMMENT "Generate documentation"
-  )
+else()
+  message(WARNING "doxygen_add_docs not available, doxygen target\
+  disabled. Update CMake.")
 endif()
