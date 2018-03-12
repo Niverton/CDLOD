@@ -7,9 +7,9 @@
 class Texture {
 public:
   Texture(const std::string &filename);
-  ~Texture();
+  virtual ~Texture();
 
-  void Load(bool useSRGB = false);
+  virtual void Load(bool useSRGB = false);
   GLuint GetHandle() {
     return m_Handle;
   }
@@ -21,6 +21,7 @@ public:
 private:
   std::string m_Name;
 
+protected:
   GLuint m_Handle;
   int m_Width;
   int m_Height;

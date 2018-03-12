@@ -10,10 +10,10 @@
 
 // 2D Scaled Simplex noise.
 // Return value between min and max.
-float ScaledSimplexNoise2d(float min, float max, const glm::vec2 &coords);
+float ScaledSimplexNoise2d(float min, float max, int x, int y);
 
 // 2D Simplex noise
-float SimplexNoise2d(const glm::vec2 &coords);
+float SimplexNoise2d(int x, int y);
 
 int fastfloor(float x);
 

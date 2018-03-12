@@ -8,18 +8,15 @@
 
 // 2D Scaled Simplex noise.
 // Return value between min and max.
-float ScaledSimplexNoise2d(float min,float max,const glm::vec2 &coords) {
-    return SimplexNoise2d(coords.x, coords.y) * (max - min) / 2 + (max + min) / 2;
+float ScaledSimplexNoise2d(float min,float max,int x, int y) {
+    return SimplexNoise2d(x,y) * (max - min) / 2 + (max + min) / 2;
 }
 
 
 
 // 2D Simplex noise
-float SimplexNoise2d(const glm::vec2 &coords) {
+float SimplexNoise2d(int x, int y) {
 
-    x=coords.x
-    y=coords.y
-    
     // Noise contributions from the three corners
     float corner1, corner2, corner3;
 
