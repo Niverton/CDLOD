@@ -5,8 +5,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(PlanetRenderer)
 
-set(GLM_USE_NATIVE NO CACHE BOOL "Pretend CMake found GLM and use native\
-lib ?")
+set(GLM_USE_NATIVE NO CACHE BOOL
+  "Pretend CMake found GLM and use native lib ?")
+set(DOXYGEN_ONLY_PUBLIC NO CACHE BOOL
+  "Generate only public documentation")
+set(KEEP_DOT NO CACHE BOOL
+  "Should doxygen keep the .dot files ?")
+set(NO_SVG NO CACHE BOOL
+  "Disable SVG output")
 
 # Fichiers source
 set(SRCS
@@ -172,12 +178,20 @@ if(COMMAND doxygen_add_docs)
     set(DOXYGEN_EXTRACT_ALL YES)
     set(DOXYGEN_CALL_GRAPH YES)
     set(DOXYGEN_CALLER_GRAPH YES)
-    set(DOXYGEN_DOT_IMAGE_FORMAT svg)
-    set(DOXYGEN_INTERACTIVE_SVG YES)
-    #Disable with -DDOXYGEN_ONLY_PUBLIC:NO
+    if(NOT ${NO_SVG})
+      set(DOXYGEN_DOT_IMAGE_FORMAT svg)
+      set(DOXYGEN_INTERACTIVE_SVG YES)
+    else()
+      set(DOXYGEN_DOT_IMAGE_FORMAT png)
+    endif()
+    #Disable with -DDOXYGEN_ONLY_PUBLIC=YES
     if(NOT DOXYGEN_ONLY_PUBLIC)
       set(DOXYGEN_EXTRACT_PRIVATE YES)
       set(DOXYGEN_EXTRACT_STATIC YES)
+    endif()
+    # Keep dot files
+    if(KEEP_DOT)
+      set(DOXYGEN_DOT_CLEANUP NO)
     endif()
 
     doxygen_add_docs(
