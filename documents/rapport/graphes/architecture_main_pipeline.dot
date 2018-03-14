@@ -1,0 +1,77 @@
+
+digraph "main"
+{
+  edge [color="midnightblue",fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica", fontsize="12", shape=record, height=0.2,
+    width=0.4, color="black", fontcolor="black", style="bold"
+  ];
+  rankdir="LR"
+
+  Main [label="Main", fillcolor="grey75", style="filled"];
+
+  //Noeuds pour la déco
+  subgraph dummy {
+    //Style
+    node [style="filled, "fillcolor="lightgrey"];
+
+    Main -> Init;
+    Init [label="Init"];
+
+      Init -> WindowInit;
+      WindowInit [label="Fenêtre SDL et contexte OpenGL"]
+
+    Main -> Update;
+    Update [label="Update"];
+
+    /*
+    Init -> Update [style="dotted"];
+    Update -> SceneDraw [style="dotted"];
+    */
+  }
+
+  subgraph bold {
+    node[fontname="Helvetica bold"];
+
+    subgraph init {
+      node [color="#b01414"] //Rouge
+
+      Init -> InputInit;
+      InputInit [label="InputManager::Init"];
+
+      Init -> SceneInit;
+      SceneInit [label="Scene::Init"];
+    }
+
+    subgraph update {
+      node [color="#dc5c00"] //Orange
+
+      Update -> InputUpdate;
+      InputUpdate [label="InputManager::UpdateEvents"];
+
+      Update -> SceneUpdate;
+      SceneUpdate [label="Scene::Update"];
+
+      SceneUpdate -> TimeUpdate;
+      TimeUpdate [label="Time::Update"];
+
+      SceneUpdate -> CameraUpdate;
+      CameraUpdate [label="Camera::Update"];
+
+      SceneUpdate -> PlanetUpdate;
+      PlanetUpdate [label="Planet::Update"];
+    }
+
+    subgraph draw {
+      node [color="#186c12"] //Vert
+
+      Main -> SceneDraw;
+      SceneDraw [label="Scene::Draw"];
+
+      SceneDraw -> PlanetDraw;
+      PlanetDraw [label="Planet::Draw"];
+
+      SceneDraw -> HUD;
+      HUD [label="TextRenderer::Draw"];
+    }
+  }
+}

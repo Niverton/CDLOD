@@ -1,0 +1,35 @@
+digraph "Scene::Init"
+{
+  edge [color="midnightblue",fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica", fontsize="12", shape=record, height=0.2,
+    width=0.4, color="black", fontcolor="black", style="bold"
+  ];
+  rankdir="LR"
+
+  Scene [label="Scene::Init", fillcolor="grey75", style="filled"];
+
+  Scene -> Context;
+  Context [label="Contexte", style="filled, "fillcolor="lightgrey"];
+
+  subgraph context {
+    node [color="#dc5c00"] //Orange
+
+    Context -> Time;
+    Time [label="Time::Start"];
+
+    Context -> Camera;
+    Camera [label="Camera"];
+  }
+
+  Scene -> TextRenderer;
+  TextRenderer [
+    label="TextRenderer::Init\nTextRenderer::Load"
+    color="#b01414" //Rouge
+  ];
+
+  Scene -> Planet;
+  Planet [
+    label="Planet::Init"
+    color="#186c12" //Vert
+  ];
+}
