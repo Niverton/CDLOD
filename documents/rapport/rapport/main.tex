@@ -150,10 +150,13 @@
   
   \chapter{Algorithme CDLOD}
   
-  L'algortihme \textbf{CDLOD}, pour "Continuous Distance-Dependent Level of Detail for Rendering Heightmaps " ( 
-  Niveau de détail continu dépendant de la distance pour le rendue de carte de hauteur") par Filip Strugar, est un algorithme qui comme sont nom l'indique, se base sur la distance pour l'affichage du niveau de détail (\textbf{LOD}) basé sur une carte de hauteur (\textbf{Heightmaps}).
+  L'algortihme \textbf{CDLOD}, pour "Continuous Distance-Dependent Level of Detail for Rendering Heightmaps " 
+  (Niveau de détail continu dépendant de la distance pour le rendue de carte de hauteur") par Filip Strugar, 
+  est un algorithme qui comme sont nom l'indique, se base sur la distance pour l'affichage du niveau de détail 
+  (\textbf{LOD}) basé sur une carte de hauteur (\textbf{Heightmaps}).
   
-  De nombreux algorithme se servent de niveau de détail pour générer leur terrain mais un des problèmes majeurs auxquels ils se confrontent viens dès lors de la séparation entre deux niveau de détail voisins.\\
+  De nombreux algorithme se servent de niveau de détail pour générer leur terrain mais,
+   un des problèmes majeurs auxquels ils se confrontent viens dès lors de la séparation entre deux niveau de détail voisins.\\
   \begin{wrapfigure}[5]{r}{6cm}
   \includegraphics[width=6cm]{img/seams.png}
     \caption{Discontinuité http://mikejsavage.co.uk/blog/geometry-clipmaps.html}
@@ -161,18 +164,27 @@
   \end{wrapfigure}
   
   \vspace{0.5cm}
-  En effet la différence d'élévation entre chaque divisions peuvent provoqué une discontinuité provoquant ainsi une zone vide, comme on peut le voir, par la zone rouge indiqué sur cette image. 
+  En effet la différence d'élévation entre chaque divisions peuvent provoqué une discontinuité provoquant ainsi une zone vide, 
+  comme on peut le voir, par la zone rouge indiqué sur cette image. 
   
   
   \vspace{2.8cm}
-  La méthode utilisé en général, est de palier cette discontinuité en rajoutant des connexions entre les niveaux affectés. Cette solution à de nombreux inconvéniant, en rajoutant des connexions de cette manière, lors du rendue et, lors du parcours du terrain ,ces connexions vont alors apparaitre brusquement perturbant ainsi la fluidité. À cela viennent s'ajouter la possibilité d'avoir des connexions multiple superposé et également un cout de rendue suplémentaire en terme de calcul et de mémoire.
+  La méthode utilisé en général, est de palier cette discontinuité en rajoutant des connexions entre les niveaux affectés. 
+  Cette solution à de nombreux inconvéniant, en rajoutant des connexions de cette manière, lors du rendue et, 
+  lors du parcours du terrain ,ces connexions vont alors apparaitre brusquement perturbant ainsi la fluidité. 
+  À cela viennent s'ajouter la possibilité d'avoir des connexions multiple superposé et également 
+  un cout de rendue suplémentaire en terme de calcul et de mémoire.
   
-  L'algorithme CDLOD va notamment ce différencier ici des autres algorithmes en se servant de "transitions" entre les niveaux de détails par une méthode dites de "\textbf{morphing}" dont nous reparlerons après avoir expliqué l'algorithme plus en détails
+  L'algorithme CDLOD va notamment ce différencier ici des autres algorithmes en se servant de "transitions" entre les niveaux de détails 
+  par une méthode dites de "\textbf{morphing}" dont nous reparlerons après avoir expliqué l'algorithme plus en détails
   
   
   \section{QuadTree}
   
-  L'algorithme CDLOD va utilisé une structure de donnée appelé QuadTree qui est généré à partir de la Heightmap. Cette structure de donné est un arbre dont chaque noeud possède quatre fils. Lord du rendue et de lors du parcours du terrain l'algorithme va parcourir l'arbre afin de sélectionner quel noeud sont visibles et en fonction de la distance, parcourir en profondeur l'arbre. Le principe est que chaque noeud est composé de quatre fils qui sont une résolution plus haute que leur père pour le même emplacement.
+  LE QuadTree est une structure de donnée que l'algorithme CDLOD va utilisé. Le QuadTree qui est généré à partir de la Heightmap. 
+  Cette structure de donné est un arbre dont chaque noeud possède quatre fils. Lord du rendue et de lors du parcours du terrain 
+  l'algorithme va parcourir l'arbre afin de sélectionner quel noeud sont visibles et en fonction de la distance, parcourir en profondeur l'arbre.
+   Le principe est que chaque noeud est composé de quatre fils qui sont une résolution plus haute que leur père pour le même emplacement.
   
   
   

@@ -1,0 +1,54 @@
+La liste a été générée grace à 
+grep -rno 'gl[[:upper:]][^ (]* *(' | sort -d -t: +2 | cut -d: -f3 | sort -u
+
+dans le répertoire PlanetFramework préalablement purgé de staticDependancies (glad)
+
+ensuite les versions supportés viennent de  www.khronos.org
+
+glActiveTexture 2.0->4.5
+glAttachShader 2.0->4.5
+glBindBuffer 2.0->4.5
+glBindFragDataLocation 3.0->4.5
+glBindTexture 2.0->4.5 
+glBindVertexArray 3.0->4.5 
+glBufferData 2.0->4.5
+glClear 2.0->4.5
+glClearColor 2.0->4.5
+glCompileShader 2.0->4.5
+glCreateProgram 2.0->4.5
+glCreateShader 2.0->4.5
+glDebugMessageCallback 4.3->4.5 !!!
+glDebugMessageControl 4.3->4.5 !!!
+glDeleteBuffers 2.0->4.5
+glDeleteProgram 2.0->4.5
+glDeleteShader 2.0->4.5
+glDeleteTextures 2.0->4.5
+glDeleteVertexArrays 3.0->4.5
+glDepthRange 2.0->4.5
+glDrawArrays 2.0->4.5
+glDrawElementsInstanced 3.1->4.5 !!!
+glEnable 2.0->4.5
+glEnableVertexAttribArray 2.0->4.5
+glGenBuffers 2.0->4.5
+glGenTextures 2.0->4.5
+glGenVertexArrays 3.0->4.5
+glGetProgramInfoLog 2.0->4.5
+glGetProgramiv 2.0->4.5
+glGetShaderInfoLog 2.0->4.5
+glGetShaderiv 2.0->4.5
+glGetString 2.0->4.5
+glGetUniformLocation 2.0->4.5
+glLinkProgram 2.0->4.5
+glPolygonMode  2.0->4.5
+glShaderSource 2.0->4.5
+glTexImage2D 2.0->4.5
+glTexParameteri  2.0->4.5
+glUniform1f 2.0->4.5
+glUniform1i 2.0->4.5
+glUniform2f 2.0->4.5
+glUniform3f 2.0->4.5
+glUniformMatrix4fv 2.0->4.5
+glUseProgram 2.0->4.5
+glVertexAttribDivisor 3.3->4.5 !!!
+glVertexAttribIPointer 3.0->4.5
+glVertexAttribPointer 2.0->4.5
