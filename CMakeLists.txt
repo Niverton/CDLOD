@@ -173,3 +173,5 @@ if(${DOXYGEN_FOUND})
     COMMENT "Generate documentation"
   )
 endif()
+
+add_subdirectory(test)

@@ -7,54 +7,60 @@
 
 #include <chrono>
 
-template <typename T>
-class TestPerf{
-public:
-  TestPerf(T& t): _list(t) {}
+template <typename Fun>
+double Timer(Fun f, int nb){
+  auto s = std::chrono::system_clock::now();
   
-  template <typename Fun>
+  f(nb);
+  
+  auto e = std::chrono::system_clock::now();
+  auto elapse = std::chrono::duration<double, std::milli>(e - s);
 
-  /**
-    \return return duration of f in milli seconds
-  */
-  double run(Fun f){
-    auto s = std::chrono::system_clock::now();
-    
-    for (auto& i: _list){
-      f(i);
-    }
-    
-    auto e = std::chrono::system_clock::now();
-    auto elapse = std::chrono::duration<double, std::milli>(e - s);
+  return elapse.count();
+}
 
-    return elapse.count();
-  }
-private:
-  T _list;
-};
+void usage(char* msg){
+  std::cerr << "Usage: " << msg << " <nb_iter_inf> <nb_iter_sup>\n";
+  std::exit(-1);
+}
 
-
-#define SIZE 1000000
 int main(int argc, char** argv){
-  std::vector<glm::vec3> vertices { SIZE , glm::vec3{0.0, 0.0, 0.0} };
+  if (argc != 3)  usage(argv[0]);
 
-  TestPerf<std::vector<glm::vec3>> test {vertices};
+  int nb_iter_inf = atoi(argv[1]);
+  int nb_iter_sup = atoi(argv[2]);
 
-  std::cout << "vertices number: " << SIZE << '\n';
+  std::cout << "CSV format - footstep : 2^{min..max}\n";
 
   {
-    std::cout << "glm::simplex \t";
-    std::cout << "elapse time: " <<
-      test.run([](glm::vec3 v) { v *= glm::simplex(v); })
-    << " ms\n";
+    std::cout << "Simplex (ms); ";
+    for (int i=nb_iter_inf; i<nb_iter_sup; i++){
+      int nb = pow(2, i);
+      double time =Timer([](long unsigned int nb)
+      {
+        std::vector<glm::vec3> vertices {nb, glm::vec3{0.0, 0.0, 0.0}};
+        for (auto v: vertices){
+          v *= glm::simplex(v);
+        }
+      }, nb);
+      std::cout << time << "; ";
+    }
+    std::cout << '\n';
   }
 
   {
-    std::cout << "glm::perlin \t";
-    std::cout << "elapse time: " <<
-      test.run([](glm::vec3 v) { v *= glm::perlin(v); })
-    << " ms\n";
+    std::cout << "Perlin (ms); ";
+    for (int i=nb_iter_inf; i<nb_iter_sup; i++){
+      int nb = pow(2, i);
+      double time =Timer([](long unsigned int nb)
+      {
+        std::vector<glm::vec3> vertices {nb, glm::vec3{0.0, 0.0, 0.0}};
+        for (auto v: vertices){
+          v *= glm::perlin(v);
+        }
+      }, nb);
+      std::cout << time << "; ";
+    }
+    std::cout << '\n';
   }
-
-
 }
