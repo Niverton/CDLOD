@@ -259,4 +259,14 @@ if(BUILD_TESTS)
   #
   # make_test(t1 t1.cpp t1.h ToTest.cpp)
 
+  # TextRenderer
+  make_test(textrenderer
+    tests/TextRenderer_test.cpp
+    tests/TextRenderer_test.h
+    PlanetFramework/TextRenderer.cpp
+    PlanetFramework/TextRenderer.h
+    tests/dummies/Shader.cpp
+    tests/dummies/SpriteFont.cpp
+    )
+
 endif()

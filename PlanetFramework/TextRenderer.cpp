@@ -8,6 +8,10 @@
 
 #include <algorithm>
 
+#ifdef TEST_textrenderer
+  #include "TextRenderer_test.h"
+#endif
+
 TextRenderer::TextRenderer()
     : m_BufferSize(500), m_Transform(glm::mat4()), m_NumCharacters(0),
       m_pSpriteFonts(std::vector<SpriteFont *>()) {
