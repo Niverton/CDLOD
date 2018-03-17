@@ -28,7 +28,8 @@ private:
   };
 
 #ifdef TEST_textrenderer
-  friend int test();
+  friend bool test();
+  friend void test_update_buffer(TextRenderer::TextVertex *, size_t);
 #endif
 
   void Init();

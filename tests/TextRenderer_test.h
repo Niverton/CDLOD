@@ -2,4 +2,7 @@
 
 #include "disable_gl.h"
 
-//TODO mock gl calls to test calls
+#undef glBufferData
+#define glBufferData(type, size, buffer, mode) test_update_buffer(buffer, size)
+
+void test_update_buffer(TextRenderer::TextVertex *buffer, size_t size);
