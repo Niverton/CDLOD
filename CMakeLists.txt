@@ -144,7 +144,7 @@ add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
 set(EXEC PlanetRenderer)
 add_executable(${EXEC} ${SRCS})
 # Build this before EXEC
-add_dependencies(${EXEC} devil_ext shaders textures)
+add_dependencies(${EXEC} devil_ext shaders textures fonts)
 if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
   add_dependencies(${EXEC} glm_ext)
 endif()
@@ -162,7 +162,6 @@ target_include_directories(${EXEC} PRIVATE ${GLM_INCLUDE_DIRS})
 target_link_libraries(${EXEC} PRIVATE ${SDL2_LIBRARIES})
 target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
 
-target_include_directories(${EXEC} PRIVATE include)
 #Force c++14
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
