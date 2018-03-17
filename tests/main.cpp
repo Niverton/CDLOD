@@ -8,8 +8,8 @@
  *      - Profit
  */
 
-int test();
+bool test();
 
 int main(void) {
-  return test();
+  return (test()) ? 0 : 1;
 }

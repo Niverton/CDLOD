@@ -4,13 +4,14 @@
  *      - TODO
  */
 
-
 #include "stdafx.h"
-#include "TextRenderer.h"
 
+#include "TextRenderer.h"
 #include "TextRenderer_test.h"
 
-int test() {
-  //TODO
-  return 0;
+
+bool test() {
+  bool result = true;
+
+  return result;
 }

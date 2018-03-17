@@ -27,6 +27,10 @@ private:
     unsigned int ChannelId;
   };
 
+#ifdef TEST_textrenderer
+  friend int test();
+#endif
+
   void Init();
   void Draw();
   void UpdateBuffer();
