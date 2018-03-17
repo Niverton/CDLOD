@@ -13,6 +13,8 @@ set(KEEP_DOT NO CACHE BOOL
   "Should doxygen keep the .dot files ?")
 set(NO_SVG NO CACHE BOOL
   "Disable SVG output")
+set(BUILD_TESTS YES CACHE BOOL
+  "Should build test executables ?")
 
 # Fichiers source
 set(SRCS
@@ -202,4 +204,59 @@ if(COMMAND doxygen_add_docs)
 else()
   message(WARNING "doxygen_add_docs not available, doxygen target\
   disabled. Update CMake.")
+endif()
+
+# ---------------------------Tests--------------------------------
+if(BUILD_TESTS)
+  enable_testing()
+
+  # All extra arguments are passed to add_executable
+  macro(make_test name)
+    add_executable(${name}
+      # EXCLUDE_FROM_ALL # Don't build with the target ALL
+      tests/main.cpp
+      PlanetFramework/StaticDependancies/glad/glad.cpp
+      ${ARGN})
+
+    set_target_properties(${name} PROPERTIES 
+      RUNTIME_OUTPUT_DIRECTORY tests
+      COMPILE_DEFINITIONS TEST_${name})
+
+    #Force c++14
+    target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
+
+    get_target_property(LIBS ${EXEC} LINK_LIBRARIES)
+    get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
+
+    target_link_libraries(${name} ${LIBS})
+    target_include_directories(${name} PRIVATE 
+      ${INCL}
+      tests/
+      PlanetFramework/
+      PlanetFramework/Textures
+      PlanetFramework/HeightMapGenerator
+      PlanetFramework/Shaders
+      PlanetFramework/Fonts
+      PlanetFramework/PlanetTech
+      PlanetFramework/PlanetTech/Types
+      )
+
+    add_test(NAME test_${name}
+      COMMAND ${name})
+  endmacro()
+
+  # How to write a test:
+  # 1) Write a header file with mocks for the functions to intercept
+  # 2) Write a source file defining the function `int test()` to run the
+  #    tests
+  # 3) Create a test target with make_test
+  # 4) Include your test's header in the tested files if building in
+  #    test mode
+  #
+  # Ex: create the t1 test using t1.cpp t1.h files testing the file
+  # ToTest.cpp
+  # make_test defines the TEST_${name} macro in the target
+  #
+  # make_test(t1 t1.cpp t1.h ToTest.cpp)
+
 endif()
