@@ -280,4 +280,16 @@ if(BUILD_TESTS)
     tests/dummies/Shader.cpp
     )
 
+  # Triangulator
+  make_test(triangulator_generate_geometry
+    tests/Triangulator_generate_geometry.cpp
+    tests/Triangulator_generate_geometry.h
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/PlanetTech/Triangulator.h
+    PlanetFramework/InputManager.cpp
+    PlanetFramework/InputManager.h
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )
+
 endif()
