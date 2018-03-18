@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef TEST_patch
+#  include "Patch_test.h"
+#endif
+
 class Shader;
 class Planet;
 
@@ -43,6 +47,9 @@ public:
   void Draw(bool white = false);
 
 private:
+#ifdef TEST_patch
+  friend int test();
+#endif
   std::vector<PatchVertex> m_Vertices;
   std::vector<UINT> m_Indices;
 

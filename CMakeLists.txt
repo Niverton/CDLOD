@@ -271,4 +271,13 @@ if(BUILD_TESTS)
     tests/dummies/SpriteFont.cpp
     )
 
+  # Patch
+  make_test(patch_generate_geometry
+    tests/Patch_generate_geometry.cpp
+    tests/Patch_generate_geometry.h
+    PlanetFramework/PlanetTech/Patch.cpp
+    PlanetFramework/PlanetTech/Patch.h
+    tests/dummies/Shader.cpp
+    )
+
 endif()
