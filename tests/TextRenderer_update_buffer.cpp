@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "TextRenderer.h"
-#include "TextRenderer_test.h"
+#include "TextRenderer_update_buffer.h"
 
 #include <algorithm>
 #include <string>

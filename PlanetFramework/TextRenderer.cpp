@@ -8,8 +8,8 @@
 
 #include <algorithm>
 
-#ifdef TEST_textrenderer
-  #include "TextRenderer_test.h"
+#ifdef test_textrenderer_update_buffer
+  #include "TextRenderer_update_buffer.h"
 #endif
 
 TextRenderer::TextRenderer()

@@ -212,15 +212,15 @@ if(BUILD_TESTS)
 
   # All extra arguments are passed to add_executable
   macro(make_test name)
-    add_executable(${name}
+    add_executable(${name}_test
       # EXCLUDE_FROM_ALL # Don't build with the target ALL
       tests/main.cpp
       PlanetFramework/StaticDependancies/glad/glad.cpp
       ${ARGN})
 
-    set_target_properties(${name} PROPERTIES 
+    set_target_properties(${name}_test PROPERTIES
       RUNTIME_OUTPUT_DIRECTORY tests
-      COMPILE_DEFINITIONS TEST_${name})
+      COMPILE_DEFINITIONS test_${name})
 
     #Force c++14
     target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
@@ -229,8 +229,8 @@ if(BUILD_TESTS)
     get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
     get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
 
-    target_link_libraries(${name} ${LIBS})
-    target_include_directories(${name} PRIVATE 
+    target_link_libraries(${name}_test ${LIBS})
+    target_include_directories(${name}_test PRIVATE
       ${INCL}
       tests/
       PlanetFramework/
@@ -241,10 +241,10 @@ if(BUILD_TESTS)
       PlanetFramework/PlanetTech
       PlanetFramework/PlanetTech/Types
       )
-    add_dependencies(${name} ${DEPS})
+    add_dependencies(${name}_test ${DEPS})
 
-    add_test(NAME test_${name}
-      COMMAND ${name})
+    add_test(NAME ${name}
+      COMMAND ${name}_test)
   endmacro()
 
   # How to write a test:
@@ -262,9 +262,9 @@ if(BUILD_TESTS)
   # make_test(t1 t1.cpp t1.h ToTest.cpp)
 
   # TextRenderer
-  make_test(textrenderer
-    tests/TextRenderer_test.cpp
-    tests/TextRenderer_test.h
+  make_test(textrenderer_update_buffer
+    tests/TextRenderer_update_buffer.cpp
+    tests/TextRenderer_update_buffer.h
     PlanetFramework/TextRenderer.cpp
     PlanetFramework/TextRenderer.h
     tests/dummies/Shader.cpp

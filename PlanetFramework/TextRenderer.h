@@ -27,7 +27,7 @@ private:
     unsigned int ChannelId;
   };
 
-#ifdef TEST_textrenderer
+#ifdef test_textrenderer_update_buffer
   friend bool test();
   friend void test_update_buffer(TextRenderer::TextVertex *, size_t);
 #endif
