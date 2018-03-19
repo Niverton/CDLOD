@@ -1,14 +1,25 @@
 #include "Scene.h"
-#include "stdafx.h"
+#include "Camera.h"                       // for Camera
+#include "Context.h"                      // for ContextObjects, Context
+#include "InputManager.h"                 // for InputManager
+#include "PlanetTech/Types/../Planet.h"   // for Planet
+#include "PlanetTech/Types/Moon.h"        // for Moon
+#include "SpriteFont.h"                   // for SpriteFont
+#include "StaticDependancies/glad/glad.h" // for GL_FRONT_AND_BACK, glDepth...
+#include "TextRenderer.h"                 // for TextRenderer
+#include "Time.h"                         // for Time
+#include "utils.h"                        // for SafeDelete, INPUT, CONTEXT
+#include <iomanip>                        // for operator<<, setprecision
+#include <sstream>                        // for stringstream, basic_ostream
+#include <string>                         // for operator+, allocator, to_s...
 
-#include "./PlanetTech/Types/Earth.h"
-#include "./PlanetTech/Types/Moon.h"
-#include "Camera.h"
-#include "SpriteFont.h"
-#include "TextRenderer.h"
-
-#include <iomanip>
-#include <sstream>
+#if PLATFORM_Win
+#include <SDL.h>
+#include <glm\glm.hpp>
+#else
+#include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#endif
 
 //#include "Screenshot.h"
 
