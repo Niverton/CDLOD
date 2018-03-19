@@ -32,14 +32,12 @@ set(SRCS
   PlanetFramework/PlanetTech/Patch.h
   PlanetFramework/PlanetTech/Planet.cpp
   PlanetFramework/PlanetTech/Planet.h
-  PlanetFramework/PlanetTech/stdafx.h
   PlanetFramework/PlanetTech/Triangulator.cpp
   PlanetFramework/PlanetTech/Triangulator.h
   PlanetFramework/PlanetTech/Types/Earth.cpp
   PlanetFramework/PlanetTech/Types/Earth.h
   PlanetFramework/PlanetTech/Types/Moon.cpp
   PlanetFramework/PlanetTech/Types/Moon.h
-  PlanetFramework/PlanetTech/Types/stdafx.h
   PlanetFramework/Scene.cpp
   PlanetFramework/Scene.h
   PlanetFramework/Screenshot.cpp
@@ -50,8 +48,6 @@ set(SRCS
   PlanetFramework/Singleton.h
   PlanetFramework/SpriteFont.cpp
   PlanetFramework/SpriteFont.h
-  PlanetFramework/stdafx.cpp
-  PlanetFramework/stdafx.h
   PlanetFramework/TextRenderer.cpp
   PlanetFramework/TextRenderer.h
   PlanetFramework/Texture.cpp
