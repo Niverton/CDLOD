@@ -1,11 +1,20 @@
 #pragma once
 
 #ifdef TEST_patch
-#  include "Patch_test.h"
+#include "Patch_test.h"
 #endif
 
-class Shader;
-class Planet;
+#include "StaticDependancies/glad/glad.h" // for GLint, GLuint
+#include "utils.h"                       // for UINT
+
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
+#include <vector> // for vector
+class Planet;     // lines 8-8
+class Shader;     // lines 7-7
 
 struct PatchVertex {
   PatchVertex(glm::vec2 position, glm::vec2 morphVec) {
