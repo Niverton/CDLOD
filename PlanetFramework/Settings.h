@@ -7,6 +7,9 @@
 #include <SDL2/SDL.h>
 #endif
 
+#define SETTINGS Settings::GetInstance()
+#define WINDOW Settings::GetInstance()->Window
+
 struct Settings : public Singleton<Settings> {
 public:
   Settings() : Window(WindowSettings()) {

@@ -4,14 +4,6 @@
 #define GLM_LEFT_HANDED
 #endif
 
-#define SETTINGS Settings::GetInstance()
-#define WINDOW Settings::GetInstance()->Window
-#define CONTEXT Context::GetInstance()
-#define TIME Context::GetInstance()->pTime
-#define SCENE Context::GetInstance()->pScene
-#define CAMERA Context::GetInstance()->pCamera
-#define INPUT InputManager::GetInstance()
-
 template <class T>
 inline void SafeDelete(T &pObjectToDelete) {
   if (pObjectToDelete != 0) {

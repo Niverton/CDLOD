@@ -3,6 +3,11 @@
 #include "Singleton.h"
 #include "Time.h"
 
+#define CONTEXT Context::GetInstance()
+#define TIME Context::GetInstance()->pTime
+#define SCENE Context::GetInstance()->pScene
+#define CAMERA Context::GetInstance()->pCamera
+
 class Camera;
 
 class ContextObjects {

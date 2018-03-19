@@ -8,6 +8,9 @@
 #include <glm/glm.hpp>
 #endif
 #include "Singleton.h"
+
+#define INPUT InputManager::GetInstance()
+
 //----------------------------
 // Event Manager class definintion
 //----------------------------
