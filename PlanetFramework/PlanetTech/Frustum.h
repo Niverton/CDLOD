@@ -1,9 +1,14 @@
 #pragma once
 
-class Camera;
-class Camera;
-class Transform;
-class Shader;
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
+#include "../StaticDependancies/glad/glad.h" // for GLint, GLuint
+#include <vector>                            // for vector
+class Camera;                                // lines 3-3
+class Shader;                                // lines 6-6
 
 struct Plane {
   Plane() {

@@ -1,10 +1,19 @@
-#include "stdafx.h"
-
 #include "Frustum.h"
-
-#include "../Camera.h"
-#include "../Shader.h"
-#include "../Transform.h"
+#include "Camera.h" // for Camera
+#include "Context.h"
+#include "Settings.h"  // for Settings::WindowSettings
+#include "Shader.h"    // for Shader
+#include "Transform.h" // for Transform
+#include "utils.h"     // for SafeDelete, WINDOW, CAMERA
+#include <cmath>       // for tan
+#include <string>      // for string
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+#else
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#endif
 
 Frustum::Frustum() {
   m_pWireShader = new Shader("./Shaders/wire.glsl");
@@ -137,9 +146,9 @@ bool Frustum::Contains(glm::vec3 p) {
 }
 
 // this method will treat triangles as intersecting even though they may be
-// outside  but it is faster then performing a proper intersection test with every
-// plane  and it does not reject triangles that are inside but with all corners
-// outside
+// outside  but it is faster then performing a proper intersection test with
+// every plane  and it does not reject triangles that are inside but with all
+// corners outside
 VolumeTri Frustum::ContainsTriangle(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c) {
   VolumeTri ret = VolumeTri::CONTAINS;
   for (auto plane : m_Planes) {
