@@ -1,4 +1,9 @@
 #pragma once
+
+#include "Singleton.h"
+#include <string>
+class Scene;
+
 class Screenshot : public Singleton<Screenshot> {
 public:
   void Take() {
