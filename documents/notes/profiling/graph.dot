@@ -1,0 +1,31 @@
+digraph "callgraph" {
+  F560dbcf68a88 [label="float glm::length<float, (glm:...\n156 637 789"];
+  F560dbd3f0808 [label="glm::tvec3<float, (glm::precis...\n299 356 156"];
+  F560dbd3f1038 [label="glm::tvec3<float, (glm::precis...\n248 267 755"];
+  F560dbd3f24d8 [label="float glm::dot<float, (glm::pr...\n478 969 850"];
+  F560dbd4975b8 [label="Planet::Update()\n2 387 927 766"];
+  F560dbd499158 [label="Triangulator::GenerateGeometry...\n2 387 957 818"];
+  F560dbd49d5c8 [label="glm::tvec3<float, (glm::precis...\n299 356 156"];
+  F560dbd5a6fb8 [label="Triangulator::RecursiveTriangl...\n2 387 957 818"];
+  F560dbd5a78a8 [label="Triangulator::SplitHeuristic(g...\n2 063 589 114"];
+  F560dbd5a87f8 [label="Triangulator::RecursiveTriangl...\n2 135 794 739"];
+  F560dbd5ac2c8 [label="Frustum::ContainsTriVolume(glm...\n1 078 223 339"];
+  F560dbd5b7c48 [label="glm::detail::compute_dot<glm::...\n413 655 779"];
+  F560dbd5b8618 [label="glm::detail::compute_normalize...\n226 679 255"];
+  F560dbd6c50f8 [label="glm::detail::compute_length<gl...\n145 359 969"];
+  F560dbcf68a88 -> F560dbd6c50f8 [weight=2,label="145 359 969 (1 253 091x)"];
+  F560dbd3f1038 -> F560dbd5b8618 [weight=2,label="226 679 255 (1 199 361x)"];
+  F560dbd3f24d8 -> F560dbd5b7c48 [weight=2,label="413 655 779 (5 442 839x)"];
+  F560dbd4975b8 -> F560dbd499158 [weight=3,label="2 387 927 766 (3 194x)"];
+  F560dbd499158 -> F560dbd5a6fb8 [weight=3,label="2 387 957 818 (64 360x)"];
+  F560dbd5a6fb8 -> F560dbd5a78a8 [weight=2,label="202 605 891 (64 360x)"];
+  F560dbd5a6fb8 -> F560dbd5a87f8 [weight=3,label="2 135 794 739 (164 416x)"];
+  F560dbd5a78a8 -> F560dbcf68a88 [weight=2,label="173 691 000 (1 389 528x)"];
+  F560dbd5a78a8 -> F560dbd3f1038 [weight=2,label="275 296 752 (1 329 936x)"];
+  F560dbd5a78a8 -> F560dbd5ac2c8 [weight=3,label="1 195 609 889 (417 268x)"];
+  F560dbd5a87f8 -> F560dbd5a78a8 [weight=3,label="1 860 983 223 (600 608x)"];
+  F560dbd5a87f8 -> F560dbd5a87f8 [weight=3,label="12 991 594 264 (436 192x)"];
+  F560dbd5ac2c8 -> F560dbd3f0808 [weight=2,label="299 356 156 (5 442 839x)"];
+  F560dbd5ac2c8 -> F560dbd3f24d8 [weight=2,label="478 969 850 (5 442 839x)"];
+  F560dbd5b7c48 -> F560dbd49d5c8 [weight=2,label="299 356 156 (5 442 839x)"];
+}
