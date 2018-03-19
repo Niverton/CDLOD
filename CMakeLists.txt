@@ -56,6 +56,7 @@ set(SRCS
   PlanetFramework/Time.h
   PlanetFramework/Transform.cpp
   PlanetFramework/Transform.h
+  PlanetFramework/utils.h
   PlanetFramework/StaticDependancies/glad/glad.cpp
   PlanetFramework/StaticDependancies/glad/glad.h
   PlanetFramework/StaticDependancies/glad/stdafx.h
@@ -141,6 +142,7 @@ COMMENT "Creating symlink to Fonts")
 add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
 set(EXEC PlanetRenderer)
 add_executable(${EXEC} ${SRCS})
+target_include_directories(${EXEC} PRIVATE PlanetFramework/)
 # Build this before EXEC
 add_dependencies(${EXEC} devil_ext shaders textures fonts)
 if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
