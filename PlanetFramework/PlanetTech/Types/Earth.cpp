@@ -1,7 +1,6 @@
 #include "Earth.h"
-#include "stdafx.h"
-
-#include "../../Texture.h"
+#include "../Planet.h"
+#include "Texture.h"
 
 Earth::Earth() : Planet() {
   m_pDiffuse = new Texture("./Textures/Earth8k.jpg");
