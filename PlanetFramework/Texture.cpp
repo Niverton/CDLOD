@@ -45,22 +45,26 @@ void Texture::Load(bool useSRGB) {
       ilDeleteImage(imgName);
     }
   }
-  glGenTextures(1, &m_Handle);
-  glBindTexture(GL_TEXTURE_2D, m_Handle);
-  
-  glTexImage2D(GL_TEXTURE_2D, 0, useSRGB ? GL_SRGB : GL_RGB, m_Width,
-               m_Height, 0, GL_RGB, GL_FLOAT, m_data);
 
+
+  if (m_data == nullptr){
+      std::cout << "  . . . FAILED! \n";
+  } else {
+    glGenTextures(1, &m_Handle);
+    glBindTexture(GL_TEXTURE_2D, m_Handle);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, useSRGB ? GL_SRGB : GL_RGB, m_Width,
+                 m_Height, 0, GL_RGB, GL_FLOAT, m_data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  }
   if (m_isFile){
     ilBindImage(0);
     ilDeleteImage(imgName);
   }
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-
 }
 
 Texture::~Texture() {
