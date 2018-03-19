@@ -59,7 +59,6 @@ set(SRCS
   PlanetFramework/utils.h
   PlanetFramework/StaticDependancies/glad/glad.cpp
   PlanetFramework/StaticDependancies/glad/glad.h
-  PlanetFramework/StaticDependancies/glad/stdafx.h
 )
 
 # --------------------------- EXTERNAL DEPENDENCIES ---------------------------
