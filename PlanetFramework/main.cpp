@@ -1,10 +1,24 @@
-#include "stdafx.h"
-
-#include "Scene.h"
-
-#include <IL/il.h>
-#include <IL/ilu.h>
-//#include <IL/ilut.h>
+#include "Context.h"                      // for Context
+#include "InputManager.h"                 // for InputManager
+#include "Scene.h"                        // for Scene
+#include "Settings.h"                     // for Settings, Settings::Window...
+#include "StaticDependancies/glad/glad.h" // for glGetString, gladLoadGLLoader
+#include "utils.h"                        // for SafeDelete
+#if PLATFORM_Win
+#include <IL\il.h>  // for ilInit
+#include <IL\ilu.h> // for iluInit
+#include <SDL.h>
+#include <glm\glm.hpp>
+#else
+#include <IL/il.h>  // for ilInit
+#include <IL/ilu.h> // for iluInit
+#include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#endif
+#include <iostream> // for operator<<, endl, basic_os...
+#include <stdio.h>  // for fprintf, stderr
+#include <stdlib.h> // for atexit, exit, NULL
+#include <string>   // for char_traits, string
 
 //**************************************
 // Functions for debugging
