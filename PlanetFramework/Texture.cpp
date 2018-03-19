@@ -1,9 +1,7 @@
 #include "Texture.h"
-#include "stdafx.h"
-
-#include <IL/il.h>
-#include <IL/ilu.h>
-//#include <IL/ilut.h>
+#include <IL/il.h>  // for ilBindImage, ilDeleteImage, ilGetInteger, ilConv...
+#include <IL/ilu.h> // for iluErrorString
+#include <iostream> // for operator<<, basic_ostream, endl, cout, ostream
 
 Texture::Texture(const std::string &filename) {
   m_Name = filename;
