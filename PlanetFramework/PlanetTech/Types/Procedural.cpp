@@ -1,6 +1,7 @@
 #include "Procedural.h"
 #include "stdafx.h"
-
+#include <IL/il.h>
+#include <IL/ilu.h>
 #include "../../Texture.h"
 
 ProceduralPlanet::ProceduralPlanet() : Planet() {
@@ -8,7 +9,13 @@ ProceduralPlanet::ProceduralPlanet() : Planet() {
   //m_pHeight = new Texture("./Textures/MoonHeight.jpg");
 
   //Compute texture here
-//  m_pHeight = 
+  
+  ILuint img;
+  ilGenImages(1, &img);
+  ilBindImage(img);
+
+
+  ILuint *data = nullptr;
 
   m_Radius = 1737.1f;
   m_MaxHeight = 10.7f;
