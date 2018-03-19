@@ -1,4 +1,6 @@
 #pragma once
+#include <IL/il.h>
+#include <IL/ilu.h>
 
 #include <string>
 
@@ -7,6 +9,7 @@
 class Texture {
 public:
   Texture(const std::string &filename);
+  Texture(ILubyte* data);
   virtual ~Texture();
 
   virtual void Load(bool useSRGB = false);
@@ -20,6 +23,8 @@ public:
 
 private:
   std::string m_Name;
+  bool m_isFile = true;
+  ILubyte *m_data = nullptr;
 
 protected:
   GLuint m_Handle;
