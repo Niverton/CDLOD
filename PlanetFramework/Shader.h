@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>                          // for string
+#include "StaticDependancies/glad/glad.h"  // for GLuint, GLenum
+
 class Shader {
 public:
   Shader(std::string filename, bool build = false);

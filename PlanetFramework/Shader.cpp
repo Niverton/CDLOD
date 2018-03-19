@@ -1,6 +1,7 @@
-#include "stdafx.h"
-
 #include "Shader.h"
+#include <iostream> // for operator<<, endl, basic_ostream, cout, ostream
+#include <fstream>
+#include <stddef.h> // for NULL
 
 Shader::Shader(std::string filename, bool build) : m_FileName(filename) {
   if (build)
