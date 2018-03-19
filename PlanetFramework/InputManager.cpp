@@ -1,6 +1,13 @@
-#include "stdafx.h"
-
 #include "InputManager.h"
+#include "utils.h"
+#include <cstring> // for memcpy, NULL
+#include <ctype.h> // for toupper
+
+#if PLATFORM_Win
+#include <SDL.h>
+#else
+#include <SDL2/SDL.h>
+#endif
 
 //----------------------------
 // Constructor and Destructor
