@@ -1,9 +1,8 @@
-#include "stdafx.h"
-
-#include "Triangulator.h"
 #include "Triangulator_generate_geometry.h"
+#include "Triangulator.h"
+#include "utils.h"
 
 bool test() {
-  //TODO
+  // TODO
   return true;
 }

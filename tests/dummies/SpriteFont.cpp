@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "SpriteFont.h"
 
 #include "BinaryReader.h"

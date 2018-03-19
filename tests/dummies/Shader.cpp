@@ -2,7 +2,6 @@
  *  \brief Dummy link target
  */
 
-#include "stdafx.h"
 #include <string>
 
 #include "Shader.h"

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TextRenderer.h"
+
 #include "disable_gl.h"
 
 #undef glBufferData
