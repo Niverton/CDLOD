@@ -1,7 +1,18 @@
 #pragma once
 
-class SpriteFont;
-class Shader;
+#include "Shader.h"
+#include "Singleton.h" // for Singleton
+#include "SpriteFont.h"
+#include "StaticDependancies/glad/glad.h" // for GLint, GLuint
+#include <stddef.h>                       // for size_t
+#include <string>                         // for string
+#include <vector>                         // for vector
+
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
 
 class TextRenderer : public Singleton<TextRenderer> {
 public:

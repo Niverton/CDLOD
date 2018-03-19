@@ -1,15 +1,23 @@
-#include "stdafx.h"
-
 #include "TextRenderer.h"
+#include "Settings.h"   // for Settings::WindowSettings
+#include "Shader.h"     // for Shader
+#include "SpriteFont.h" // for SpriteFont, FontMetric, TextCache
+#include "Texture.h"    // for Texture
+#include "utils.h"      // for WINDOW, SafeDelete, UINT
+#include <algorithm>    // for find
+#include <iostream>     // for operator<<, endl, basic_ostream
+#include <iterator>     // for each loop (begin and end)
 
-#include "Shader.h"
-#include "SpriteFont.h"
-#include "Texture.h"
-
-#include <algorithm>
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+#else
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#endif
 
 #ifdef test_textrenderer_update_buffer
-  #include "TextRenderer_update_buffer.h"
+#include "TextRenderer_update_buffer.h"
 #endif
 
 TextRenderer::TextRenderer()
