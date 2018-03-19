@@ -1,12 +1,21 @@
-#include "stdafx.h"
-
 #include "Triangulator.h"
+#include "Context.h"
+#include "Frustum.h"      // for Frustum, VolumeTri, Vol...
+#include "InputManager.h" // for InputManager
+#include "Planet.h"       // for Planet
+#include "Settings.h"     // for Settings::WindowSettings
+#include "Transform.h"    // for Transform
+#include "utils.h"        // for SafeDelete
+#include <cmath>          // for fminf, acosf, sinf, sqrt
+#include <memory>         // for allocator_traits<>::val...
 
-#include "Frustum.h"
-#include "Planet.h"
-
-#include "../Camera.h"
-#include "../Transform.h"
+#if PLATFORM_Win
+#include <SDL.h>
+#include <glm\glm.hpp>
+#else
+#include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#endif
 
 Triangulator::Triangulator(Planet *pPlanet) : m_pPlanet(pPlanet) {
   m_pFrustum = new Frustum();
@@ -170,8 +179,9 @@ TriNext Triangulator::SplitHeuristic(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
     // auto intersect = m_pFrustum->ContainsTriangle(a, b, c);
     if (intersect == VolumeTri::OUTSIDE)
       return TriNext::CULL;
-    if (intersect == VolumeTri::CONTAINS) // stop frustum culling -> all
-                                          // children are also inside the frustum
+    if (intersect ==
+        VolumeTri::CONTAINS) // stop frustum culling -> all
+                             // children are also inside the frustum
     {
       // check if new splits are allowed
       if (level >= m_MaxLevel)

@@ -1,9 +1,15 @@
 #pragma once
 
-class Frustum;
-class Planet;
-struct PatchInstance;
-#include "Patch.h"
+#include "Patch.h" // for PatchInstance
+#include <vector>  // for vector
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
+
+class Frustum; // lines 3-3
+class Planet;  // lines 4-4
 
 enum TriNext { CULL, LEAF, SPLIT, SPLITCULL };
 
