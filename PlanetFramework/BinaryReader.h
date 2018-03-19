@@ -1,5 +1,9 @@
 #pragma once
 
+#include "utils.h"  // for UINT32
+#include <iostream> // for operator<<, endl, istream, basic_istream::read
+#include <string>   // for string
+
 class BinaryReader {
 public:
   BinaryReader(void);
