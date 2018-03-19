@@ -1,6 +1,19 @@
 #pragma once
-class Transform;
-class Planet;
+
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
+
+#include "InputManager.h" // for InputManager
+#include "PlanetTech/Planet.h"       // for Planet
+#include "Settings.h"     // for Settings::WindowSettings
+#include "Time.h"         // for Time
+#include "Transform.h"    // for Transform
+#include "utils.h"       // for INPUT, TIME, WINDOW
+#include <SDL_scancode.h> // for ::SDL_SCANCODE_KP_4
+#include <cmath>          // for powf, cos, sin, sqrtf
 
 class Camera {
 public:

@@ -1,8 +1,22 @@
-#include "stdafx.h"
-
-#include "./PlanetTech/Planet.h"
 #include "Camera.h"
-#include "Transform.h"
+#include "Context.h"
+#include "InputManager.h"      // for InputManager
+#include "PlanetTech/Planet.h" // for Planet
+#include "Settings.h"          // for Settings::WindowSettings
+#include "Time.h"              // for Time
+#include "Transform.h"         // for Transform
+#include "utils.h"             // for INPUT, TIME, WINDOW
+#include <cmath>               // for powf, cos, sin, sqrtf
+
+#if PLATFORM_Win
+#include <SDL.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#else
+#include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#endif
 
 Camera::Camera()
     : m_FOV(45), m_NearPlane(1), m_FarPlane(200000), m_Size(25.0f),
