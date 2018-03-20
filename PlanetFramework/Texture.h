@@ -9,7 +9,7 @@
 class Texture {
 public:
   Texture(const std::string &filename);
-  Texture(float *data);
+  Texture(ILubyte *data);
   virtual ~Texture();
 
   virtual void Load(bool useSRGB = false);
@@ -24,7 +24,7 @@ public:
 private:
   std::string m_Name;
   bool m_isFile = true;
-  float *m_data = nullptr;
+  ILubyte *m_data = nullptr;
 
 protected:
   GLuint m_Handle;
