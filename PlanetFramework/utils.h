@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef GLM_LEFT_HANDED
-#define GLM_LEFT_HANDED
+#ifndef GLM_FORCE_LEFT_HANDED
+#define GLM_FORCE_LEFT_HANDED
 #endif
 
 template <class T>
