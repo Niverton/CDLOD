@@ -3,6 +3,7 @@
 
 #include "./PlanetTech/Types/Earth.h"
 #include "./PlanetTech/Types/Moon.h"
+#include "./PlanetTech/Types/Procedural.h"
 #include "Camera.h"
 #include "SpriteFont.h"
 #include "TextRenderer.h"
@@ -13,7 +14,8 @@
 //#include "Screenshot.h"
 
 Scene::Scene() {
-  m_pPlanet = new Moon();
+  m_pPlanet = new ProceduralPlanet(ProceduralPlanet::Noise::SIMPLEX);
+//  m_pPlanet = new Moon();
   m_pDebugFont = new SpriteFont();
 }
 

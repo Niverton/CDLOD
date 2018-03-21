@@ -15,17 +15,13 @@ ProceduralPlanet::ProceduralPlanet(Noise n) : Planet() {
   const int h = 2048;    //same as moonHeight
   const int w = 4096;
 
-  std::vector<ILubyte> data;
+  std::vector<float> data;
 
-  
   for (int i=0; i<h; i++){
     for (int j=0; j<w; j++){
-      if (n == Noise::SIMPLEX){
-        data.emplace_back(static_cast<ILubyte>(glm::simplex(glm::vec2(i, j))));
-      }
-      if (n == Noise::PERLIN){
-        //data[i+j] = static_cast<ILubyte>(glm::perlin(glm::vec2(i, j)));
-      }
+      glm::vec2 pos = glm::vec2(i, j);
+      float noise = glm::simplex(pos);
+      data.emplace_back(noise);
     }
   }
 
