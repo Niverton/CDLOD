@@ -45,9 +45,9 @@ InputManager::InputManager() {
   m_CharToSdlMap['9'] = SDL_SCANCODE_9;
 }
 InputManager::~InputManager() {
-  delete m_pKeyMapNew;
+  delete[] m_pKeyMapNew;
   m_pKeyMapNew = nullptr;
-  delete m_pKeyMapOld;
+  delete[] m_pKeyMapOld;
   m_pKeyMapOld = nullptr;
   if (!(m_pKeyMapSdl[0] == '\0')) {
     delete m_pKeyMapSdl;
