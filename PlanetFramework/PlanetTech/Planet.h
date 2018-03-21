@@ -7,14 +7,35 @@ class Texture;
 class Triangulator;
 class Patch;
 
+/**
+  \brief  Extend this class for create new planet type.
+          This class manage all stuff about planet rendering such as 
+          texture, triangulator and patch.
+*/
+
 class Planet {
 public:
   Planet();
   virtual ~Planet();
 
+  /**
+    \brief  Load texture data and initialize triangulator and patch.
+  */
   void Init();
+
+  /**
+    \brief  Regenerate geometry and update position.
+  */
   void Update();
+
+  /**
+    \brief  Draw planet
+  */
   void Draw();
+
+  /**
+    \brief  Draw frustum
+  */
   void DrawWire();
 
   float GetRadius() {

@@ -3,6 +3,10 @@
 class SpriteFont;
 class Shader;
 
+/**
+  \brief  Use for draw text on screen.
+          The TextRender is handle with an OpenGL Shader called text.
+*/
 class TextRenderer : public Singleton<TextRenderer> {
 public:
 #undef DrawText
@@ -27,6 +31,9 @@ private:
     unsigned int ChannelId;
   };
 
+  /**
+    \brief initialise TextRender, bind shader with OpenGL and generate buffer
+  */
   void Init();
   void Draw();
   void UpdateBuffer();
