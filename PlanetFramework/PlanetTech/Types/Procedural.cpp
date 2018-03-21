@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
 
-ProceduralPlanet::ProceduralPlanet() : Planet() {
+ProceduralPlanet::ProceduralPlanet(Noise func) : Planet() {
   //m_pDiffuse = new Texture("./Textures/moon8k.jpg");
   //m_pHeight = new Texture("./Textures/MoonHeight.jpg");
 
@@ -20,7 +20,7 @@ ProceduralPlanet::ProceduralPlanet() : Planet() {
 
   for (int i=0; i<h; i++){
     for (int j=0; j<w; j++){
-      //data[i+j] = static_cast<ILubyte>(glm::simplex(i+j));
+      data[i+j] = static_cast<ILubyte>(func(i,j));
     }
   }
 
