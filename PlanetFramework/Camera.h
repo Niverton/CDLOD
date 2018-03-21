@@ -2,6 +2,11 @@
 class Transform;
 class Planet;
 
+/*!
+  \brief  Camera provide two mode, orthigraphic and perspective.
+          The position of the camera is calculate with longitute, latitute and
+          altitude coordinate system.
+*/
 class Camera {
 public:
   Camera();
@@ -37,6 +42,18 @@ public:
     m_PerspectiveProjection = false;
   }
 
+  /*!
+    \brief  This function update camera stuff according to keyboard ans mouse 
+            input.
+            New far and near plane are calculate based on planet: 
+            $ 
+              \sqrt{(radius + altitude}^{2} - radius^{2}} +
+              \sqrt{(radius + mac_height}^{2} - radius^{2}}
+            $
+
+            Projection matrix and other matrix has calculate thanks to 
+            the class Transform.
+  */
   void Update();
 
   glm::mat4 GetView() {
