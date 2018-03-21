@@ -64,22 +64,23 @@ int main(int argc, char *argv[]) {
 
   // Initialize SDL, OpenGL, DevIL and GLAD
   //**************************************
-
-  // request opengl context
-  SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
-
-  // Buffers
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
+  //
   // SDL init
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
     sdl_die("Couldn't initialize SDL");
   atexit(SDL_Quit);
   SDL_GL_LoadLibrary(NULL);
+
+  // request opengl context
+  SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
+  // Buffers
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
 
 // Request a debug context.
 #if defined(DEBUG) | defined(_DEBUG)
@@ -120,16 +121,17 @@ int main(int argc, char *argv[]) {
   gladLoadGLLoader(SDL_GL_GetProcAddress);
   std::cout << "Vendor: \t" << glGetString(GL_VENDOR) << std::endl;
   std::cout << "Renderer:\t" << glGetString(GL_RENDERER) << std::endl;
-  std::cout << "Version:\t" << glGetString(GL_VERSION) << std::endl
+  std::cout << "Version:\t" << glGetString(GL_VERSION) << std::endl;
+  std::cout << "GLSL Version:\t" << glGetString(GL_SHADING_LANGUAGE_VERSION)
             << std::endl;
 
 // Let OpenGL Log errors
 #ifdef _DEBUG
   glEnable(GL_DEBUG_OUTPUT);
   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-  glDebugMessageCallback(openglCallbackFunction, nullptr);
-  glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
-                        true);
+  //glDebugMessageCallback(openglCallbackFunction, nullptr);
+  //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
+  //                      true);
 #endif
 
   // INIT

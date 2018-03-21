@@ -1,5 +1,5 @@
 <VERTEX>
-	#version 400 core
+	#version 330 core
 	
 	//in
 	layout (location = 0) in vec3 position;
@@ -27,7 +27,8 @@
 	}
 </VERTEX>
 <GEOMETRY>
-	#version 400 core
+	#version 330 core
+        #extension GL_ARB_gpu_shader5 : require
 	
 	layout(points, invocations = 1) in;
 	layout(triangle_strip, max_vertices=4) out;
@@ -86,7 +87,7 @@
 	}	
 </GEOMETRY>
 <FRAGMENT>
-	#version 400 core
+	#version 330 core
 	
 	in GSO 
 	{
