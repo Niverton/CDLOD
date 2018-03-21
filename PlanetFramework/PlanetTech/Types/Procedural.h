@@ -1,9 +1,11 @@
 #pragma once
 #include "../Planet.h"
 
-template <typename Noise>
 class ProceduralPlanet : public Planet {
 public:
-  ProceduralPlanet(Noise func);
+  enum class Noise{
+    SIMPLEX, PERLIN
+  };
+  ProceduralPlanet(Noise n);
   ~ProceduralPlanet();
 };

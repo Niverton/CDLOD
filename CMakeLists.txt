@@ -58,6 +58,8 @@ set(SRCS
   PlanetFramework/Time.h
   PlanetFramework/Transform.cpp
   PlanetFramework/Transform.h
+  PlanetFramework/PlanetTech/Types/Procedural.h
+  PlanetFramework/PlanetTech/Types/Procedural.cpp
   PlanetFramework/StaticDependancies/glad/glad.cpp
   PlanetFramework/StaticDependancies/glad/glad.h
   PlanetFramework/StaticDependancies/glad/stdafx.h
