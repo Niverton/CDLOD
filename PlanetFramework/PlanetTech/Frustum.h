@@ -46,6 +46,11 @@ public:
   void Init();
 
   void Update();
+
+  /**
+      \brief  Draw the frustum, use for freeze the renderer, and move a free
+              camera with just what the frustum sees drawn.
+  */
   void Draw();
   
   /**
@@ -54,9 +59,32 @@ public:
   */
   void SetToCamera(Camera *pCamera);
   void SetCullTransform(glm::mat4 objectWorld);
-  
+ 
+  /**
+    \brief  Test if vec3 p is in front of the plane or behind the plane
+    \param  p, a point
+    \return true if p is in front of plane,
+            false otherwise.
+  */
   bool Contains(glm::vec3 p);
+
+  /**
+    \brief  Test if triangle abc is inside the frustum
+    \param  a, first vertex of the triangle
+    \param  b, second vertex of the triangle
+    \param  c, third vertex of the triangle
+    \return return OUTSIDE, CONTAINS or INTERSECT.
+  */
   VolumeTri ContainsTriangle(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c);
+  
+  /**
+    \brief Same as ContainsTri but use included inside a volume.
+    \param  a, first vertex of the triangle
+    \param  b, second vertex of the triangle
+    \param  c, third vertex of the triangle
+    \param height, height of volume
+    \return return OUTSIDE, CONTAINS or INTERSECT.
+  */
   VolumeTri ContainsTriVolume(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
                               float height);
 
