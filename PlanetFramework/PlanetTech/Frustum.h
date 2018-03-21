@@ -24,18 +24,37 @@ struct Plane {
 
 enum class VolumeTri { OUTSIDE, INTERSECT, CONTAINS };
 
+/**
+  \brief  Frustum represent whats the camera sees.
+          This is define by the position of the camera, the field of view and
+          2 planes resenting the near and the far.
+          Vertices before the near and after the far are not draw.
+          The frustum provide a function draw wich virtualy detaches the camera
+          from frustum for cut the terrain update and draw what the frustum 
+          currently sees. 
+
+          The frustum is handle by OpenGL thanks to shader called wire.
+*/
 class Frustum {
 public:
   Frustum();
   ~Frustum();
-
+  
+  /**
+    \brief  Load the shader and bind frutum with OpengGL.
+  */
   void Init();
+
   void Update();
   void Draw();
-
+  
+  /**
+    \brief  Set up the camera
+    \param  pCamera, pointer to a camera
+  */
   void SetToCamera(Camera *pCamera);
   void SetCullTransform(glm::mat4 objectWorld);
-
+  
   bool Contains(glm::vec3 p);
   VolumeTri ContainsTriangle(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c);
   VolumeTri ContainsTriVolume(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
