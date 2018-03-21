@@ -265,7 +265,13 @@ if(BUILD_TESTS)
     PlanetFramework/TextRenderer.cpp
     PlanetFramework/TextRenderer.h
     tests/dummies/Shader.cpp
-    tests/dummies/SpriteFont.cpp
+    #tests/dummies/SpriteFont.cpp
+    PlanetFramework/SpriteFont.cpp
+    PlanetFramework/SpriteFont.h
+    PlanetFramework/BinaryReader.cpp
+    PlanetFramework/BinaryReader.h
+    PlanetFramework/Texture.cpp
+    PlanetFramework/Texture.h
     )
 
   # Patch

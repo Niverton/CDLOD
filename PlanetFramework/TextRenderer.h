@@ -14,6 +14,10 @@
 #include <glm/glm.hpp>
 #endif
 
+#ifdef test_textrenderer_update_buffer
+#include "TextRenderer_update_buffer.h"
+#endif
+
 class TextRenderer : public Singleton<TextRenderer> {
 public:
 #undef DrawText
@@ -40,7 +44,7 @@ private:
 
 #ifdef test_textrenderer_update_buffer
   friend bool test();
-  friend void test_update_buffer(TextRenderer::TextVertex *, size_t);
+  friend void test_update_buffer(void *, size_t);
 #endif
 
   void Init();

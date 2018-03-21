@@ -41,6 +41,7 @@ struct FontMetric {
   glm::vec2 TexCoord;
 };
 
+
 class Texture;
 class TextRenderer;
 
@@ -59,6 +60,9 @@ public:
 
 private:
   friend class TextRenderer;
+#ifdef test_textrenderer_update_buffer
+  friend void test_update_buffer(void*, size_t);
+#endif
 
   FontMetric &GetMetric(const wchar_t &character) {
     return m_CharTable[character - MIN_CHAR_ID];

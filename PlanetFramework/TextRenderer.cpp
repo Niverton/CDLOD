@@ -16,9 +16,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #endif
 
-#ifdef test_textrenderer_update_buffer
-#include "TextRenderer_update_buffer.h"
-#endif
 
 TextRenderer::TextRenderer()
     : m_BufferSize(500), m_Transform(glm::mat4()), m_NumCharacters(0),
