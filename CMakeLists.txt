@@ -304,5 +304,13 @@ if(BUILD_TESTS)
     tests/dummies/Shader.cpp
     tests/dummies/Frustum.cpp
     )
+  make_test(triangulator_recursive_triangle
+    tests/Triangulator_recursive_triangle.cpp
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/InputManager.cpp
+    tests/dummies/Planet.cpp    
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )
 
 endif()

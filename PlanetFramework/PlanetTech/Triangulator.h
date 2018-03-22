@@ -56,9 +56,9 @@ public:
 
 private:
   friend class Planet;
-#ifdef test_triangulator_split_heuristic
+#if defined(test_triangulator_split_heuristic) ||                              \
+    defined(test_triangulator_recursive_triangle)
   friend bool test();
-  //friend bool test_split_heuristic(const Triangulator&);
 #endif
 
   void Precalculate();
