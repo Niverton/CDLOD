@@ -294,5 +294,15 @@ if(BUILD_TESTS)
     tests/dummies/Shader.cpp
     tests/dummies/Frustum.cpp
     )
+  make_test(triangulator_split_heuristic
+    tests/Triangulator_split_heuristic.cpp
+    tests/Triangulator_split_heuristic.h
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/PlanetTech/Triangulator.h
+    PlanetFramework/InputManager.cpp
+    PlanetFramework/InputManager.h
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )
 
 endif()
