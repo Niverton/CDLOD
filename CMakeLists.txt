@@ -241,6 +241,14 @@ if(BUILD_TESTS)
       PlanetFramework/PlanetTech
       PlanetFramework/PlanetTech/Types
       )
+    if (${DEPS})
+      add_dependencies(${name}_test ${DEPS})
+    else()
+      add_dependencies(${name}_test devil_ext)
+      if(TARGET glm_ext)
+        add_dependencies(${name}_test glm_ext)
+      endif()
+    endif()
 
     add_test(NAME ${name}
       COMMAND ${name}_test)
