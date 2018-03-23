@@ -143,13 +143,10 @@ set(EXEC PlanetRenderer)
 add_executable(${EXEC} ${SRCS})
 target_include_directories(${EXEC} PRIVATE PlanetFramework/)
 # Build this before EXEC
-set (DEPS devil_ext shaders textures fonts)
-#add_dependencies(${EXEC} devil_ext shaders textures fonts)
+add_dependencies(${EXEC} devil_ext shaders textures fonts)
 if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
-  set(${DEPS} ${DEPS} glm_ext)
-  #add_dependencies(${EXEC} glm_ext)
+  add_dependencies(${EXEC} glm_ext)
 endif()
-add_dependencies(${EXEC} ${DEPS})
 
 #DevIL
 target_include_directories(${EXEC} PRIVATE ${devil_include_dir})
@@ -227,8 +224,7 @@ if(BUILD_TESTS)
 
     get_target_property(LIBS ${EXEC} LINK_LIBRARIES)
     get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
-    #get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
-    add_dependencies(${name}_test ${DEPS})
+    get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
 
     target_link_libraries(${name}_test ${LIBS})
     target_include_directories(${name}_test PRIVATE
@@ -242,6 +238,14 @@ if(BUILD_TESTS)
       PlanetFramework/PlanetTech
       PlanetFramework/PlanetTech/Types
       )
+    if (${DEPS})
+      add_dependencies(${name}_test ${DEPS})
+    else()
+      add_dependencies(${name}_test devil_ext)
+      if(TARGET glm_ext)
+        add_dependencies(${name}_test glm_ext)
+      endif()
+    endif()
 
     add_test(NAME ${name}
       COMMAND ${name}_test)
