@@ -311,6 +311,11 @@ if(BUILD_TESTS)
     tests/dummies/Planet.cpp    
     tests/dummies/Shader.cpp
     tests/dummies/Frustum.cpp
+    )  
+  
+  # Heightmap
+  make_test(procedural_heightmap
+    tests/Procedural_heightmap.cpp
     )
 
 endif()
