@@ -225,6 +225,9 @@ if(BUILD_TESTS)
     get_target_property(LIBS ${EXEC} LINK_LIBRARIES)
     get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
     get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
+    if(${DEPS})
+      add_dependencies(${name}_test ${DEPS})
+    endif()
 
     target_link_libraries(${name}_test ${LIBS})
     target_include_directories(${name}_test PRIVATE
@@ -238,7 +241,6 @@ if(BUILD_TESTS)
       PlanetFramework/PlanetTech
       PlanetFramework/PlanetTech/Types
       )
-    add_dependencies(${name}_test ${DEPS})
 
     add_test(NAME ${name}
       COMMAND ${name}_test)
