@@ -23,6 +23,10 @@ struct PatchInstance {
   glm::vec3 r;
   glm::vec3 s;
 };
+/**
+  \brief  Use shader called patch to perform smooth transition with morph.
+          
+*/
 class Patch {
 public:
   Patch(short levels = 5);
@@ -36,7 +40,17 @@ public:
     return m_Vertices.size();
   }
 
+  /**
+    \brief  Initialize shader and OpenGL buffer
+  */
   void Init();
+
+  /**
+    \brief  
+            For calculate where draw smooth transition, we compute a border
+            with level. The morph distance is linear and equals to 2^level.
+
+  */
   void GenerateGeometry(short levels);
   void BindInstances(std::vector<PatchInstance> &instances);
   void UploadDistanceLUT(std::vector<float> &distances);

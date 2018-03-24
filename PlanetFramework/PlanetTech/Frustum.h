@@ -49,7 +49,7 @@ public:
 
   /**
       \brief  Draw the frustum, use for freeze the renderer, and move a free
-              camera with just what the frustum sees drawn.
+            
   */
   void Draw();
   

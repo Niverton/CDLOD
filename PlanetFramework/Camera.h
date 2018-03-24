@@ -48,7 +48,7 @@ public:
             New far and near plane are calculate based on planet: 
             $ 
               \sqrt{(radius + altitude}^{2} - radius^{2}} +
-              \sqrt{(radius + mac_height}^{2} - radius^{2}}
+              \sqrt{(radius + max_height}^{2} - radius^{2}}
             $
 
             Projection matrix and other matrix has calculate thanks to 
