@@ -33,7 +33,7 @@
 		vec2 tileStretch = vec2(2, 1);
 		float detail1 = (texture(texHeightDetail, uv*tileStretch*100).r)*maxHeight*0.1f;
 		float detail2 = (1 - texture(texDetail2, uv*tileStretch*700).r)*0.01f;
-		return texture(texHeight, uv).r*maxHeight;//+detail1+detail2;
+		return texture(texHeight, uv).r*maxHeight+detail1+detail2;
 	}
 	float morphFac(float dist, int lev)
 	{

@@ -15,13 +15,11 @@
 Planet::Planet() {
   m_pTransform = new Transform();
 
+
+
   m_pTriangulator = new Triangulator(this);
   m_pPatch = new Patch(4);
   m_pPatch->SetPlanet(this);
-
-  m_pDetail1 = new Texture("./Textures/MoonDetail1.jpg");
-  m_pDetail2 = new Texture("./Textures/MoonDetail2.jpg");
-  m_pHeightDetail = new Texture("./Textures/MoonHeightDetail1.jpg");
 }
 
 void Planet::Init() {
