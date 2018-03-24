@@ -31,9 +31,9 @@
 		//return 0;
 		vec2 uv = vec2(atan( Tex3.z, Tex3.x )/6.28318530718, acos( Tex3.y )/3.14159265359f);
 		vec2 tileStretch = vec2(2, 1);
-//		float detail1 = (texture(texHeightDetail, uv*tileStretch*100).r)*maxHeight*0.1f;
-//		float detail2 = (1 - texture(texDetail2, uv*tileStretch*700).r)*0.01f;
-		return texture(texHeight, uv).r*maxHeight;
+		float detail1 = (texture(texHeightDetail, uv*tileStretch*100).r)*maxHeight*0.1f;
+		float detail2 = (1 - texture(texDetail2, uv*tileStretch*700).r)*0.01f;
+		return texture(texHeight, uv).r*maxHeight;//+detail1+detail2;
 	}
 	float morphFac(float dist, int lev)
 	{

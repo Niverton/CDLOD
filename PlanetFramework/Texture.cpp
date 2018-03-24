@@ -10,7 +10,7 @@ Texture::Texture(const std::string &filename) {
   m_isFile = true;
 }
 
-Texture::Texture(float* data){
+Texture::Texture(float** data){
   m_data = data;
   m_isFile = false;
 }
@@ -62,9 +62,10 @@ void Texture::Load(bool useSRGB) {
 
       glGenTextures(1, &m_Handle);
       glBindTexture(GL_TEXTURE_2D, m_Handle);
+      
 
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width,
-                   m_Height, 0, GL_RGB, GL_FLOAT, m_data);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, m_Width,
+                   m_Height, 0, GL_RED, GL_FLOAT, m_data);
 
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
