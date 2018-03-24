@@ -65,6 +65,12 @@ int main(int argc, char *argv[]) {
   // Initialize SDL, OpenGL, DevIL and GLAD
   //**************************************
 
+  // SDL init
+  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    sdl_die("Couldn't initialize SDL");
+  atexit(SDL_Quit);
+  SDL_GL_LoadLibrary(NULL);
+
   // request opengl context
   SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -75,11 +81,7 @@ int main(int argc, char *argv[]) {
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-  // SDL init
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    sdl_die("Couldn't initialize SDL");
-  atexit(SDL_Quit);
-  SDL_GL_LoadLibrary(NULL);
+
 
 // Request a debug context.
 #if defined(DEBUG) | defined(_DEBUG)
