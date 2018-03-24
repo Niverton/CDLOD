@@ -249,13 +249,18 @@
 	arrete du triangle l'on recommence de manière récursive tans que une subdivision est nécessaire.
 	C'est à dire tans que le noeud contenant le triangle n'est pas une feuille. Dans le cas contraire,
 	
-	% Insert image here (diagramme récursif de RecursiveTriangle)	
+	\begin{figure}[!h]
+    \includegraphics[width=12cm]{img/TriangleSplit.png}
+    \caption{Division}
+    \label{fig:TriangleSplit}
+	\end{figure}
 	
 	La figure XX représente un diagramme de la fonction récursive. Lorsque l'on passe d'un niveau à un
 	niveau inferieur dans l'arbre, le noeud courant pointer vers quatre fils, il est donc nécéssaire
 	d'appeler récursivement quatre fois la fonction.
 	
-	On peut se rendre compte de la découpe du triangle en quatre plus petit dans la figure XX.
+	On peut se rendre compte de la découpe du triangle en quatre plus petit dans la figure 
+	\cite{TriangleSplit}.
 	Les appels récursifs se font dans l'ordre aBC, AbC, ABc et enfin le triangle du milieux ABC.\\
 	
 	La fonction splitHeuristic permet en fonction de trois coordonnées représentant un triangle 
