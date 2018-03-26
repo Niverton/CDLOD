@@ -31,9 +31,11 @@
 		//return 0;
 		vec2 uv = vec2(atan( Tex3.z, Tex3.x )/6.28318530718, acos( Tex3.y )/3.14159265359f);
 		vec2 tileStretch = vec2(2, 1);
+                /*
 		float detail1 = (texture(texHeightDetail, uv*tileStretch*100).r)*maxHeight*0.1f;
 		float detail2 = (1 - texture(texDetail2, uv*tileStretch*700).r)*0.01f;
-		return texture(texHeight, uv).r*maxHeight+detail1+detail2;
+                */
+		return texture(texHeight, uv).r*maxHeight;//+detail1+detail2;
 	}
 	float morphFac(float dist, int lev)
 	{
@@ -129,21 +131,27 @@
 		
 		vec2 tileStretch = vec2(2, 1);
 		vec2 detailUV = uv*tileStretch*100;
+                /*
 		vec3 detail1 = texture(texDetail1, detailUV).rgb;
 		vec3 detail2 = texture(texDetail2, uv*tileStretch*700).rgb;
+                */
 		
 		float dist = length(TriPos-camPos);
-		vec3 mix1 = detail1*dif;
+		//vec3 mix1 = detail1*dif;
 		float craterAmount = 1-clamp(dif.r-0.5f, 0, 1);
 		float detail = craterAmount*clamp((dist-1000)/3000, 0, 1);
+                /*
 		dif = mix(mix1, dif, detail);
 		vec3 mix2 = detail2*dif;
 		dif = mix(mix2, dif, clamp((dist-1000)/2000, 0, 1));
+                */
 		
 		//Calculate normal
 		vec3 norm = CalculateNormal(uv, texHeight, texOffset);
+                /*
 		vec3 normDetail = CalculateNormal(detailUV, texHeightDetail, texOffsetDetail);
 		norm = normalize(norm+normDetail*detail*2);
+                */
 	
 		vec3 lit = DirLighting(dif, norm);
 		lit*=0.8f;
