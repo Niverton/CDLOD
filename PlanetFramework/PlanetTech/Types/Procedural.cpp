@@ -1,33 +1,34 @@
-#include <vector>
 #include "Procedural.h"
+#include "../../Texture.h"
 #include "stdafx.h"
 #include <IL/il.h>
 #include <IL/ilu.h>
-#include "../../Texture.h"
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
 
 ProceduralPlanet::ProceduralPlanet(Noise n) : Planet() {
   m_pDiffuse = new Texture("./Textures/moon8k.jpg");
-  //m_pHeight = new Texture("./Textures/MoonHeight.jpg");
-  //Compute texture here
-  const int h = 2048;    //same as moonHeight
+  // m_pHeight = new Texture("./Textures/MoonHeight.jpg");
+  // Compute texture here
+  const int h = 2048; // same as moonHeight
   const int w = 4096;
 
-  m_data = new float*[h];
-  for (int i=0; i<h; i++){
+  m_data = new float *[h];
+  for (int i = 0; i < h; i++) {
     m_data[i] = new float[w];
   }
 
-  for (int i=0; i<h; i++){
-    for (int j=0; j<w; j++){
+  for (int i = 0; i < h; i++) {
+    for (int j = 0; j < w; j++) {
       glm::vec2 pos = glm::vec2(i, j);
       float noise = glm::simplex(pos);
       m_data[i][j] = noise;
     }
   }
-  
+
+  ///*
   int wd1 = 800;
   int hd1 = 800;
 
@@ -60,16 +61,16 @@ ProceduralPlanet::ProceduralPlanet(Noise n) : Planet() {
     }
   }
 
-  m_pDetail1 = new Texture(m_dataDetail1);
-  m_pDetail2 = new Texture(m_dataDetail2);
-  m_pHeightDetail = new Texture(m_dataDetail1);
+  m_pDetail1 = new Texture(m_dataDetail1, wd1, hd1);
+  m_pDetail2 = new Texture(m_dataDetail2, wd2, hd2);
+  m_pHeightDetail = new Texture(m_dataDetail1, wd1, hd1);
+  //*/
 
   m_Radius = 1737.1f;
   m_MaxHeight = 10.7f;
 
-  m_pHeight = new Texture(m_data);
-  //m_pDiffuse = m_pHeight;
-  
+  m_pHeight = new Texture(m_data, w, h);
+  // m_pDiffuse = m_pHeight;
 }
 
 ProceduralPlanet::~ProceduralPlanet() {

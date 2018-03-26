@@ -9,7 +9,7 @@
 class Texture {
 public:
   Texture(const std::string &filename);
-  Texture(float **data);
+  Texture(float **data, int width, int height);
   virtual ~Texture();
 
   virtual void Load(bool useSRGB = false);

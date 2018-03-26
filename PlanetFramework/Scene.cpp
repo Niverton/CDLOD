@@ -15,7 +15,7 @@
 
 Scene::Scene() {
   m_pPlanet = new ProceduralPlanet(ProceduralPlanet::Noise::SIMPLEX);
-//  m_pPlanet = new Moon();
+  //m_pPlanet = new Moon();
   m_pDebugFont = new SpriteFont();
 }
 
