@@ -3,6 +3,13 @@
 
 class ProceduralPlanet : public Planet {
 public:
-  ProceduralPlanet();
+  enum class Noise{
+    SIMPLEX, PERLIN
+  };
+  ProceduralPlanet(Noise n);
   ~ProceduralPlanet();
+private:
+  float** m_data;
+  float** m_dataDetail1;
+  float** m_dataDetail2;
 };
