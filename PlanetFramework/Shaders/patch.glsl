@@ -35,7 +35,15 @@
 		float detail1 = (texture(texHeightDetail, uv*tileStretch*100).r)*maxHeight*0.1f;
 		float detail2 = (1 - texture(texDetail2, uv*tileStretch*700).r)*0.01f;
                 */
-		return texture(texHeight, uv).r*maxHeight;//+detail1+detail2;
+
+		float height = texture(texHeight, uv).r*maxHeight;//+detail1+detail2;
+    if (height > maxHeight * 2){
+      return maxHeight;
+    }
+    if (height < -(maxHeight * 2)){
+      return maxHeight;
+    }
+    return height;
 	}
 	float morphFac(float dist, int lev)
 	{
