@@ -64,7 +64,7 @@ void Triangulator::Init() {
 
   // Create a frustum
   m_pFrustum->Init();
-
+  m_pFrustum->SetToCamera(CAMERA);
   // First geometry generation
   GenerateGeometry();
 }
