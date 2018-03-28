@@ -141,6 +141,7 @@ void Triangulator::Precalculate() {
 }
 
 void Triangulator::GenerateGeometry() {
+printf("\n-----cull %d- Split %d- splitCull %d- Leaf %d-----------------\n", TriNext::CULL , TriNext::SPLIT, TriNext::SPLITCULL,TriNext::LEAF  );
   // Precalculate Distance LUT
   // The distances generated should keep the triangles smaller than
   // m_AllowedTriPx at any level  In future only recalculate on FOV or triangle
@@ -157,9 +158,8 @@ void Triangulator::GenerateGeometry() {
   // Recursion start
   m_Positions.clear();
 
-  for (auto t : m_Icosahedron) {
-    RecursiveTriangle(t.a, t.b, t.c, t.level, true);
-  }
+  RecursiveTriangle(m_Icosahedron[0].a, m_Icosahedron[0].b, m_Icosahedron[0].c, m_Icosahedron[0].level, true);
+  
 }
 
 TriNext Triangulator::SplitHeuristic(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
@@ -210,6 +210,7 @@ TriNext Triangulator::SplitHeuristic(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
 void Triangulator::RecursiveTriangle(glm::vec3 a, glm::vec3 b, glm::vec3 c,
                                      short level, bool frustumCull) {
   TriNext next = SplitHeuristic(a, b, c, level, frustumCull);
+  printf("%d", next);
   if (next == CULL)
     return;
   // check if subdivision is needed based on camera distance
@@ -226,11 +227,11 @@ void Triangulator::RecursiveTriangle(glm::vec3 a, glm::vec3 b, glm::vec3 c,
     short nLevel = level + 1;
     RecursiveTriangle(a, B, C, nLevel, next == SPLITCULL); // Winding is
                                                            // inverted
-    RecursiveTriangle(A, b, C, nLevel, next == SPLITCULL); // Winding is
+    //RecursiveTriangle(A, b, C, nLevel, next == SPLITCULL); // Winding is
                                                            // inverted
-    RecursiveTriangle(A, B, c, nLevel, next == SPLITCULL); // Winding is
+    //RecursiveTriangle(A, B, c, nLevel, next == SPLITCULL); // Winding is
                                                            // inverted
-    RecursiveTriangle(A, B, C, nLevel, next == SPLITCULL);
+    //RecursiveTriangle(A, B, C, nLevel, next == SPLITCULL);
   } else // put the triangle in the buffer
   {
     m_Positions.push_back(PatchInstance(level, a, b - a, c - a));

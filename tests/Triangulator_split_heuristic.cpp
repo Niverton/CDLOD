@@ -1,3 +1,4 @@
+#include "Scene.h"
 #include "Triangulator.h"
 #include "utils.h"
 #include <algorithm>
