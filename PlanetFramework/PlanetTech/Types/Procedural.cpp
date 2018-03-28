@@ -13,7 +13,7 @@ ProceduralPlanet::ProceduralPlanet(Noise n) : Planet() {
   // m_pHeight = new Texture("./Textures/MoonHeight.jpg");
   // Compute texture here
   const int h = 2048; // same as moonHeight
-  const int w = 4096;
+  const int w = 2048;
 
   m_data = new float *[h];
   for (int i = 0; i < h; i++) {
@@ -22,7 +22,7 @@ ProceduralPlanet::ProceduralPlanet(Noise n) : Planet() {
 
   for (int i = 0; i < h; i++) {
     for (int j = 0; j < w; j++) {
-      glm::vec2 pos = glm::vec2(i, j);
+      glm::vec3 pos = glm::vec3(i, j, 1.0);
       float noise = glm::simplex(pos);
       m_data[i][j] = noise;
     }
