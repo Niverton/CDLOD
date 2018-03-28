@@ -12,8 +12,8 @@ ProceduralPlanet::ProceduralPlanet(Noise n) : Planet() {
   m_pDiffuse = new Texture("./Textures/moon8k.jpg");
   // m_pHeight = new Texture("./Textures/MoonHeight.jpg");
   // Compute texture here
-  const int h = 1025; // same as moonHeight
-  const int w = 1025;
+  const int h = 2048; // same as moonHeight
+  const int w = 4096;
 
   m_data = new float *[h];
   for (int i = 0; i < h; i++) {
