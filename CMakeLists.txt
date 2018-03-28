@@ -227,8 +227,10 @@ if(BUILD_TESTS)
 
     get_target_property(LIBS ${EXEC} LINK_LIBRARIES)
     get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
-    #get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
-    add_dependencies(${name}_test ${DEPS})
+    get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
+    if(${DEPS})
+      add_dependencies(${name}_test ${DEPS})
+    endif()
 
     target_link_libraries(${name}_test ${LIBS})
     target_include_directories(${name}_test PRIVATE
@@ -242,6 +244,15 @@ if(BUILD_TESTS)
       PlanetFramework/PlanetTech
       PlanetFramework/PlanetTech/Types
       )
+
+    if (${DEPS})
+      add_dependencies(${name}_test ${DEPS})
+    else()
+      add_dependencies(${name}_test devil_ext)
+      if(TARGET glm_ext)
+        add_dependencies(${name}_test glm_ext)
+      endif()
+    endif()
 
     add_test(NAME ${name}
       COMMAND ${name}_test)
@@ -314,6 +325,11 @@ if(BUILD_TESTS)
     tests/dummies/Planet.cpp    
     tests/dummies/Shader.cpp
     tests/dummies/Frustum.cpp
+    )  
+  
+  # Heightmap
+  make_test(procedural_heightmap
+    tests/Procedural_heightmap.cpp
     )
 
 endif()
