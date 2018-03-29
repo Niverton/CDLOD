@@ -228,7 +228,7 @@ if(BUILD_TESTS)
     get_target_property(LIBS ${EXEC} LINK_LIBRARIES)
     get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
     get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
-    if(${DEPS})
+    if(DEPS)
       add_dependencies(${name}_test ${DEPS})
     endif()
 
@@ -245,7 +245,7 @@ if(BUILD_TESTS)
       PlanetFramework/PlanetTech/Types
       )
 
-    if (${DEPS})
+    if (DEPS)
       add_dependencies(${name}_test ${DEPS})
     else()
       add_dependencies(${name}_test devil_ext)
