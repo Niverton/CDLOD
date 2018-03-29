@@ -47,8 +47,8 @@ bool test() {
       i++;
     }
     int expected_count = 1 + s_count * 4;
-    if (i > expected_count) {
-      cerr << "Too many triangles. Expected " << expected_count << ", got " << i
+    if (i != expected_count) {
+      cerr << "Unexpect triangle number. Expected " << expected_count << ", got " << i
            << "\n";
       return false;
     }
