@@ -13,6 +13,8 @@ set(KEEP_DOT NO CACHE BOOL
   "Should doxygen keep the .dot files ?")
 set(NO_SVG NO CACHE BOOL
   "Disable SVG output")
+set(ASAN NO CACHE BOOL
+  "Enable -fsanitize=address ?")
 
 # Fichiers source
 set(SRCS
@@ -139,7 +141,7 @@ add_custom_target(textures ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
   COMMENT "Creating symlink to Textures")
 add_custom_target(fonts ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
   ${CMAKE_SOURCE_DIR}/PlanetFramework/Fonts Fonts
-COMMENT "Creating symlink to Fonts")
+  COMMENT "Creating symlink to Fonts")
 
 # Target
 add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
@@ -149,6 +151,19 @@ add_executable(${EXEC} ${SRCS})
 add_dependencies(${EXEC} devil_ext shaders textures)
 if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
   add_dependencies(${EXEC} glm_ext)
+endif()
+
+# Compile options
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+  if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    target_compile_options(${EXEC} PRIVATE
+      "-Wall" "-Wpedantic" "-O1")
+  else()
+    target_compile_options(${EXEC} PRIVATE "-O3")
+  endif()
+  if(ADDRESS_SANITIZER)
+    target_compile_options(${EXEC} PRIVATE "-fsanitize=address")
+  endif()
 endif()
 
 #DevIL
