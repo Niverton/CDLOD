@@ -15,6 +15,9 @@ set(NO_SVG NO CACHE BOOL
   "Disable SVG output")
 set(ASAN NO CACHE BOOL
   "Enable -fsanitize=address ?")
+set(SANAL NO CACHE BOOL
+  "Run static analysers during build ?")
+
 
 # Fichiers source
 set(SRCS
@@ -182,6 +185,35 @@ target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(${EXEC} PRIVATE include)
 #Force c++14
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
+
+# Add static analysers
+if(STATIC_ANALYSIS)
+  if(NOT DEFINED CMAKE_CXX_CLANG_TIDY)
+    #CMAKE_CXX_CLANG_TIDY was not set
+    find_program(clang_tidy_loc clang-tidy)
+    if (EXISTS ${clang_tidy_loc})
+      message(STATUS "Found clang-tidy at " ${clang_tidy_loc})
+      set_target_properties(${EXEC} PROPERTIES
+        CXX_CLANG_TIDY "${clang_tidy_loc};-checks=*")
+      get_target_property(test ${EXEC} CXX_CLANG_TIDY)
+    else()
+      message(STATUS "clang-tidy not found")
+    endif()
+  endif()
+  if (NOT DEFINED CMAKE_CXX_CPPCHECK)
+    find_program(cppcheck_loc cppcheck)
+    if(EXISTS ${cppcheck_loc})
+      message(STATUS "Found cppcheck at " ${cppcheck_loc})
+      message(STATUS "cppcheck is only available from CMake 3.9 and"
+      " higher")
+      set_target_properties(${EXEC} PROPERTIES
+        CXX_CPPCHECK
+        "${cppcheck_loc};--enable=warning,performance,information")
+    else()
+      message(STATUS "cppcheck not found")
+    endif()
+  endif()
+endif()
 
 # Export documentation, only available if doxygen and doxygen_add_docs
 # are available
