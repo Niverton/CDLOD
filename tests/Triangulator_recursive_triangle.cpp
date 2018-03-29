@@ -34,6 +34,9 @@ bool test() {
 
   cerr << a << ", " << b << ", " << c << "\n";
 
+  /** @param s_count: the number of splits expected
+   *  @param level: the level of detail
+   */
   auto lamb = [&](int s_count, int level) {
     cerr << "Expected: " << s_count << " splits\n";
     // Empty positions
