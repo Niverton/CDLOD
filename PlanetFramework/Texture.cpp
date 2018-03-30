@@ -10,7 +10,7 @@ Texture::Texture(const std::string &filename) {
   m_isFile = true;
 }
 
-Texture::Texture(float **data, int width, int height)
+Texture::Texture(float *data, int width, int height)
     : m_data{data}, m_Width{width}, m_Height{height}, m_isFile{false} {
 }
 
@@ -62,16 +62,20 @@ void Texture::Load(bool useSRGB) {
     glGenTextures(1, &m_Handle);
     glBindTexture(GL_TEXTURE_2D, m_Handle);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, m_Width, m_Height, 0, GL_RED,
-                 GL_FLOAT, m_data);
-
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, m_Width, m_Height, 0, GL_RED,
+                 GL_FLOAT, m_data);
   }
 }
 
 Texture::~Texture() {
   glDeleteTextures(1, &m_Handle);
+  if (not m_isFile) {
+    delete[] m_data;
+  }
 }

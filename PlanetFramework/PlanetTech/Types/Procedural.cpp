@@ -15,25 +15,16 @@ ProceduralPlanet::ProceduralPlanet(Noise n) {
   const int h = 2048; // same as moonHeight
   const int w = 2048;
 
-  m_data = new float *[h];
-  for (int i = 0; i < h; i++) {
-    m_data[i] = new float[w];
-  }
-
-  for (int i = 0; i < h; i++) {
-    for (int j = 0; j < w; j++) {
-      glm::vec3 pos = glm::vec3(i, j, 1.0);
-      float noise = glm::simplex(pos);
-      m_data[i][j] = noise;
-    }
+  auto *data = new float[h * w];
+  for (int i = 0; i < h * w; i++) {
+    data[i] = glm::simplex(glm::vec3(i % w, i / w, 1.));
   }
 
   // Taken from Moon
   m_Radius = 1737.1f;
   m_MaxHeight = 10.7f;
 
-  m_pHeight = new Texture(m_data, w, h);
-  // m_pDiffuse = m_pHeight;
+  m_pHeight = new Texture(data, w, h);
 }
 
 ProceduralPlanet::~ProceduralPlanet() {
