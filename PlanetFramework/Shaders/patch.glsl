@@ -43,12 +43,12 @@
 	void main()
 	{
 		//initial position
-		vec3 TriPos = a + r*pos.x + s*pos.y;
+		vec3 TriPos = a + pos.x + pos.y;
 		//morph factor
 		float dist = length(TriPos-camPos);
 		float mPerc = morphFac(dist, level);
 		//morph
-		//TriPos += mPerc*(r*morph.x + s*morph.y);
+		TriPos += mPerc*(r*morph.x + s*morph.y);
 		//add height
 		Tex3 = normalize(TriPos);
 		TriPos = Tex3 * (radius + height(Tex3));
