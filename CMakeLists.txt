@@ -160,12 +160,13 @@ endif()
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   if(CMAKE_BUILD_TYPE MATCHES "Debug")
     target_compile_options(${EXEC} PRIVATE
-      "-Wall" "-Wpedantic" "-O1")
+      "-Wall" "-Wpedantic")
   else()
     target_compile_options(${EXEC} PRIVATE "-O3")
   endif()
-  if(ADDRESS_SANITIZER)
-    target_compile_options(${EXEC} PRIVATE "-fsanitize=address")
+  if(ASAN)
+    set_target_properties(${EXEC} PROPERTIES
+      LINK_FLAGS "-fsanitize=address")
   endif()
 endif()
 
