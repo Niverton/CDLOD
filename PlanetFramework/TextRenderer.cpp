@@ -88,7 +88,7 @@ void TextRenderer::SetFont(SpriteFont *pFont) {
     m_ActiveFontIdx = pos - m_pSpriteFonts.begin();
 }
 
-void TextRenderer::DrawText(std::string &text, glm::vec2 pos) {
+void TextRenderer::DrawText(const std::string &text, glm::vec2 pos) {
   if (m_pSpriteFonts.size() > 0) {
     m_NumCharacters += text.size();
     m_pSpriteFonts[m_ActiveFontIdx]->m_TextCache.push_back(
