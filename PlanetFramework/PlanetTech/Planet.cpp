@@ -14,9 +14,6 @@
 
 Planet::Planet() {
   m_pTransform = new Transform();
-
-
-
   m_pTriangulator = new Triangulator(this);
   m_pPatch = new Patch(4);
   m_pPatch->SetPlanet(this);
@@ -30,9 +27,6 @@ void Planet::Init() {
   // LoadTextures
   m_pDiffuse->Load();
   m_pHeight->Load();
-  m_pDetail1->Load();
-  m_pDetail2->Load();
-  m_pHeightDetail->Load();
 
   m_pTriangulator->Init();
   m_pPatch->Init();
@@ -75,10 +69,7 @@ void Planet::DrawWire() {
 Planet::~Planet() {
   SafeDelete(m_pTransform);
   SafeDelete(m_pDiffuse);
-  SafeDelete(m_pDetail1);
-  SafeDelete(m_pDetail2);
   SafeDelete(m_pHeight);
-  SafeDelete(m_pHeightDetail);
 
   SafeDelete(m_pPatch);
   SafeDelete(m_pTriangulator);

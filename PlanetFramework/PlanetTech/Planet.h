@@ -9,7 +9,7 @@ class Patch;
 
 /**
   \brief  Extend this class for create new planet type.
-          This class manage all stuff about planet rendering such as 
+          This class manage all stuff about planet rendering such as
           texture, triangulator and patch.
 */
 
@@ -58,15 +58,6 @@ public:
   Texture *GetDiffuseMap() {
     return m_pDiffuse;
   }
-  Texture *GetDetail1Map() {
-    return m_pDetail1;
-  }
-  Texture *GetDetail2Map() {
-    return m_pDetail2;
-  }
-  Texture *GetHeightDetailMap() {
-    return m_pHeightDetail;
-  }
 
 protected:
   // Planet parameters
@@ -74,9 +65,6 @@ protected:
   float m_MaxHeight = 10.7f;
 
   Texture *m_pDiffuse = nullptr;
-  Texture *m_pDetail1 = nullptr;
-  Texture *m_pDetail2 = nullptr;
-  Texture *m_pHeightDetail = nullptr;
   Texture *m_pHeight = nullptr;
 
   Transform *m_pTransform = nullptr;
