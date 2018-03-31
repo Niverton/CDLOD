@@ -5,26 +5,20 @@
 #include <sstream>
 #include <string> // for basic_string, string, operator<<, getline, char_...
 
-BinaryReader::BinaryReader(void) : m_Exists(false), m_pReader(nullptr) {
-}
-
-BinaryReader::~BinaryReader(void) {
-  Close();
-}
-
 std::string BinaryReader::ReadLongString() {
-  if (m_pReader == nullptr)
+  if (m_pReader == nullptr) {
     std::cout << "BinaryReader doesn't exist!\nUnable to read binary data..."
               << std::endl;
+  }
 
-  auto stringLength = Read<UINT>();
+  auto stringLength = Read<unsigned int>();
 
   std::stringstream ss;
   for (UINT i = 0; i < stringLength; ++i) {
     ss << Read<char>();
   }
 
-  return (std::string)ss.str();
+  return ss.str();
 }
 
 std::string BinaryReader::ReadNullString() {
@@ -35,27 +29,28 @@ std::string BinaryReader::ReadNullString() {
   }
 
   std::string buff;
-  getline(*m_pReader, buff, '\0');
+  std::getline(*m_pReader, buff, '\0');
 
   return std::string(buff.begin(), buff.end());
 }
 
 std::string BinaryReader::ReadString() {
-  if (m_pReader == nullptr)
+  if (m_pReader == nullptr) {
     std::cout << "BinaryReader doesn't exist!\nUnable to read binary data..."
               << std::endl;
+  }
 
-  int stringLength = (int)Read<char>();
+  auto stringLength = static_cast<int>(Read<char>());
 
   std::stringstream ss;
   for (int i = 0; i < stringLength; ++i) {
     ss << Read<char>();
   }
 
-  return (std::string)ss.str();
+  return ss.str();
 }
 
-void BinaryReader::Open(std::string binaryFile) {
+void BinaryReader::Open(const std::string &binaryFile) {
   Close();
 
   auto temp = new std::ifstream();
@@ -86,7 +81,7 @@ void BinaryReader::Close() {
 }
 
 int BinaryReader::GetBufferPosition() {
-  if (m_pReader) {
+  if (not m_pReader->fail()) {
     return static_cast<int>(m_pReader->tellg());
   }
 
@@ -97,7 +92,7 @@ int BinaryReader::GetBufferPosition() {
 }
 
 bool BinaryReader::SetBufferPosition(int pos) {
-  if (m_pReader) {
+  if (not m_pReader->fail()) {
     m_pReader->seekg(pos);
     return true;
   }

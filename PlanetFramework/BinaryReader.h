@@ -6,13 +6,17 @@
 
 class BinaryReader {
 public:
-  BinaryReader(void);
-  ~BinaryReader(void);
+  BinaryReader() = default;
+  ~BinaryReader() {
+    Close();
+  };
+  BinaryReader(const BinaryReader &yRef) = delete;
+  BinaryReader &operator=(const BinaryReader &yRef) = delete;
 
   template <class T>
   T Read() {
     if (m_pReader == nullptr) {
-      std::cout << "[ERROR] BinaryReader doesn't exist!\nUnable to read binary "
+      std::cerr << "[ERROR] BinaryReader doesn't exist!\nUnable to read binary "
                    "data..."
                 << std::endl;
       return T();
@@ -34,19 +38,11 @@ public:
     return m_Exists;
   }
 
-  void Open(std::string binaryFile);
-  void Open(char *s, UINT32 size);
+  void Open(const std::string &binaryFile);
+  void Open(char *s, unsigned int size);
   void Close();
 
 private:
-  bool m_Exists;
-  std::istream *m_pReader;
-
-private:
-  // -------------------------
-  // Disabling default copy constructor and default
-  // assignment operator.
-  // -------------------------
-  BinaryReader(const BinaryReader &yRef);
-  BinaryReader &operator=(const BinaryReader &yRef);
+  bool m_Exists = false;
+  std::istream *m_pReader = nullptr;
 };
