@@ -24,7 +24,7 @@
 // Functions for debugging
 //**************************************
 static void sdl_die(const char *message) {
-  fprintf(stderr, "%s: %s\n", message, SDL_GetError());
+  std::cerr << message << ": "<< SDL_GetError() << "\n";
   exit(2);
 }
 #if defined(DEBUG) | defined(_DEBUG)
