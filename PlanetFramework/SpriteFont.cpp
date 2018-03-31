@@ -98,7 +98,7 @@ void SpriteFont::Load(const std::string &filename) {
   m_CharacterCount = numChars;
   for (int i = 0; i < numChars; i++) {
     auto posChar = pBinReader->GetBufferPosition();
-    auto charId = (wchar_t)(pBinReader->Read<unsigned int>());
+    auto charId = static_cast<wchar_t>(pBinReader->Read<unsigned int>());
     if (!(IsCharValid(charId))) {
       std::cerr << "[WARNING] SpriteFont::Load > SpriteFont(.fnt): Invalid "
                    "Character\n";
