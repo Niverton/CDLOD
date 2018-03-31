@@ -69,7 +69,7 @@ ProceduralPlanet::ProceduralPlanet(Noise n, Properties* properties) {
                     prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain);
         break;
       }   
-      case Noise::WARPED_RIDGED_MULTI-FRACTAL:
+      case Noise::WARPED_RIDGED_MULTI_FRACTAL:
       {
         auto prop = static_cast<WarpedRidgedMultiFractalProperties*>(properties);
         m_data[i] = Simplex::ridgedMF(Simplex::ridgedMF(glm::vec3(i % width, i / width, 1.),
