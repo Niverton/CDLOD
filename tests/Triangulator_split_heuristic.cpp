@@ -8,17 +8,17 @@
 
 static auto get_name(TriNext v) {
   switch (v) {
-  case CULL:
+  case TriNext::CULL:
     // Returned when the triangle was culled because it was behind the
     // planet
     return "CULL";
-  case LEAF:
+  case TriNext::LEAF:
     // Returned when the triangle is at the correct level of detail
     return "LEAF";
-  case SPLIT:
+  case TriNext::SPLIT:
     // The triangle should be split (too high in the quadtree)
     return "SPLIT";
-  case SPLITCULL:
+  case TriNext::SPLITCULL:
     // The triangle should be split and the next calls should be with
     // frustum culling enabled
     return "SPLITCULL";

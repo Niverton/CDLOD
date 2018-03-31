@@ -1,4 +1,4 @@
-#include "PlanetTech/Planet.h"
+#include "Planet.h"
 #include "Triangulator.h"
 #include "utils.h"
 #include <algorithm>
