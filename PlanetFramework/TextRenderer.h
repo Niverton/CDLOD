@@ -1,7 +1,22 @@
 #pragma once
 
-class SpriteFont;
-class Shader;
+#include "Shader.h"
+#include "Singleton.h" // for Singleton
+#include "SpriteFont.h"
+#include "StaticDependancies/glad/glad.h" // for GLint, GLuint
+#include <stddef.h>                       // for size_t
+#include <string>                         // for string
+#include <vector>                         // for vector
+
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
+
+#ifdef test_textrenderer_update_buffer
+#include "TextRenderer_update_buffer.h"
+#endif
 
 /**
   \brief  Use for draw text on screen.
@@ -31,6 +46,10 @@ private:
     unsigned int ChannelId;
   };
 
+#ifdef test_textrenderer_update_buffer
+  friend bool test();
+  friend void test_update_buffer(void *, size_t);
+#endif
   /**
     \brief initialise TextRender, bind shader with OpenGL and generate buffer
   */

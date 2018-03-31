@@ -1,9 +1,15 @@
 #pragma once
 
-class Frustum;
-class Planet;
-struct PatchInstance;
-#include "Patch.h"
+#include "Patch.h" // for PatchInstance
+#include <vector>  // for vector
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
+
+class Frustum; // lines 3-3
+class Planet;  // lines 4-4
 
 enum TriNext { CULL, LEAF, SPLIT, SPLITCULL };
 
@@ -89,6 +95,10 @@ public:
 
 private:
   friend class Planet;
+#if defined(test_triangulator_split_heuristic) ||                              \
+    defined(test_triangulator_recursive_triangle)
+  friend bool test();
+#endif
 
   void Precalculate();
 

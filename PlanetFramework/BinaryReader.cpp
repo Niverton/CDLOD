@@ -1,11 +1,9 @@
-// Precompiled Header [ALWAYS ON TOP IN CPP]
-#include "stdafx.h"
-
 #include "BinaryReader.h"
-
-#include <iostream> // std::cout
+#include "utils.h"  // for SafeDelete, UINT, UINT32
+#include <fstream>  // for basic_ifstream
+#include <iostream> // for operator<<, endl, stringstream, basic_ostream, cout
 #include <sstream>
-#include <string> // std::string
+#include <string> // for basic_string, string, operator<<, getline, char_...
 
 BinaryReader::BinaryReader(void) : m_Exists(false), m_pReader(nullptr) {
 }

@@ -1,9 +1,8 @@
-#include "stdafx.h"
-
 #include "SpriteFont.h"
-
-#include "BinaryReader.h"
-#include "Texture.h"
+#include "BinaryReader.h" // for BinaryReader
+#include "Texture.h"      // for Texture
+#include "utils.h"        // for SafeDelete
+#include <iostream>       // for operator<<, basic_ostream, endl, cout, ost...
 
 #ifndef PLATFORM_Win
 #include <cstring>

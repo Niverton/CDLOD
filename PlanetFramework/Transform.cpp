@@ -1,10 +1,15 @@
 #include "Transform.h"
-#include "stdafx.h"
+#include "utils.h"
 
-#include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.inl> // for scale, translate
+#include <glm/gtx/quaternion.hpp>       // for toMat4
+#include <glm/gtx/transform.inl>        // for scale, translate
+
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
 
 Transform::Transform() {
   m_Tranform = glm::mat4(1.0f);

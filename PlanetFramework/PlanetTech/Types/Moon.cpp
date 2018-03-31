@@ -1,7 +1,6 @@
 #include "Moon.h"
-#include "stdafx.h"
-
-#include "../../Texture.h"
+#include "../Planet.h"
+#include "Texture.h"
 
 Moon::Moon() : Planet() {
   m_pDiffuse = new Texture("./Textures/moon8k.jpg");

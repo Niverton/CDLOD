@@ -1,13 +1,18 @@
 #pragma once
-#include <map>
-#ifdef PLATFORM_Win
+
+#include "Singleton.h" // for Singleton
+#include <map>         // for map
+
+#if PLATFORM_Win
 #include <SDL.h>
 #include <glm\glm.hpp>
 #else
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #endif
-#include "Singleton.h"
+
+#define INPUT InputManager::GetInstance()
+
 //----------------------------
 // Event Manager class definintion
 //----------------------------

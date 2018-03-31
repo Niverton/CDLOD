@@ -17,7 +17,8 @@ set(ASAN NO CACHE BOOL
   "Enable -fsanitize=address ?")
 set(SANAL NO CACHE BOOL
   "Run static analysers during build ?")
-
+set(BUILD_TESTS YES CACHE BOOL
+  "Should build test executables ?")
 
 # Fichiers source
 set(SRCS
@@ -35,14 +36,12 @@ set(SRCS
   PlanetFramework/PlanetTech/Patch.h
   PlanetFramework/PlanetTech/Planet.cpp
   PlanetFramework/PlanetTech/Planet.h
-  PlanetFramework/PlanetTech/stdafx.h
   PlanetFramework/PlanetTech/Triangulator.cpp
   PlanetFramework/PlanetTech/Triangulator.h
   PlanetFramework/PlanetTech/Types/Earth.cpp
   PlanetFramework/PlanetTech/Types/Earth.h
   PlanetFramework/PlanetTech/Types/Moon.cpp
   PlanetFramework/PlanetTech/Types/Moon.h
-  PlanetFramework/PlanetTech/Types/stdafx.h
   PlanetFramework/Scene.cpp
   PlanetFramework/Scene.h
   PlanetFramework/Screenshot.cpp
@@ -53,8 +52,6 @@ set(SRCS
   PlanetFramework/Singleton.h
   PlanetFramework/SpriteFont.cpp
   PlanetFramework/SpriteFont.h
-  PlanetFramework/stdafx.cpp
-  PlanetFramework/stdafx.h
   PlanetFramework/TextRenderer.cpp
   PlanetFramework/TextRenderer.h
   PlanetFramework/Texture.cpp
@@ -65,9 +62,9 @@ set(SRCS
   PlanetFramework/Transform.h
   PlanetFramework/PlanetTech/Types/Procedural.h
   PlanetFramework/PlanetTech/Types/Procedural.cpp
+  PlanetFramework/utils.h
   PlanetFramework/StaticDependancies/glad/glad.cpp
   PlanetFramework/StaticDependancies/glad/glad.h
-  PlanetFramework/StaticDependancies/glad/stdafx.h
 )
 
 # --------------------------- EXTERNAL DEPENDENCIES ---------------------------
@@ -150,11 +147,15 @@ add_custom_target(fonts ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
 add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
 set(EXEC PlanetRenderer)
 add_executable(${EXEC} ${SRCS})
+target_include_directories(${EXEC} PRIVATE PlanetFramework/)
 # Build this before EXEC
-add_dependencies(${EXEC} devil_ext shaders textures)
+set (DEPS devil_ext shaders textures fonts)
+#add_dependencies(${EXEC} devil_ext shaders textures fonts)
 if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
-  add_dependencies(${EXEC} glm_ext)
+  list(APPEND ${DEPS} glm_ext)
+  #add_dependencies(${EXEC} glm_ext)
 endif()
+add_dependencies(${EXEC} ${DEPS})
 
 # Compile options
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -183,7 +184,6 @@ target_include_directories(${EXEC} PRIVATE ${GLM_INCLUDE_DIRS})
 target_link_libraries(${EXEC} PRIVATE ${SDL2_LIBRARIES})
 target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
 
-target_include_directories(${EXEC} PRIVATE include)
 #Force c++14
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
@@ -253,4 +253,132 @@ if(COMMAND doxygen_add_docs)
 else()
   message(WARNING "doxygen_add_docs not available, doxygen target\
   disabled. Update CMake.")
+endif()
+
+# ---------------------------Tests--------------------------------
+if(BUILD_TESTS)
+  enable_testing()
+
+  # All extra arguments are passed to add_executable
+  macro(make_test name)
+    add_executable(${name}_test
+      # EXCLUDE_FROM_ALL # Don't build with the target ALL
+      tests/main.cpp
+      PlanetFramework/StaticDependancies/glad/glad.cpp
+      ${ARGN})
+
+    set_target_properties(${name}_test PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY tests
+      COMPILE_DEFINITIONS test_${name})
+
+    #Force c++14
+    target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
+
+    get_target_property(LIBS ${EXEC} LINK_LIBRARIES)
+    get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
+    get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
+    if(DEPS)
+      add_dependencies(${name}_test ${DEPS})
+    endif()
+
+    target_link_libraries(${name}_test ${LIBS})
+    target_include_directories(${name}_test PRIVATE
+      ${INCL}
+      tests/
+      PlanetFramework/
+      PlanetFramework/Textures
+      PlanetFramework/HeightMapGenerator
+      PlanetFramework/Shaders
+      PlanetFramework/Fonts
+      PlanetFramework/PlanetTech
+      PlanetFramework/PlanetTech/Types
+      )
+
+    if (DEPS)
+      add_dependencies(${name}_test ${DEPS})
+    else()
+      add_dependencies(${name}_test devil_ext)
+      if(TARGET glm_ext)
+        add_dependencies(${name}_test glm_ext)
+      endif()
+    endif()
+
+    add_test(NAME ${name}
+      COMMAND ${name}_test)
+  endmacro()
+
+  # How to write a test:
+  # 1) Write a header file with mocks for the functions to intercept
+  # 2) Write a source file defining the function `int test()` to run the
+  #    tests
+  # 3) Create a test target with make_test
+  # 4) Include your test's header in the tested files if building in
+  #    test mode
+  #
+  # Ex: create the t1 test using t1.cpp t1.h files testing the file
+  # ToTest.cpp
+  # make_test defines the TEST_${name} macro in the target
+  #
+  # make_test(t1 t1.cpp t1.h ToTest.cpp)
+
+  # TextRenderer
+  make_test(textrenderer_update_buffer
+    tests/TextRenderer_update_buffer.cpp
+    tests/TextRenderer_update_buffer.h
+    PlanetFramework/TextRenderer.cpp
+    PlanetFramework/TextRenderer.h
+    tests/dummies/Shader.cpp
+    #tests/dummies/SpriteFont.cpp
+    PlanetFramework/SpriteFont.cpp
+    PlanetFramework/SpriteFont.h
+    PlanetFramework/BinaryReader.cpp
+    PlanetFramework/BinaryReader.h
+    PlanetFramework/Texture.cpp
+    PlanetFramework/Texture.h
+    )
+
+  # Patch
+  make_test(patch_generate_geometry
+    tests/Patch_generate_geometry.cpp
+    tests/Patch_generate_geometry.h
+    PlanetFramework/PlanetTech/Patch.cpp
+    PlanetFramework/PlanetTech/Patch.h
+    tests/dummies/Shader.cpp
+    )
+
+  # Triangulator
+  make_test(triangulator_generate_geometry
+    tests/Triangulator_generate_geometry.cpp
+    tests/Triangulator_generate_geometry.h
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/PlanetTech/Triangulator.h
+    PlanetFramework/InputManager.cpp
+    PlanetFramework/InputManager.h
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )
+  make_test(triangulator_split_heuristic
+    tests/Triangulator_split_heuristic.cpp
+    tests/Triangulator_split_heuristic.h
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/PlanetTech/Triangulator.h
+    PlanetFramework/InputManager.cpp
+    PlanetFramework/InputManager.h
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )
+  make_test(triangulator_recursive_triangle
+    tests/Triangulator_recursive_triangle.cpp
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/InputManager.cpp
+    tests/dummies/Planet.cpp    
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )  
+  
+  # Heightmap
+  make_test(procedural_heightmap
+    tests/Procedural_heightmap.cpp
+    )
+
 endif()

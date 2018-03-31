@@ -1,5 +1,18 @@
 #pragma once
 
+#include "utils.h" // for UCHAR, USHORT
+#include <string>  // for string
+#include <vector>  // for vector
+
+#if PLATFORM_Win
+#include <SDL.h>
+#include <glm\glm.hpp>
+#else
+#include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#endif
+class Texture; // lines 31-31
+
 struct TextCache {
 public:
   TextCache(const std::string &text, glm::vec2 pos, glm::vec4 col)
@@ -28,6 +41,7 @@ struct FontMetric {
   glm::vec2 TexCoord;
 };
 
+
 class Texture;
 class TextRenderer;
 
@@ -46,6 +60,9 @@ public:
 
 private:
   friend class TextRenderer;
+#ifdef test_textrenderer_update_buffer
+  friend void test_update_buffer(void*, size_t);
+#endif
 
   FontMetric &GetMetric(const wchar_t &character) {
     return m_CharTable[character - MIN_CHAR_ID];

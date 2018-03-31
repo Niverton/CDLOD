@@ -1,16 +1,20 @@
 #include "Planet.h"
-#include "stdafx.h"
+#include "Context.h"
+#include "Frustum.h"                      // for Frustum
+#include "InputManager.h"                 // for InputManager
+#include "Patch.h"                        // for Patch
+#include "StaticDependancies/glad/glad.h" // for GLfloat
+#include "Texture.h"                      // for Texture
+#include "Time.h"                         // for Time
+#include "Transform.h"                    // for Transform
+#include "Triangulator.h"                 // for Triangulator
+#include "utils.h"                        // for SafeDelete, INPUT, TIME
 
-#include <limits>
-
-#include "../Camera.h"
-#include "../Shader.h"
-#include "../Texture.h"
-#include "../Transform.h"
-
-#include "Frustum.h"
-#include "Patch.h"
-#include "Triangulator.h"
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
 
 Planet::Planet() {
   m_pTransform = new Transform();

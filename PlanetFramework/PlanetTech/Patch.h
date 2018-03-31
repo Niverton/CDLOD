@@ -1,7 +1,20 @@
 #pragma once
 
-class Shader;
-class Planet;
+#ifdef TEST_patch
+#include "Patch_test.h"
+#endif
+
+#include "StaticDependancies/glad/glad.h" // for GLint, GLuint
+#include "utils.h"                       // for UINT
+
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
+#include <vector> // for vector
+class Planet;     // lines 8-8
+class Shader;     // lines 7-7
 
 struct PatchVertex {
   PatchVertex(glm::vec2 position, glm::vec2 morphVec) {
@@ -57,6 +70,9 @@ public:
   void Draw(bool white = false);
 
 private:
+#ifdef TEST_patch
+  friend int test();
+#endif
   std::vector<PatchVertex> m_Vertices;
   std::vector<UINT> m_Indices;
 

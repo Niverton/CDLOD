@@ -2,9 +2,14 @@
 #include <IL/il.h>
 #include <IL/ilu.h>
 
-#include <string>
+#include "StaticDependancies/glad/glad.h" // for GLuint
+#include <string>                         // for string
 
-#include "stdafx.h"
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
 
 class Texture {
 public:

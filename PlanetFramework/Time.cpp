@@ -1,5 +1,5 @@
 #include "Time.h"
-#include "stdafx.h"
+#include "utils.h"
 
 Time::Time() {
   Start();
