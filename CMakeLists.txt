@@ -188,7 +188,7 @@ target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
 # Add static analysers
-if(STATIC_ANALYSIS)
+if(SANAL)
   if(NOT DEFINED CMAKE_CXX_CLANG_TIDY)
     #CMAKE_CXX_CLANG_TIDY was not set
     find_program(clang_tidy_loc clang-tidy)
