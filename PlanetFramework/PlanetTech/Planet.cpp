@@ -27,7 +27,6 @@ void Planet::Init() {
   m_pTransform->SetRotation(glm::rotate(m_pTransform->GetRotation(),
                                         glm::radians(270.f),
                                         glm::vec3(0.0f, 1.0f, 0.0f)));
-
   // LoadTextures
   m_pDiffuse->Load();
   m_pHeight->Load();
@@ -39,12 +38,15 @@ void Planet::Init() {
 void Planet::Update() {
   m_pTransform->SetPosition(0, 0, 0);
   // m_pTransform->SetPosition(m_Radius*sinf(TIME->GetTime()), 0, 0);
-  if (INPUT->IsKeyboardKeyPressed('r'))
+  if (INPUT->IsKeyboardKeyPressed('r')) {
     m_Rotate = !m_Rotate;
-  if (m_Rotate)
-    m_pTransform->SetRotation(glm::rotate(m_pTransform->GetRotation(),
-                                          -(GLfloat)TIME->DeltaTime() * 0.01f,
-                                          glm::vec3(0.0f, 1.0f, 0.0f)));
+  }
+  if (m_Rotate) {
+    m_pTransform->SetRotation(
+        glm::rotate(m_pTransform->GetRotation(),
+                    -static_cast<GLfloat>(TIME->DeltaTime()) * 0.01f,
+                    glm::vec3(0.0f, 1.0f, 0.0f)));
+  }
 
   m_pTransform->UpdateTransforms();
 
@@ -61,13 +63,15 @@ void Planet::Update() {
 
 void Planet::Draw() {
   m_pPatch->Draw();
-  if (m_pTriangulator->IsFrustumLocked())
+  if (m_pTriangulator->IsFrustumLocked()) {
     m_pTriangulator->GetFrustum()->Draw();
+  }
 }
 void Planet::DrawWire() {
   m_pPatch->Draw(true);
-  if (m_pTriangulator->IsFrustumLocked())
+  if (m_pTriangulator->IsFrustumLocked()) {
     m_pTriangulator->GetFrustum()->Draw();
+  }
 }
 
 Planet::~Planet() {
