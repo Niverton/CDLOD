@@ -9,7 +9,12 @@ public:
     RIDGED_NOISE,
     FLOW_NOISE,
     FBM,
-    WRAPPED_FBM
+    FBM_VARIATION,
+    WARPED_FBM,
+    DFBM_WARPED_FBM,
+    RIDGED_MULTI_FRACTAL_VARIATION,
+    WARPED_RIDGED_MULTI_FRACTAL,
+    RIDGED_MULTI_FRACTAL_VARIATION2,
   };
 
   struct Properties {
@@ -25,8 +30,6 @@ public:
 
 private:
   float* m_data;
-};
-
 
 struct FlowNoiseProperties : ProceduralPlanet::Properties {
   float angle;
@@ -36,4 +39,40 @@ struct FbmProperties : ProceduralPlanet::Properties {
   unsigned short octave = 4;
   float lacunarity = 2.0f;
   float gain = 0.5f;
+};
+
+struct FbmVariationProperties : ProceduralPlanet::Properties {
+  unsigned short octave = 10;
+  float lacunarity = 5.0f;
+  float gain = 0.75f;
+};
+
+
+struct DfbmProperties : ProceduralPlanet::Properties {
+  unsigned short octave = 4;
+  float lacunarity = 2.0f;
+  float gain = 0.5f;
+};
+
+struct RidgedMultiFractalVariationProperties : ProceduralPlanet::Properties {
+  float ridgeOffset = 0.1f;
+  unsigned short octave = 5;
+  float lacunarity = 1.5f;
+  float gain = 1.5f;
+};
+
+struct WarpedRidgedMultiFractalProperties : ProceduralPlanet::Properties {
+  float ridgeOffset = 1.0f;
+  unsigned short octave = 4;
+  float lacunarity = 2.0f;
+  float gain = 0.5f;
+};
+
+struct RidgedMultiFractalVariationl2Properties : ProceduralPlanet::Properties {
+  float ridgeOffset = -1.0f;
+  unsigned short octave = 4;
+  float lacunarity = 3.0f;
+  float gain = -0.65f;
+};
+
 };
