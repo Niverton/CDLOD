@@ -12,9 +12,9 @@ public:
     FBM_VARIATION,
     WARPED_FBM,
     DFBM_WARPED_FBM,
-    RIDGED_MULTI-FRACTAL_VARIATION,
-    WARPED_RIDGED_MULTI-FRACTAL,
-    RIDGED_MULTI-FRACTAL_VARIATION2,
+    RIDGED_MULTI_FRACTAL_VARIATION,
+    WARPED_RIDGED_MULTI_FRACTAL,
+    RIDGED_MULTI_FRACTAL_VARIATION2,
   };
 
   struct Properties {
@@ -30,8 +30,6 @@ public:
 
 private:
   float* m_data;
-};
-
 
 struct FlowNoiseProperties : ProceduralPlanet::Properties {
   float angle;
@@ -70,9 +68,11 @@ struct WarpedRidgedMultiFractalProperties : ProceduralPlanet::Properties {
   float gain = 0.5f;
 };
 
-struct WarpedRidgedMultiFractal2Properties : ProceduralPlanet::Properties {
+struct RidgedMultiFractalVariationl2Properties : ProceduralPlanet::Properties {
   float ridgeOffset = -1.0f;
   unsigned short octave = 4;
   float lacunarity = 3.0f;
   float gain = -0.65f;
+};
+
 };
