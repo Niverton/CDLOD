@@ -18,7 +18,13 @@ public:
       std::string token, value;
       std::tie(token, value) = t;
       if (token == cmd){
-        *ret = std::stoi(value);
+        try {
+          *ret = std::stoi(value);
+        }catch(...){
+          std::cerr << "Error: " << value << " is an invalid value for " 
+                    << token << " parameter\n";
+          std::exit(EXIT_FAILURE);
+        }
         return;
       }
     }
@@ -33,7 +39,13 @@ public:
       std::tie(token, value) = t;
       int r;
       if (token == cmd){
-        r = std::stof(value);
+        try {
+          *ret = std::stof(value);
+        }catch (...) {
+          std::cerr << "Error: " << value << " is an invalid value for " 
+                    << token << " parameter\n";
+          std::exit(EXIT_FAILURE);
+        }
         return;
       }
     }
