@@ -45,4 +45,6 @@ private:
       val = def;
     }
   }
+
+  void CreatePlanetFromArgs(int argc, char** argv);
 };
