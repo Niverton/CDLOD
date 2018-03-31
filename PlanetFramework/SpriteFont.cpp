@@ -4,21 +4,13 @@
 #include "utils.h"        // for SafeDelete
 #include <iostream>       // for operator<<, basic_ostream, endl, cout, ost...
 
-#ifndef PLATFORM_Win
-#include <cstring>
-#endif
-
 SpriteFont::SpriteFont()
     : m_pTexture(nullptr), m_CharacterCount(0), m_CharacterSpacing(1),
       m_FontSize(0), m_FontName(""), m_TextureWidth(0), m_TextureHeight(0),
       m_TextCache(std::vector<TextCache>()), m_BufferStart(0), m_BufferSize(0),
       m_IsAddedToRenderer(false) {
   for (int i = 0; i < CHAR_COUNT; ++i) {
-#ifdef PLATFORM_Win
-    ZeroMemory((void *)&m_CharTable[i], sizeof(FontMetric));
-#else
     std::memset((void *)&m_CharTable[i], 0, sizeof(FontMetric));
-#endif
     m_CharTable[i].IsValid = false;
   }
 }
@@ -170,5 +162,4 @@ void SpriteFont::Load(std::string filename) {
     }
   }
   delete pBinReader;
-#pragma warning(default : 4702)
 }
