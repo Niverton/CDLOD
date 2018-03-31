@@ -11,10 +11,19 @@
 #include <iomanip>
 #include <sstream>
 
+
 //#include "Screenshot.h"
 
 Scene::Scene() {
-  m_pPlanet = new ProceduralPlanet(ProceduralPlanet::Noise::SIMPLEX);
+  
+  auto prop = ProceduralPlanet::Properties {};
+  prop.width = 90;
+  prop.height = 90;
+  prop.maxHeight = 10.0f,
+
+  m_pPlanet = new ProceduralPlanet(ProceduralPlanet::Noise::SIMPLEX,
+                  /*static_cast<ProceduralPlanet::Properties*>(*/&prop/*)*/);
+
   //m_pPlanet = new Moon();
   m_pDebugFont = new SpriteFont();
 }
