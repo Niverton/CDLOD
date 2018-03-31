@@ -114,6 +114,9 @@ private:
   // Camera projection
   glm::mat4 m_View, m_Projection, m_ViewInverse, m_ViewProjection,
       m_ViewProjectionInverse;
-  float m_FarPlane, m_NearPlane, m_FOV, m_Size;
-  bool m_PerspectiveProjection;
+  float m_FarPlane = 200000;
+  float m_NearPlane = 1;
+  float m_FOV = 45.f;
+  float m_Size = 25.f;
+  bool m_PerspectiveProjection = true;
 };

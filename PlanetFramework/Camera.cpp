@@ -18,15 +18,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #endif
 
-Camera::Camera()
-    : m_FOV(45), m_NearPlane(1), m_FarPlane(200000), m_Size(25.0f),
-      m_PerspectiveProjection(true) {
-  m_Projection = glm::mat4();
-  m_View = glm::mat4();
-  m_ViewInverse = glm::mat4();
-  m_ViewProjection = glm::mat4();
-  m_ViewProjectionInverse = glm::mat4();
-
+Camera::Camera() {
   m_pTransform = new Transform();
   m_pTransform->SetPosition(0, 0, -6);
 }
@@ -89,9 +81,10 @@ void Camera::Update() {
   m_pTransform->UpdateTransforms();
 
   if (m_PerspectiveProjection) {
-    m_Projection = glm::perspectiveLH(
-        glm::radians(m_FOV), (float)(WINDOW.Width) / (float)WINDOW.Height,
-        m_NearPlane, m_FarPlane);
+    m_Projection = glm::perspectiveLH(glm::radians(m_FOV),
+                                      static_cast<float>(WINDOW.Width) /
+                                          static_cast<float>(WINDOW.Height),
+                                      m_NearPlane, m_FarPlane);
   } else {
     float viewWidth = (m_Size > 0) ? m_Size * WINDOW.AspectRatio : WINDOW.Width;
     float viewHeight = (m_Size > 0) ? m_Size : WINDOW.Height;
