@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) {
 
   glEnable(GL_DEPTH_TEST);
   // Main Loop
-  while (true) {
+  while (!pInput->IsKeyboardKeyDown(SDL_SCANCODE_ESCAPE)) {
     // UPDATE
     //**********
 
@@ -189,6 +189,7 @@ int main(int argc, char *argv[]) {
   pContext->DestroyInstance();
 
   SDL_GL_DeleteContext(context);
+  SDL_VideoQuit();
   SDL_Quit();
   return 0;
 }
