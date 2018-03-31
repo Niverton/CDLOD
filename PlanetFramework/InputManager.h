@@ -77,14 +77,14 @@ private:
   // Key Input
   Uint8 *m_pKeyMapNew = nullptr, *m_pKeyMapOld = nullptr;
   const Uint8 *m_pKeyMapSdl = nullptr;
-  int m_KeyboardLength;
+  int m_KeyboardLength{};
   std::map<char, SDL_Scancode> m_CharToSdlMap;
 
   // Mouse Input
   int m_MousePosX = 0;
   int m_MousePosY = 0;
   glm::vec2 m_MouseMove = glm::vec2();
-  Uint32 m_MouseMapNew, m_MouseMapOld;
+  Uint32 m_MouseMapNew{}, m_MouseMapOld{};
   // Application flow
   bool m_ExitRequested = false;
 };
