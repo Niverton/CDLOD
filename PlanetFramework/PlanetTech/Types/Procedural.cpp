@@ -21,6 +21,3 @@ ProceduralPlanet::ProceduralPlanet(Noise n) {
 
   m_pHeight = new Texture(data, w, h);
 }
-
-ProceduralPlanet::~ProceduralPlanet() {
-}
