@@ -41,7 +41,7 @@ void TextRenderer::Init() {
   glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
   // set data and attributes
-  glBufferData(GL_ARRAY_BUFFER, m_BufferSize, NULL, GL_DYNAMIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, m_BufferSize, nullptr, GL_DYNAMIC_DRAW);
 
   // input layout
 
@@ -53,28 +53,28 @@ void TextRenderer::Init() {
 
   int offset = 0;
   int stride = 3 * sizeof(GLfloat);
-  glVertexAttribPointer(0, (GLint)3, GL_FLOAT, GL_FALSE,
-                        (GLsizei)sizeof(TextVertex),
+  glVertexAttribPointer(0, static_cast<GLint>(3), GL_FLOAT, GL_FALSE,
+                        static_cast<GLsizei>(sizeof(TextVertex)),
                         (GLvoid *)offsetof(TextVertex, Position));
   offset += stride;
   stride = 4 * sizeof(GLfloat);
-  glVertexAttribPointer(1, (GLint)4, GL_FLOAT, GL_FALSE,
-                        (GLsizei)sizeof(TextVertex),
+  glVertexAttribPointer(1, static_cast<GLint>(4), GL_FLOAT, GL_FALSE,
+                        static_cast<GLsizei>(sizeof(TextVertex)),
                         (GLvoid *)offsetof(TextVertex, Color));
   offset += stride;
   stride = 2 * sizeof(GLfloat);
-  glVertexAttribPointer(2, (GLint)2, GL_FLOAT, GL_FALSE,
-                        (GLsizei)sizeof(TextVertex),
+  glVertexAttribPointer(2, static_cast<GLint>(2), GL_FLOAT, GL_FALSE,
+                        static_cast<GLsizei>(sizeof(TextVertex)),
                         (GLvoid *)offsetof(TextVertex, TexCoord));
   offset += stride;
   stride = 2 * sizeof(GLfloat);
-  glVertexAttribPointer(3, (GLint)2, GL_FLOAT, GL_FALSE,
-                        (GLsizei)sizeof(TextVertex),
+  glVertexAttribPointer(3, static_cast<GLint>(2), GL_FLOAT, GL_FALSE,
+                        static_cast<GLsizei>(sizeof(TextVertex)),
                         (GLvoid *)offsetof(TextVertex, CharacterDimension));
   offset += stride;
   stride = sizeof(unsigned int);
-  glVertexAttribIPointer(4, (GLint)1, GL_UNSIGNED_INT,
-                         (GLsizei)sizeof(TextVertex),
+  glVertexAttribIPointer(4, static_cast<GLint>(1), GL_UNSIGNED_INT,
+                         static_cast<GLsizei>(sizeof(TextVertex)),
                          (GLvoid *)offsetof(TextVertex, ChannelId));
 
   // unbind
@@ -93,26 +93,28 @@ void TextRenderer::SetFont(SpriteFont *pFont) {
   if (pos == m_pSpriteFonts.end()) {
     m_ActiveFontIdx = m_pSpriteFonts.size();
     m_pSpriteFonts.push_back(pFont);
-  } else
+  } else {
     m_ActiveFontIdx = pos - m_pSpriteFonts.begin();
+}
 }
 
 void TextRenderer::DrawText(const std::string &text, glm::vec2 pos) {
-  if (m_pSpriteFonts.size() > 0) {
+  if (!m_pSpriteFonts.empty()) {
     m_NumCharacters += text.size();
-    m_pSpriteFonts[m_ActiveFontIdx]->m_TextCache.push_back(
-        TextCache(text, pos, m_Color));
+    m_pSpriteFonts[m_ActiveFontIdx]->m_TextCache.emplace_back(text, pos, m_Color);
     if (!m_pSpriteFonts[m_ActiveFontIdx]->m_IsAddedToRenderer) {
       m_pSpriteFonts[m_ActiveFontIdx]->m_IsAddedToRenderer = true;
     }
-  } else
+  } else {
     std::cout << "[WARNING] TextRenderer>DrawText: No active font found!"
               << std::endl;
 }
+}
 
 void TextRenderer::Draw() {
-  if (m_pSpriteFonts.size() <= 0)
+  if (m_pSpriteFonts.empty()) {
     return;
+}
 
   // Bind Object vertex array
   glBindVertexArray(m_VAO);
@@ -175,10 +177,11 @@ void TextRenderer::UpdateBuffer() {
             tVerts.push_back(vText);
 
             totalAdvanceX += metric.AdvanceX;
-          } else
+          } else {
             std::cout << "[WARNING] TextRenderer::CreateTextVertices>char not "
                          "suppported for current font"
                       << std::endl;
+}
         }
       }
       pFont->m_BufferSize = tVerts.size() - pFont->m_BufferStart + 1;
