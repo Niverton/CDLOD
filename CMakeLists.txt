@@ -147,7 +147,11 @@ add_custom_target(fonts ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
 add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
 set(EXEC PlanetRenderer)
 add_executable(${EXEC} ${SRCS})
-target_include_directories(${EXEC} PRIVATE PlanetFramework/)
+target_include_directories(${EXEC}
+  PRIVATE
+    PlanetFramework/
+    PlanetFramework/PlanetTech/
+    )
 # Build this before EXEC
 set (DEPS devil_ext shaders textures fonts)
 #add_dependencies(${EXEC} devil_ext shaders textures fonts)
