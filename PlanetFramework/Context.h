@@ -16,9 +16,9 @@ public:
   }
   ~ContextObjects() {
   }
-  Time *pTime;
-  Camera *pCamera;
-  Scene *pScene;
+  Time *pTime = nullptr;
+  Camera *pCamera = nullptr;
+  Scene *pScene = nullptr;
 };
 
 struct Context : public Singleton<Context>, public ContextObjects {
