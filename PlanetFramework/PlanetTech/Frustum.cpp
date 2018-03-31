@@ -36,7 +36,7 @@ void Frustum::Init() {
   glBufferData(GL_ARRAY_BUFFER, m_Corners.size() * sizeof(glm::vec3),
                m_Corners.data(), GL_STATIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3),
-                        (GLvoid *)0);
+                        (GLvoid *)nullptr);
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -61,7 +61,7 @@ void Frustum::SetToCamera(Camera *pCamera) {
 void Frustum::Update() {
   // calculate generalized relative width and aspect ratio
   float normHalfWidth = tan(glm::radians(m_FOV));
-  float aspectRatio = (float)WINDOW.Width / (float)WINDOW.Height;
+  float aspectRatio = float(WINDOW.Width) / float(WINDOW.Height);
 
   // calculate width and height for near and far plane
   float nearHW = normHalfWidth * m_NearPlane;
@@ -99,13 +99,13 @@ void Frustum::Update() {
   m_Planes.clear();
   // winding in an outside perspective so the cross product creates normals
   // pointing inward
-  m_Planes.push_back(Plane(na, nb, nc)); // Near
+  m_Planes.emplace_back(na, nb, nc); // Near
   // m_Planes.push_back(Plane(fb, fa, fd));//Far Maybe skip this step? most
   // polys further away should already be low res
-  m_Planes.push_back(Plane(fa, na, fc)); // Left
-  m_Planes.push_back(Plane(nb, fb, nd)); // Right
-  m_Planes.push_back(Plane(fa, fb, na)); // Top
-  m_Planes.push_back(Plane(nc, nd, fc)); // Bottom
+  m_Planes.emplace_back(fa, na, fc); // Left
+  m_Planes.emplace_back(nb, fb, nd); // Right
+  m_Planes.emplace_back(fa, fb, na); // Top
+  m_Planes.emplace_back(nc, nd, fc); // Bottom
 
   // update the list of corners for debug drawing
   m_Corners.clear();
@@ -139,8 +139,9 @@ void Frustum::Update() {
 
 bool Frustum::Contains(glm::vec3 p) {
   for (auto plane : m_Planes) {
-    if (glm::dot(plane.n, p - plane.d) < 0)
+    if (glm::dot(plane.n, p - plane.d) < 0) {
       return false;
+    }
   }
   return true;
 }
@@ -153,18 +154,23 @@ VolumeTri Frustum::ContainsTriangle(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c) {
   VolumeTri ret = VolumeTri::CONTAINS;
   for (auto plane : m_Planes) {
     char rejects = 0;
-    if (glm::dot(plane.n, a - plane.d) < 0)
+    if (glm::dot(plane.n, a - plane.d) < 0) {
       rejects++;
-    if (glm::dot(plane.n, b - plane.d) < 0)
+    }
+    if (glm::dot(plane.n, b - plane.d) < 0) {
       rejects++;
-    if (glm::dot(plane.n, c - plane.d) < 0)
+    }
+    if (glm::dot(plane.n, c - plane.d) < 0) {
       rejects++;
+    }
     // if all three are outside a plane the triangle is outside the frustrum
-    if (rejects >= 3)
+    if (rejects >= 3) {
       return VolumeTri::OUTSIDE;
-    // if at least one is outside the triangle intersects at least one plane
-    else if (rejects > 0)
+      // if at least one is outside the triangle intersects at least one plane
+    }
+    if (rejects > 0) {
       ret = VolumeTri::INTERSECT;
+    }
   }
   return ret;
 }
@@ -174,28 +180,35 @@ VolumeTri Frustum::ContainsTriVolume(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
   VolumeTri ret = VolumeTri::CONTAINS;
   for (auto plane : m_Planes) {
     char rejects = 0;
-    if (glm::dot(plane.n, a - plane.d) < 0)
+    if (glm::dot(plane.n, a - plane.d) < 0) {
       rejects++;
-    if (glm::dot(plane.n, b - plane.d) < 0)
+    }
+    if (glm::dot(plane.n, b - plane.d) < 0) {
       rejects++;
-    if (glm::dot(plane.n, c - plane.d) < 0)
+    }
+    if (glm::dot(plane.n, c - plane.d) < 0) {
       rejects++;
+    }
     // if all three are outside a plane the triangle is outside the frustrum
     if (rejects >= 3) {
-      if (glm::dot(plane.n, (a * height) - plane.d) < 0)
+      if (glm::dot(plane.n, (a * height) - plane.d) < 0) {
         rejects++;
-      if (glm::dot(plane.n, (b * height) - plane.d) < 0)
+      }
+      if (glm::dot(plane.n, (b * height) - plane.d) < 0) {
         rejects++;
-      if (glm::dot(plane.n, (c * height) - plane.d) < 0)
+      }
+      if (glm::dot(plane.n, (c * height) - plane.d) < 0) {
         rejects++;
-      if (rejects >= 6)
+      }
+      if (rejects >= 6) {
         return VolumeTri::OUTSIDE;
-      else
-        ret = VolumeTri::INTERSECT;
+      }
+      { ret = VolumeTri::INTERSECT; }
     }
     // if at least one is outside the triangle intersects at least one plane
-    else if (rejects > 0)
+    else if (rejects > 0) {
       ret = VolumeTri::INTERSECT;
+    }
   }
   return ret;
 }
