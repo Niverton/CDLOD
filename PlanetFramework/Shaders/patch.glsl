@@ -45,13 +45,13 @@
 		//initial position
 		vec3 TriPos = a + r*pos.x + s*pos.y;
 		//morph factor
-		float dist = length(TriPos-camPos);
-		float mPerc = morphFac(dist, level);
-		//morph
-		TriPos += mPerc*(r*morph.x + s*morph.y);
-		//add height
-		Tex3 = normalize(TriPos);
-		TriPos = Tex3 * (radius + height(Tex3));
+	//	float dist = length(TriPos-camPos);
+	//	float mPerc = morphFac(dist, level);
+	//	//morph
+	//	TriPos += mPerc*(r*morph.x + s*morph.y);
+	//	//add height
+	//	Tex3 = normalize(TriPos);
+	//	TriPos = Tex3 * (radius + height(Tex3));
 		
 		Normal = normalize((model*vec4(Tex3, 1.0f)).xyz);
 		gl_Position = viewProj * model * vec4(TriPos, 1.0f);
