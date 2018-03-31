@@ -16,11 +16,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #endif
 
-
-TextRenderer::TextRenderer()
-    : m_BufferSize(500), m_Transform(glm::mat4()), m_NumCharacters(0),
-      m_pSpriteFonts(std::vector<SpriteFont *>()) {
+TextRenderer::TextRenderer() {
   m_pTextShader = new Shader("./Shaders/text.glsl");
+}
+
+TextRenderer::~TextRenderer() {
+  SafeDelete(m_pTextShader);
+  glDeleteVertexArrays(1, &m_VAO);
+  glDeleteBuffers(1, &m_VBO);
 }
 
 void TextRenderer::Init() {
@@ -85,7 +88,7 @@ void TextRenderer::Init() {
   float scaleY = (WINDOW.Height > 0) ? 2.f / WINDOW.Height : 0;
 
   float aaa[16]{scaleX, 0, 0, 0, 0, -scaleY, 0, 0, 0, 0, 1, 0, -1, 1, 0, 1};
-  m_Transform = glm::make_mat4(aaa);
+  m_Transform = glm::make_mat4(static_cast<float *>(aaa));
 }
 
 void TextRenderer::SetFont(SpriteFont *pFont) {
@@ -95,26 +98,27 @@ void TextRenderer::SetFont(SpriteFont *pFont) {
     m_pSpriteFonts.push_back(pFont);
   } else {
     m_ActiveFontIdx = pos - m_pSpriteFonts.begin();
-}
+  }
 }
 
 void TextRenderer::DrawText(const std::string &text, glm::vec2 pos) {
   if (!m_pSpriteFonts.empty()) {
     m_NumCharacters += text.size();
-    m_pSpriteFonts[m_ActiveFontIdx]->m_TextCache.emplace_back(text, pos, m_Color);
+    m_pSpriteFonts[m_ActiveFontIdx]->m_TextCache.emplace_back(text, pos,
+                                                              m_Color);
     if (!m_pSpriteFonts[m_ActiveFontIdx]->m_IsAddedToRenderer) {
       m_pSpriteFonts[m_ActiveFontIdx]->m_IsAddedToRenderer = true;
     }
   } else {
     std::cout << "[WARNING] TextRenderer>DrawText: No active font found!"
               << std::endl;
-}
+  }
 }
 
 void TextRenderer::Draw() {
   if (m_pSpriteFonts.empty()) {
     return;
-}
+  }
 
   // Bind Object vertex array
   glBindVertexArray(m_VAO);
@@ -181,7 +185,7 @@ void TextRenderer::UpdateBuffer() {
             std::cout << "[WARNING] TextRenderer::CreateTextVertices>char not "
                          "suppported for current font"
                       << std::endl;
-}
+          }
         }
       }
       pFont->m_BufferSize = tVerts.size() - pFont->m_BufferStart + 1;
@@ -205,8 +209,3 @@ void TextRenderer::UpdateBuffer() {
   m_NumCharacters = 0;
 }
 
-TextRenderer::~TextRenderer() {
-  SafeDelete(m_pTextShader);
-  glDeleteVertexArrays(1, &m_VAO);
-  glDeleteBuffers(1, &m_VBO);
-}

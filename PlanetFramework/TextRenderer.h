@@ -24,7 +24,6 @@
 */
 class TextRenderer : public Singleton<TextRenderer> {
 public:
-#undef DrawText
   void DrawText(const std::string &text, glm::vec2 pos);
   void SetFont(SpriteFont *pFont);
   void SetColor(glm::vec4 color) {
@@ -60,7 +59,8 @@ private:
   Shader *m_pTextShader;
   std::vector<SpriteFont *> m_pSpriteFonts;
 
-  unsigned int m_BufferSize, m_NumCharacters;
+  unsigned int m_BufferSize = 500;
+  unsigned int m_NumCharacters = 0;
   glm::mat4 m_Transform;
   glm::vec4 m_Color = glm::vec4(0, 0, 0, 1);
   size_t m_ActiveFontIdx{};
