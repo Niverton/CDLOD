@@ -68,7 +68,7 @@ struct WarpedRidgedMultiFractalProperties : ProceduralPlanet::Properties {
   float gain = 0.5f;
 };
 
-struct RidgedMultiFractalVariationl2Properties : ProceduralPlanet::Properties {
+struct RidgedMultiFractalVariation2Properties : ProceduralPlanet::Properties {
   float ridgeOffset = -1.0f;
   unsigned short octave = 4;
   float lacunarity = 3.0f;
