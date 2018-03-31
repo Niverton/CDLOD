@@ -5,7 +5,7 @@
 #endif
 
 #include "StaticDependancies/glad/glad.h" // for GLint, GLuint
-#include "utils.h"                       // for UINT
+#include "utils.h"                        // for UINT
 
 #if PLATFORM_Win
 #include <glm\glm.hpp>
@@ -38,7 +38,7 @@ struct PatchInstance {
 };
 /**
   \brief  Use shader called patch to perform smooth transition with morph.
-          
+
 */
 class Patch {
 public:
@@ -59,7 +59,7 @@ public:
   void Init();
 
   /**
-    \brief  
+    \brief
             For calculate where draw smooth transition, we compute a border
             with level. The morph distance is linear and equals to 2^level.
 
@@ -81,27 +81,27 @@ private:
   int m_NumInstances = 0;
 
   short m_Levels;
-  UINT m_RC;
+  UINT m_RC{};
 
   // OpenGl stuff
-  GLuint m_VAO;
-  GLuint m_VBO;
-  GLuint m_EBO;
-  GLuint m_VBOInstance;
+  GLuint m_VAO{};
+  GLuint m_VBO{};
+  GLuint m_EBO{};
+  GLuint m_VBOInstance{};
 
   Shader *m_pPatchShader = nullptr;
 
-  GLint m_uModel;
-  GLint m_uViewProj;
+  GLint m_uModel{};
+  GLint m_uViewProj{};
 
-  GLint m_uMaxHeight;
+  GLint m_uMaxHeight{};
 
-  GLint m_uCamPos;
-  GLint m_uRadius;
+  GLint m_uCamPos{};
+  GLint m_uRadius{};
   float m_MorphRange = 0.5f;
-  GLint m_uMorphRange;
+  GLint m_uMorphRange{};
 
   // shading
   glm::vec3 m_Ambient = glm::vec3(0.05f, 0.05f, 0.08f);
-  GLint m_uAmbient;
+  GLint m_uAmbient{};
 };

@@ -101,9 +101,9 @@ void Patch::GenerateGeometry(short levels) {
   m_Indices.clear();
   // Generate
   m_Levels = levels;
-  m_RC = 1 + (unsigned int)pow(2, (int)m_Levels);
+  m_RC = 1 + static_cast<unsigned int>(pow(2, static_cast<int>(m_Levels)));
 
-  float delta = 1 / (float)(m_RC - 1);
+  float delta = 1 / static_cast<float>(m_RC - 1);
 
   UINT rowIdx = 0;
   UINT nextIdx = 0;
@@ -112,21 +112,23 @@ void Patch::GenerateGeometry(short levels) {
     nextIdx += numCols;
     for (UINT column = 0; column < numCols; column++) {
       // calc position
-      glm::vec2 pos =
-          glm::vec2(column / (float)(m_RC - 1), row / (float)(m_RC - 1));
+      glm::vec2 pos = glm::vec2(column / static_cast<float>(m_RC - 1),
+                                row / static_cast<float>(m_RC - 1));
       // calc morph
       glm::vec2 morph = glm::vec2(0, 0);
       if (row % 2 == 0) {
-        if (column % 2 == 1)
+        if (column % 2 == 1) {
           morph = glm::vec2(-delta, 0);
+        }
       } else {
-        if (column % 2 == 0)
+        if (column % 2 == 0) {
           morph = glm::vec2(0, delta);
-        else
+        } else {
           morph = glm::vec2(delta, -delta);
+        }
       }
       // create vertex
-      m_Vertices.push_back(PatchVertex(pos, morph));
+      m_Vertices.emplace_back(pos, morph);
       // calc index
       if (row < m_RC - 1 && column < numCols - 1) {
         m_Indices.push_back(rowIdx + column);
@@ -199,8 +201,8 @@ void Patch::Draw(bool white) {
   glBindVertexArray(m_VAO);
 
   // Draw the object
-  glDrawElementsInstanced(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0,
-                          m_NumInstances);
+  glDrawElementsInstanced(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT,
+                          nullptr, m_NumInstances);
 
   // unbind vertex array
   glBindVertexArray(0);
