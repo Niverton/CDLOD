@@ -4,17 +4,6 @@
 #include "utils.h"        // for SafeDelete
 #include <iostream>       // for operator<<, basic_ostream, endl, cout, ost...
 
-SpriteFont::SpriteFont()
-    : m_pTexture(nullptr), m_CharacterCount(0), m_CharacterSpacing(1),
-      m_FontSize(0), m_FontName(""), m_TextureWidth(0), m_TextureHeight(0),
-      m_TextCache(std::vector<TextCache>()), m_BufferStart(0), m_BufferSize(0),
-      m_IsAddedToRenderer(false) {
-  for (int i = 0; i < CHAR_COUNT; ++i) {
-    std::memset((void *)&m_CharTable[i], 0, sizeof(FontMetric));
-    m_CharTable[i].IsValid = false;
-  }
-}
-
 SpriteFont::~SpriteFont() {
   SafeDelete(m_pTexture);
 }

@@ -29,25 +29,24 @@ private:
 
 struct FontMetric {
   // BMFONT
-  bool IsValid;
-  wchar_t Character;
-  USHORT Width;
-  USHORT Height;
-  short OffsetX;
-  short OffsetY;
-  short AdvanceX;
-  UCHAR Page;
-  UCHAR Channel;
+  bool IsValid = false;
+  wchar_t Character = 0;
+  unsigned short Width = 0;
+  unsigned short Height = 0;
+  short OffsetX = 0;
+  short OffsetY = 0;
+  short AdvanceX = 0;
+  unsigned char Page = 0;
+  unsigned char Channel = 0;
   glm::vec2 TexCoord;
 };
-
 
 class Texture;
 class TextRenderer;
 
 class SpriteFont {
 public:
-  SpriteFont();
+  SpriteFont() = default;
   virtual ~SpriteFont();
 
   static bool IsCharValid(const wchar_t &character);
@@ -61,7 +60,7 @@ public:
 private:
   friend class TextRenderer;
 #ifdef test_textrenderer_update_buffer
-  friend void test_update_buffer(void*, size_t);
+  friend void test_update_buffer(void *, size_t);
 #endif
 
   FontMetric &GetMetric(const wchar_t &character) {
@@ -71,15 +70,16 @@ private:
   FontMetric m_CharTable[CHAR_COUNT];
   std::vector<TextCache> m_TextCache;
 
-  short m_FontSize;
+  short m_FontSize = 0;
   std::string m_FontName;
-  int m_CharacterCount;
-  int m_CharacterSpacing;
-  int m_TextureWidth;
-  int m_TextureHeight;
-  int m_BufferStart, m_BufferSize;
-  Texture *m_pTexture;
-  bool m_IsAddedToRenderer;
+  int m_CharacterCount = 0;
+  int m_CharacterSpacing = 1;
+  int m_TextureWidth = 0;
+  int m_TextureHeight = 0;
+  int m_BufferStart = 0;
+  int m_BufferSize = 0;
+  Texture *m_pTexture = nullptr;
+  bool m_IsAddedToRenderer = false;
 
 private:
   // -------------------------
