@@ -54,28 +54,18 @@ void TextRenderer::Init() {
   glEnableVertexAttribArray(3);
   glEnableVertexAttribArray(4);
 
-  int offset = 0;
-  int stride = 3 * sizeof(GLfloat);
   glVertexAttribPointer(0, static_cast<GLint>(3), GL_FLOAT, GL_FALSE,
                         static_cast<GLsizei>(sizeof(TextVertex)),
                         (GLvoid *)offsetof(TextVertex, Position));
-  offset += stride;
-  stride = 4 * sizeof(GLfloat);
   glVertexAttribPointer(1, static_cast<GLint>(4), GL_FLOAT, GL_FALSE,
                         static_cast<GLsizei>(sizeof(TextVertex)),
                         (GLvoid *)offsetof(TextVertex, Color));
-  offset += stride;
-  stride = 2 * sizeof(GLfloat);
   glVertexAttribPointer(2, static_cast<GLint>(2), GL_FLOAT, GL_FALSE,
                         static_cast<GLsizei>(sizeof(TextVertex)),
                         (GLvoid *)offsetof(TextVertex, TexCoord));
-  offset += stride;
-  stride = 2 * sizeof(GLfloat);
   glVertexAttribPointer(3, static_cast<GLint>(2), GL_FLOAT, GL_FALSE,
                         static_cast<GLsizei>(sizeof(TextVertex)),
                         (GLvoid *)offsetof(TextVertex, CharacterDimension));
-  offset += stride;
-  stride = sizeof(unsigned int);
   glVertexAttribIPointer(4, static_cast<GLint>(1), GL_UNSIGNED_INT,
                          static_cast<GLsizei>(sizeof(TextVertex)),
                          (GLvoid *)offsetof(TextVertex, ChannelId));
@@ -110,8 +100,7 @@ void TextRenderer::DrawText(const std::string &text, glm::vec2 pos) {
       m_pSpriteFonts[m_ActiveFontIdx]->m_IsAddedToRenderer = true;
     }
   } else {
-    std::cout << "[WARNING] TextRenderer>DrawText: No active font found!"
-              << std::endl;
+    std::cerr << "[WARNING] TextRenderer>DrawText: No active font found!\n";
   }
 }
 
@@ -182,9 +171,8 @@ void TextRenderer::UpdateBuffer() {
 
             totalAdvanceX += metric.AdvanceX;
           } else {
-            std::cout << "[WARNING] TextRenderer::CreateTextVertices>char not "
-                         "suppported for current font"
-                      << std::endl;
+            std::cerr << "[WARNING] TextRenderer::CreateTextVertices>char not "
+                         "suppported for current font\n";
           }
         }
       }
@@ -208,4 +196,3 @@ void TextRenderer::UpdateBuffer() {
 
   m_NumCharacters = 0;
 }
-
