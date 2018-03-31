@@ -10,7 +10,7 @@ class Planet;
 
 class Scene {
 public:
-  Scene();
+  Scene(int argc, char** argv);
   ~Scene();
 
   void Init();
@@ -34,4 +34,15 @@ private:
 
   // Planet tech
   Planet *m_pPlanet;
+
+  //Planet properties
+  /**
+    \brief if val == cmp then val is set to default value def
+  */
+  template <typename T>
+  void check_value(T& val, T cmp, T def){
+    if (val == cmp){
+      val = def;
+    }
+  }
 };

@@ -1,3 +1,4 @@
+#include "ArgvParser.h"
 #include "Scene.h"
 #include "stdafx.h"
 
@@ -10,20 +11,39 @@
 
 #include <iomanip>
 #include <sstream>
-
+#include <string>
+#include <cstdlib>
 
 //#include "Screenshot.h"
 
-Scene::Scene() {
-  
-  auto prop = ProceduralPlanet::Properties {};
-  prop.width = 90;
-  prop.height = 90;
-  prop.maxHeight = 10.0f,
+Scene::Scene(int argc, char** argv) {
+  if (argc == 1) {
+    //Create default planet
+    ProceduralPlanet::Properties prop;
+    m_pPlanet = new ProceduralPlanet(&prop);
+  } else {
+    ArgvParser argvParser {argc, argv};
+    std::string noise = argvParser.GetMode();
+    
+    if (noise == "SIMPLEX" || noise == "simplex") {
+      ProceduralPlanet::Properties prop;
+      prop.noise = ProceduralPlanet::Noise::SIMPLEX;
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdInt<float>("--max-height", &prop.maxHeight);
 
-  m_pPlanet = new ProceduralPlanet(ProceduralPlanet::Noise::SIMPLEX,
-                  /*static_cast<ProceduralPlanet::Properties*>(*/&prop/*)*/);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<float>(prop.maxHeight, 0, 10.0);
 
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+
+      m_pPlanet = new ProceduralPlanet(&prop);
+    }
+
+  }
   //m_pPlanet = new Moon();
   m_pDebugFont = new SpriteFont();
 }
@@ -136,3 +156,4 @@ Scene::~Scene() {
   SafeDelete(m_pCamera);
   SafeDelete(m_pConObj);
 }
+
