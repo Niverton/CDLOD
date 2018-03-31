@@ -41,13 +41,49 @@ ProceduralPlanet::ProceduralPlanet(Noise n, Properties* properties) {
                     prop->octave, prop->lacunarity, prop->gain);
         break;
       }
-      case Noise::WRAPPED_FBM:
+      case Noise::FBM_VARIATION:
+      {
+        auto prop = static_cast<FbmVariationProperties*>(properties);
+        m_data[i] = Simplex::fBm(Simplex::fBm(glm::vec3(i % width, i / width, 1.),
+                    prop->octave, prop->lacunarity, prop->gain),prop->octave, prop->lacunarity, prop->gain);
+        break;
+      }
+      case Noise::WARPPED_FBM:
       {
         auto prop = static_cast<FbmProperties*>(properties);
         m_data[i] = Simplex::fBm(Simplex::fBm(glm::vec3(i % width, i / width, 1.),
-                    prop->octave, prop->lacunarity, prop->gain));
+                    prop->octave, prop->lacunarity, prop->gain),prop->octave, prop->lacunarity, prop->gain);
         break;
       }
+      case Noise::DFBM_WARPED_FBM:
+      {
+        auto prop = static_cast<DfbmProperties*>(properties);
+        m_data[i] = Simplex::fBm(Simplex::dfBm(glm::vec3(i % width, i / width, 1.),
+                    prop->octave, prop->lacunarity, prop->gain),prop->octave, prop->lacunarity, prop->gain);
+        break;
+      }  
+      case Noise::RIDGED_MULTI-FRACTAL_VARIATION:
+      {
+        auto prop = static_cast<RidgedMultiFractalVariationProperties*>(properties);
+        m_data[i] = Simplex::ridgedMF(glm::vec3(i % width, i / width, 1.),
+                    prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain);
+        break;
+      }   
+      case Noise::WARPED_RIDGED_MULTI-FRACTAL:
+      {
+        auto prop = static_cast<WarpedRidgedMultiFractalProperties*>(properties);
+        m_data[i] = Simplex::ridgedMF(Simplex::ridgedMF(glm::vec3(i % width, i / width, 1.),
+                    prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain),prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain));
+        break;
+      }
+      case Noise::RIDGED_MULTI-FRACTAL_VARIATION2:
+      {
+        auto prop = static_cast<RidgedMultiFractalVariation2Properties*>(properties);
+        m_data[i] = Simplex::ridgedMF(glm::vec3(i % width, i / width, 1.),
+                    prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain);
+        break;
+      }     
+      
     }
   }
 
