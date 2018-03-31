@@ -28,8 +28,8 @@ void Planet::Init() {
                                         glm::radians(270.f),
                                         glm::vec3(0.0f, 1.0f, 0.0f)));
   // LoadTextures
-  m_pDiffuse->Load();
-  m_pHeight->Load();
+  m_pDiffuse->Load(false);
+  m_pHeight->Load(false);
 
   m_pTriangulator->Init();
   m_pPatch->Init();

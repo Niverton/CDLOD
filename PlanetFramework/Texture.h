@@ -17,7 +17,7 @@ public:
   Texture(float *data, int width, int height);
   virtual ~Texture();
 
-  virtual void Load(bool useSRGB = false);
+  virtual void Load(bool useSRGB);
   GLuint GetHandle() {
     return m_Handle;
   }
@@ -32,7 +32,7 @@ private:
   float *m_data = nullptr;
 
 protected:
-  GLuint m_Handle;
-  int m_Width;
-  int m_Height;
+  GLuint m_Handle{};
+  int m_Width{};
+  int m_Height{};
 };

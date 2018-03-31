@@ -86,7 +86,7 @@ void SpriteFont::Load(const std::string &filename) {
   }
   auto filepath = filename.substr(0, filename.rfind('/') + 1);
   m_pTexture = new Texture(filepath + pn);
-  m_pTexture->Load();
+  m_pTexture->Load(false);
   pBinReader->SetBufferPosition(pos + Block2Size);
   //**********
   // BLOCK 3 *
