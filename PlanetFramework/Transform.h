@@ -10,8 +10,7 @@
 
 class Transform {
 public:
-  Transform();
-  ~Transform();
+  Transform() = default;
 
   void UpdateTransforms();
 
@@ -67,13 +66,13 @@ public:
   }
 
 private:
-  glm::mat4 m_Tranform;
+  glm::mat4 m_Tranform{1.0f};
 
-  glm::vec3 m_Position;
-  glm::quat m_Rotation;
-  glm::vec3 m_Scale;
+  glm::vec3 m_Position{0.f, 0.f, 0.f};
+  glm::quat m_Rotation{};
+  glm::vec3 m_Scale{1.f, 1.f, 1.1f};
 
-  glm::vec3 m_Forward;
-  glm::vec3 m_Right;
-  glm::vec3 m_Up;
+  glm::vec3 m_Forward{0.f, 0.f, 1.f};
+  glm::vec3 m_Right{1.f, 0.f, 0.f};
+  glm::vec3 m_Up{0.f, 1.f, 0.f};
 };

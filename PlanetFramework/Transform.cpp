@@ -11,18 +11,6 @@
 #include <glm/glm.hpp>
 #endif
 
-Transform::Transform() {
-  m_Tranform = glm::mat4(1.0f);
-
-  m_Position = glm::vec3(0.f, 0.f, 0.f);
-  m_Rotation = glm::quat();
-  m_Scale = glm::vec3(1.f, 1.f, 1.f);
-
-  m_Forward = glm::vec3(0.f, 0.f, 1.f);
-  m_Right = glm::vec3(1.f, 0.f, 0.f);
-  m_Up = glm::vec3(0.f, 1.f, 0.f);
-}
-
 void Transform::UpdateTransforms() {
   m_Tranform = glm::translate(m_Position) * glm::toMat4(m_Rotation) *
                glm::scale(m_Scale);
@@ -32,5 +20,3 @@ void Transform::UpdateTransforms() {
   m_Up = glm::normalize(glm::cross(m_Forward, m_Right));
 }
 
-Transform::~Transform() {
-}
