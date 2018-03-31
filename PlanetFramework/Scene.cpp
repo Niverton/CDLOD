@@ -64,8 +64,9 @@ void Scene::Update() {
       break;
     }
   }
-  if (INPUT->IsKeyboardKeyPressed(SDL_SCANCODE_F2))
+  if (INPUT->IsKeyboardKeyPressed(SDL_SCANCODE_F2)) {
     m_DrawUI = !m_DrawUI;
+  }
   if (INPUT->IsKeyboardKeyPressed(SDL_SCANCODE_F1)) {
     //	Screenshot::GetInstance()->Take();
   }
