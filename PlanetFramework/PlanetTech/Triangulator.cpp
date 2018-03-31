@@ -91,17 +91,17 @@ bool Triangulator::Update() {
   }
   if (levelChanged) {
     Precalculate();
-}
+  }
 
   // Frustum update
   if (INPUT->IsKeyboardKeyPressed(SDL_SCANCODE_SPACE)) {
     m_LockFrustum = !m_LockFrustum;
-}
+  }
 
   m_pFrustum->SetCullTransform(m_pPlanet->GetTransform()->GetTransform());
   if (!m_LockFrustum) {
     m_pFrustum->SetToCamera(CAMERA);
-}
+  }
   m_pFrustum->Update();
 
   return true;
@@ -159,9 +159,9 @@ void Triangulator::GenerateGeometry() {
 
   // Recursion start
   m_Positions.clear();
-	for (auto t : m_Icosahedron){
-		RecursiveTriangle(t.a, t.b, t.c, t.level, true);
-	}
+  for (auto t : m_Icosahedron) {
+    RecursiveTriangle(t.a, t.b, t.c, t.level, true);
+  }
 }
 
 TriNext Triangulator::SplitHeuristic(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
@@ -181,7 +181,7 @@ TriNext Triangulator::SplitHeuristic(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
     // auto intersect = m_pFrustum->ContainsTriangle(a, b, c);
     if (intersect == VolumeTri::OUTSIDE) {
       return TriNext::CULL;
-}
+    }
     if (intersect ==
         VolumeTri::CONTAINS) // stop frustum culling -> all
                              // children are also inside the frustum
@@ -189,52 +189,52 @@ TriNext Triangulator::SplitHeuristic(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
       // check if new splits are allowed
       if (level >= m_MaxLevel) {
         return TriNext::LEAF;
-}
+      }
       // split according to distance
       float aDist = glm::length(a - m_pFrustum->GetPositionOS());
       float bDist = glm::length(b - m_pFrustum->GetPositionOS());
       float cDist = glm::length(c - m_pFrustum->GetPositionOS());
       if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level]) {
         return TriNext::SPLIT;
-}
+      }
       return TriNext::LEAF;
     }
-    
-	// check if new splits are allowed
-      if (level >= m_MaxLevel) {
-        return TriNext::LEAF;
-}
-      // split according to distance
-      float aDist = glm::length(a - m_pFrustum->GetPositionOS());
-      float bDist = glm::length(b - m_pFrustum->GetPositionOS());
-      float cDist = glm::length(c - m_pFrustum->GetPositionOS());
-      if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level]) {
-        return TriNext::SPLITCULL;
-}
+
+    // check if new splits are allowed
+    if (level >= m_MaxLevel) {
       return TriNext::LEAF;
-    
+    }
+    // split according to distance
+    float aDist = glm::length(a - m_pFrustum->GetPositionOS());
+    float bDist = glm::length(b - m_pFrustum->GetPositionOS());
+    float cDist = glm::length(c - m_pFrustum->GetPositionOS());
+    if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level]) {
+      return TriNext::SPLITCULL;
+    }
+    return TriNext::LEAF;
   }
   // check if new splits are allowed
   if (level >= m_MaxLevel) {
     return TriNext::LEAF;
-}
+  }
   // split according to distance
   float aDist = glm::length(a - m_pFrustum->GetPositionOS());
   float bDist = glm::length(b - m_pFrustum->GetPositionOS());
   float cDist = glm::length(c - m_pFrustum->GetPositionOS());
   if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level]) {
     return TriNext::SPLIT;
-}
+  }
   return TriNext::LEAF;
 }
 
 void Triangulator::RecursiveTriangle(glm::vec3 a, glm::vec3 b, glm::vec3 c,
                                      short level, bool frustumCull) {
   TriNext next = SplitHeuristic(a, b, c, level, frustumCull);
-  if (next == CULL) {
+  if (next == TriNext::CULL) {
     return;
-  // check if subdivision is needed based on camera distance
-  } if (next == SPLIT || next == SPLITCULL) {
+    // check if subdivision is needed based on camera distance
+  }
+  if (next == TriNext::SPLIT || next == TriNext::SPLITCULL) {
     // find midpoints
     glm::vec3 A = b + ((c - b) * 0.5f);
     glm::vec3 B = c + ((a - c) * 0.5f);
@@ -245,13 +245,16 @@ void Triangulator::RecursiveTriangle(glm::vec3 a, glm::vec3 b, glm::vec3 c,
     C *= m_pPlanet->GetRadius() / glm::length(C);
     // Make 4 new triangles
     short nLevel = level + 1;
-    RecursiveTriangle(a, B, C, nLevel, next == SPLITCULL); // Winding is
-                                                           // inverted
-    RecursiveTriangle(A, b, C, nLevel, next == SPLITCULL); // Winding is
-                                                           // inverted
-    RecursiveTriangle(A, B, c, nLevel, next == SPLITCULL); // Winding is
-                                                           // inverted
-    RecursiveTriangle(A, B, C, nLevel, next == SPLITCULL);
+    RecursiveTriangle(a, B, C, nLevel,
+                      next == TriNext::SPLITCULL); // Winding is
+                                                   // inverted
+    RecursiveTriangle(A, b, C, nLevel,
+                      next == TriNext::SPLITCULL); // Winding is
+                                                   // inverted
+    RecursiveTriangle(A, B, c, nLevel,
+                      next == TriNext::SPLITCULL); // Winding is
+                                                   // inverted
+    RecursiveTriangle(A, B, C, nLevel, next == TriNext::SPLITCULL);
   } else // put the triangle in the buffer
   {
     m_Positions.emplace_back(level, a, b - a, c - a);

@@ -11,7 +11,7 @@
 class Frustum; // lines 3-3
 class Planet;  // lines 4-4
 
-enum TriNext { CULL, LEAF, SPLIT, SPLITCULL };
+enum class TriNext { CULL, LEAF, SPLIT, SPLITCULL };
 
 /**
   \brief  This is the represention of a node in the quadtree.
@@ -33,7 +33,7 @@ struct Tri {
   Tri *c3 = nullptr;
   Tri *c4 = nullptr;
 
-  TriNext state;
+  TriNext state{TriNext::CULL};
 
   short level;
 
