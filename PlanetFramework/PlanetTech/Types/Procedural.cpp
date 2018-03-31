@@ -9,12 +9,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
 
-ProceduralPlanet::ProceduralPlanet(Noise n, Properties* properties) {
+ProceduralPlanet::ProceduralPlanet(Properties* properties) {
   
   unsigned int width = properties->width;
   unsigned int height = properties->height;
   m_Radius = properties->radius;
   m_MaxHeight = properties->maxHeight;
+  Noise n = properties->noise;
 
   m_data = new float[height * width];
   for (int i = 0; i < height * width; i++) {

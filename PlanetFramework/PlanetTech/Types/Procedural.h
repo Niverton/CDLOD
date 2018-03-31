@@ -18,14 +18,14 @@ public:
   };
 
   struct Properties {
-  public:
+    Noise noise = Noise::SIMPLEX;        //default
     unsigned int width = 1024;
     unsigned int height = 1024;
     float radius = 1737.1f;       //Same as moon
     float maxHeight = 10.7f;      //Same as moon
   };
 
-  ProceduralPlanet(Noise n, Properties* properties);
+  ProceduralPlanet(Properties* properties);
   ~ProceduralPlanet();
 
 private:
