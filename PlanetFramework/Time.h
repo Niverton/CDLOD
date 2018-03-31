@@ -7,7 +7,6 @@ typedef std::chrono::duration<long, std::nano> HighResDuration;
 class Time {
 public:
   Time();
-  ~Time();
   void Start();
   void Update();
   float GetTime();
@@ -29,5 +28,5 @@ private:
 
   HighResTime begin;
   HighResTime last;
-  float m_DeltaTime;
+  float m_DeltaTime = 0;
 };

@@ -5,8 +5,6 @@ Time::Time() {
   Start();
 }
 
-Time::~Time() {
-}
 
 void Time::Start() {
   begin = Now();
