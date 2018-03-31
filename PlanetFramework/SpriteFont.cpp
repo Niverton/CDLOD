@@ -4,10 +4,6 @@
 #include "utils.h"        // for SafeDelete
 #include <iostream>       // for operator<<, basic_ostream, endl, cout, ost...
 
-SpriteFont::~SpriteFont() {
-  SafeDelete(m_pTexture);
-}
-
 bool SpriteFont::IsCharValid(const wchar_t &character) {
   if (character >= MIN_CHAR_ID && character <= MAX_CHAR_ID)
     return true;

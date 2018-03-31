@@ -47,7 +47,11 @@ class TextRenderer;
 class SpriteFont {
 public:
   SpriteFont() = default;
-  virtual ~SpriteFont();
+  virtual ~SpriteFont() {
+    SafeDelete(m_pTexture);
+  };
+  SpriteFont(const SpriteFont &t) = delete;
+  SpriteFont &operator=(const SpriteFont &t) = delete;
 
   static bool IsCharValid(const wchar_t &character);
 
@@ -80,12 +84,4 @@ private:
   int m_BufferSize = 0;
   Texture *m_pTexture = nullptr;
   bool m_IsAddedToRenderer = false;
-
-private:
-  // -------------------------
-  // Disabling default copy constructor and default
-  // assignment operator.
-  // -------------------------
-  SpriteFont(const SpriteFont &t);
-  SpriteFont &operator=(const SpriteFont &t);
 };
