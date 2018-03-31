@@ -1,8 +1,9 @@
 #pragma once
 
-#include "utils.h" // for UCHAR, USHORT
-#include <string>  // for string
-#include <vector>  // for vector
+#include "Texture.h" //for Texture
+#include "utils.h"   // for UCHAR, USHORT
+#include <string>    // for string
+#include <vector>    // for vector
 
 #if PLATFORM_Win
 #include <SDL.h>
@@ -11,7 +12,6 @@
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #endif
-class Texture; // lines 31-31
 
 struct TextCache {
 public:
@@ -55,7 +55,7 @@ public:
 
   static bool IsCharValid(const wchar_t &character);
 
-  void Load(std::string filename);
+  void Load(const std::string &filename);
 
   static const int MAX_CHAR_ID = 255;
   static const int MIN_CHAR_ID = 0;
