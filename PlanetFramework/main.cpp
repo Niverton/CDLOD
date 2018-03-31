@@ -15,9 +15,9 @@
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 #endif
+#include <cstdio>   // for fprintf, stderr
+#include <cstdlib>  // for atexit, exit, NULL
 #include <iostream> // for operator<<, endl, basic_os...
-#include <stdio.h>  // for fprintf, stderr
-#include <stdlib.h> // for atexit, exit, NULL
 #include <string>   // for char_traits, string
 
 //**************************************
@@ -67,7 +67,7 @@ void SetDebuggingOptions() {
 //**************************************
 // Main
 //**************************************
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv) {
 #ifdef PLATFORM_Win
   UNREFERENCED_PARAMETER(argv);
   UNREFERENCED_PARAMETER(argc);
@@ -80,16 +80,18 @@ int main(int argc, char *argv[]) {
   //**************************************
   //
   // SDL init
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     sdl_die("Couldn't initialize SDL");
+  }
   atexit(SDL_Quit);
-  SDL_GL_LoadLibrary(NULL);
+  SDL_GL_LoadLibrary(nullptr);
 
   // SDL init
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     sdl_die("Couldn't initialize SDL");
+  }
   atexit(SDL_Quit);
-  SDL_GL_LoadLibrary(NULL);
+  SDL_GL_LoadLibrary(nullptr);
 
   // request opengl context
   SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -100,7 +102,6 @@ int main(int argc, char *argv[]) {
   // Buffers
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
 
 // Request a debug context.
 #if defined(DEBUG) | defined(_DEBUG)
@@ -121,15 +122,17 @@ int main(int argc, char *argv[]) {
         SDL_WINDOWPOS_CENTERED, pSettings->Window.Width,
         pSettings->Window.Height, SDL_WINDOW_OPENGL);
   }
-  if (pSettings->Window.pWindow == NULL)
+  if (pSettings->Window.pWindow == nullptr) {
     sdl_die("Couldn't set video mode");
+  }
 
   // OpenGL context creation
   SDL_GLContext context = SDL_GL_CreateContext(pSettings->Window.pWindow);
-  if (context == NULL)
+  if (context == nullptr) {
     sdl_die("Failed to create OpenGL context");
+  }
   // Use v-sync
-  SDL_GL_SetSwapInterval(pSettings->Window.VSyncEnabled);
+  SDL_GL_SetSwapInterval(static_cast<int>(pSettings->Window.VSyncEnabled));
 
   // Initialize DevIL
 
@@ -149,8 +152,8 @@ int main(int argc, char *argv[]) {
 #ifdef _DEBUG
   glEnable(GL_DEBUG_OUTPUT);
   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-  //glDebugMessageCallback(openglCallbackFunction, nullptr);
-  //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
+  // glDebugMessageCallback(openglCallbackFunction, nullptr);
+  // glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
   //                      true);
 #endif
 
@@ -162,7 +165,7 @@ int main(int argc, char *argv[]) {
   pInput->Init();
 
   // Make a scene :D
-  Scene *pScene = new Scene();
+  auto *pScene = new Scene();
   pScene->Init();
 
   glEnable(GL_DEPTH_TEST);
@@ -173,8 +176,9 @@ int main(int argc, char *argv[]) {
 
     // user input
     pInput->UpdateEvents();
-    if (pInput->IsExitRequested())
+    if (pInput->IsExitRequested()) {
       break;
+    }
 
     // scene update
     pScene->Update();
