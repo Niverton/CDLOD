@@ -10,8 +10,6 @@ public:
   ~BinaryReader() {
     Close();
   };
-  BinaryReader(const BinaryReader &yRef) = delete;
-  BinaryReader &operator=(const BinaryReader &yRef) = delete;
 
   template <class T>
   T Read() {
@@ -23,7 +21,7 @@ public:
     }
 
     T value;
-    m_pReader->read((char *)&value, sizeof(T));
+    m_pReader->read(reinterpret_cast<char*>(&value), sizeof(T));
     return value;
   }
 
