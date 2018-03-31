@@ -147,10 +147,8 @@ void Triangulator::GenerateGeometry() {
 
   // Recursion start
   m_Positions.clear();
+  m_Positions.push_back(PatchInstance(m_Icosahedron[0].level, m_Icosahedron[0].a, m_Icosahedron[0].b - m_Icosahedron[0].a, m_Icosahedron[0].c - m_Icosahedron[0].a));
 
-  for (auto t : m_Icosahedron) {
-    RecursiveTriangle(t.a, t.b, t.c, t.level, true);
-  }
 }
 
 TriNext Triangulator::SplitHeuristic(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,

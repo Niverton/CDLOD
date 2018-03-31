@@ -43,7 +43,7 @@
 	void main()
 	{
 		//initial position
-		vec3 TriPos = a + pos.x + pos.y;
+		vec3 TriPos = a + r*pos.x + s*pos.y;
 		//morph factor
 		float dist = length(TriPos-camPos);
 		float mPerc = morphFac(dist, level);
