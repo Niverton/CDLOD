@@ -167,6 +167,7 @@ target_include_directories(${EXEC}
     PlanetFramework/
     PlanetFramework/PlanetTech/
     external/glad
+    external/
     )
 # Build this before EXEC
 set (DEPS devil_ext shaders textures fonts glad)
