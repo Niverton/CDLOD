@@ -63,6 +63,8 @@ set(SRCS
   PlanetFramework/Time.h
   PlanetFramework/Transform.cpp
   PlanetFramework/Transform.h
+  PlanetFramework/ArgvParser.h
+  PlanetFramework/ArgvParser.cpp
   PlanetFramework/PlanetTech/Types/Procedural.h
   PlanetFramework/PlanetTech/Types/Procedural.cpp
   PlanetFramework/StaticDependancies/glad/glad.cpp

@@ -1,3 +1,4 @@
+
 #include "Scene.h"
 #include "stdafx.h"
 
@@ -10,19 +11,13 @@
 
 #include <iomanip>
 #include <sstream>
-
+#include <string>
+#include <cstdlib>
 
 //#include "Screenshot.h"
 
-Scene::Scene() {
-  
-  auto prop = ProceduralPlanet::Properties {};
-  prop.width = 90;
-  prop.height = 90;
-  prop.maxHeight = 10.0f,
-
-  m_pPlanet = new ProceduralPlanet(ProceduralPlanet::Noise::SIMPLEX,
-                  /*static_cast<ProceduralPlanet::Properties*>(*/&prop/*)*/);
+Scene::Scene(int argc, char** argv, ArgvParser& parser) {
+  CreatePlanetFromArgs(argc, argv, parser);
 
   //m_pPlanet = new Moon();
   m_pDebugFont = new SpriteFont();
@@ -135,4 +130,233 @@ Scene::~Scene() {
   SafeDelete(m_pTime);
   SafeDelete(m_pCamera);
   SafeDelete(m_pConObj);
+}
+
+void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
+  if (argc == 1) {
+    //Create default planet
+    ProceduralPlanet::Properties prop;
+    m_pPlanet = new ProceduralPlanet(&prop);
+  } else {
+    std::string noise = argvParser.GetMode();
+    std::cout << '\n';
+
+    if (noise == "SIMPLEX" || noise == "simplex") {
+      ProceduralPlanet::Properties prop;
+      prop.noise = ProceduralPlanet::Noise::SIMPLEX;
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat<float>("--max-height", &prop.maxHeight);
+      argvParser.GetCmdFloat<float>("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+
+      std::cout << "SIMPLEX:\n";
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+
+      m_pPlanet = new ProceduralPlanet(&prop);
+    } else if (noise == "PERLIN" || noise == "perlin") {
+      ProceduralPlanet::Properties prop;
+      prop.noise = ProceduralPlanet::Noise::PERLIN;
+
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat<float>("--max-height", &prop.maxHeight);
+      argvParser.GetCmdFloat<float>("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+
+      std::cout << "PERLIN\n";
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+      m_pPlanet = new ProceduralPlanet(&prop);
+    } else if (noise == "RIDGED-NOISE" || noise == "ridged-noise") {
+      ProceduralPlanet::Properties prop;
+      prop.noise = ProceduralPlanet::Noise::RIDGED_NOISE;
+
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat<float>("--max-height", &prop.maxHeight);
+      argvParser.GetCmdFloat<float>("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+
+      std::cout << "RIDGED NOISE\n";
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+      
+      m_pPlanet = new ProceduralPlanet(&prop);
+    } else if (noise == "FLOW-NOISE" || noise == "flow-noise"){
+      FlowNoiseProperties prop;
+    
+      prop.noise = ProceduralPlanet::Noise::FLOW_NOISE;
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat<float>("--max-height", &prop.maxHeight);
+      argvParser.GetCmdFloat<float>("--angle", &prop.angle);
+      argvParser.GetCmdFloat<float>("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+      check_value<float>(prop.angle, 0, 0.5);
+
+      std::cout << "FLOW NOISE\n";
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+      std::cout << "Angle: " << prop.angle << '\n';
+
+      m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
+                                        (&prop));
+    } else if ( noise == "FBM" || noise == "fbm") {
+      FbmProperties prop;
+    
+      prop.noise = ProceduralPlanet::Noise::FBM;
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat<float>("--max-height", &prop.maxHeight);
+      argvParser.GetCmdInt<unsigned int>("--octave", &prop.octave);
+      argvParser.GetCmdFloat<float>("--lacunarity", &prop.lacunarity);
+      argvParser.GetCmdFloat<float>("--gain", &prop.gain);
+      argvParser.GetCmdFloat<float>("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.octave, 0, 4);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+      check_value<float>(prop.lacunarity, 0, 2.0);
+      check_value<float>(prop.gain, 0, 0.5);
+
+      std::cout << "FBM\n";
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+      std::cout << "Octave: " << prop.octave << '\n';
+      std::cout << "Lacuranity: " << prop.lacunarity << '\n';
+      std::cout << "Gain: " << prop.gain << '\n';
+     
+      m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
+                                        (&prop));
+    } else if (noise == "WARPED-FBM" || noise == "warped-fbm") {
+      FbmProperties prop;
+    
+      prop.noise = ProceduralPlanet::Noise::WARPED_FBM;
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat<float>("--max-height", &prop.maxHeight);
+      argvParser.GetCmdInt<unsigned int>("--octave", &prop.octave);
+      argvParser.GetCmdFloat<float>("--lacunarity", &prop.lacunarity);
+      argvParser.GetCmdFloat<float>("--gain", &prop.gain);
+      argvParser.GetCmdFloat<float>("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.octave, 0, 4);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+      check_value<float>(prop.lacunarity, 0, 2.0);
+      check_value<float>(prop.gain, 0, 0.5);
+
+      std::cout << "FBM WARPPED\n";
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+      std::cout << "Octave: " << prop.octave << '\n';
+      std::cout << "Lacuranity: " << prop.lacunarity << '\n';
+      std::cout << "Gain: " << prop.gain << '\n';
+     
+      m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
+                                        (&prop));
+    } else if (noise == "DFBM-WARPED-FBM" || noise == "dfbm-warper-fbm") {
+      FbmProperties prop;
+    
+      prop.noise = ProceduralPlanet::Noise::DFBM_WARPED_FBM;
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat<float>("--max-height", &prop.maxHeight);
+      argvParser.GetCmdInt<unsigned int>("--octave", &prop.octave);
+      argvParser.GetCmdFloat<float>("--lacunarity", &prop.lacunarity);
+      argvParser.GetCmdFloat<float>("--gain", &prop.gain);
+      argvParser.GetCmdFloat<float>("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.octave, 0, 4);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+      check_value<float>(prop.lacunarity, 0, 2.0);
+      check_value<float>(prop.gain, 0, 0.5);
+
+      std::cout << "DFBM WARPED FBM\n";
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+      std::cout << "Octave: " << prop.octave << '\n';
+      std::cout << "Lacuranity: " << prop.lacunarity << '\n';
+      std::cout << "Gain: " << prop.gain << '\n';
+     
+      m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
+                                        (&prop));
+    } else if (noise == "RIDGED-MULTI-FRACTAL" || noise == "ridged-multi-fractal") {
+      RidgedMultiFractalVariationProperties prop;
+    
+      prop.noise = ProceduralPlanet::Noise::RIDGED_MULTI_FRACTAL_VARIATION;
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat<float>("--max-height", &prop.maxHeight);
+      argvParser.GetCmdInt<unsigned int>("--octave", &prop.octave);
+      argvParser.GetCmdFloat<float>("--lacunarity", &prop.lacunarity);
+      argvParser.GetCmdFloat<float>("--gain", &prop.gain);
+      argvParser.GetCmdFloat<float>("--offset", &prop.ridgeOffset);
+      argvParser.GetCmdFloat<float>("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 800);
+      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.octave, 0, 4);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+      check_value<float>(prop.lacunarity, 0, 2.0);
+      check_value<float>(prop.gain, 0, 0.5);
+      check_value<float>(prop.ridgeOffset, 0, 0.1);
+
+      std::cout << "RIDGED MULTI FRACTAL VARIATION\n";
+      std::cout << "Width: " << prop.width << '\n';
+      std::cout << "Height: " << prop.height<< '\n';
+      std::cout << "MaxHeight: " << prop.maxHeight << '\n';
+      std::cout << "Octave: " << prop.octave << '\n';
+      std::cout << "Lacuranity: " << prop.lacunarity << '\n';
+      std::cout << "Gain: " << prop.gain << '\n';
+     
+      m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
+                                        (&prop));
+    } else {
+      std::cerr << "Error: " << argv[1] << " is incorrect noise.\n";
+      std::cerr << argv[0] << " start with default options.\n";
+      ProceduralPlanet::Properties prop;
+
+      std::cerr << "Default options: \n"
+                << "  Noise: SIMPLEX\n"
+                << "  Width: " << prop.width << '\n'
+                << "  Height: " << prop.height << '\n'
+                << "  MaxHeight: " << prop.maxHeight << '\n';
+ 
+      m_pPlanet = new ProceduralPlanet(&prop);
+    }
+  }
 }
