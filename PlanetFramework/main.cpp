@@ -1,12 +1,25 @@
-#include "stdafx.h"
-#include <cstdlib>
-
 #include "ArgvParser.h"
-#include "Scene.h"
-
-#include <IL/il.h>
-#include <IL/ilu.h>
-//#include <IL/ilut.h>
+#include "Context.h"      // for Context
+#include "InputManager.h" // for InputManager
+#include "Scene.h"        // for Scene
+#include "Settings.h"     // for Settings, Settings::Window...
+#include "glad.h"         // for glGetString, gladLoadGLLoader
+#include "utils.h"        // for SafeDelete
+#if PLATFORM_Win
+#include <IL\il.h>  // for ilInit
+#include <IL\ilu.h> // for iluInit
+#include <SDL.h>
+#include <glm\glm.hpp>
+#else
+#include <IL/il.h>  // for ilInit
+#include <IL/ilu.h> // for iluInit
+#include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#endif
+#include <cstdio>   // for fprintf, stderr
+#include <cstdlib>  // for atexit, exit, NULL
+#include <iostream> // for operator<<, endl, basic_os...
+#include <string>   // for char_traits, string
 
 static const char* USAGE =
 " <NOISE> --<noise-option>=<value> --<option>\n\n"
@@ -56,7 +69,7 @@ void usage(const char* msg){
 // Functions for debugging
 //**************************************
 static void sdl_die(const char *message) {
-  fprintf(stderr, "%s: %s\n", message, SDL_GetError());
+  std::cerr << message << ": " << SDL_GetError() << "\n";
   exit(2);
 }
 #if defined(DEBUG) | defined(_DEBUG)
@@ -99,9 +112,7 @@ void SetDebuggingOptions() {
 //**************************************
 // Main
 //**************************************
-int main(int argc, char *argv[]) {
-  
-
+int main(int argc, char **argv) {
   if (argc <= 1){
     usage(argv[0]);
   }
@@ -123,10 +134,11 @@ int main(int argc, char *argv[]) {
   //**************************************
   //
   // SDL init
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     sdl_die("Couldn't initialize SDL");
+  }
   atexit(SDL_Quit);
-  SDL_GL_LoadLibrary(NULL);
+  SDL_GL_LoadLibrary(nullptr);
 
   // request opengl context
   SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -137,7 +149,6 @@ int main(int argc, char *argv[]) {
   // Buffers
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
 
 // Request a debug context.
 #if defined(DEBUG) | defined(_DEBUG)
@@ -158,15 +169,17 @@ int main(int argc, char *argv[]) {
         SDL_WINDOWPOS_CENTERED, pSettings->Window.Width,
         pSettings->Window.Height, SDL_WINDOW_OPENGL);
   }
-  if (pSettings->Window.pWindow == NULL)
+  if (pSettings->Window.pWindow == nullptr) {
     sdl_die("Couldn't set video mode");
+  }
 
   // OpenGL context creation
   SDL_GLContext context = SDL_GL_CreateContext(pSettings->Window.pWindow);
-  if (context == NULL)
+  if (context == nullptr) {
     sdl_die("Failed to create OpenGL context");
+  }
   // Use v-sync
-  SDL_GL_SetSwapInterval(pSettings->Window.VSyncEnabled);
+  SDL_GL_SetSwapInterval(static_cast<int>(pSettings->Window.VSyncEnabled));
 
   // Initialize DevIL
 
@@ -201,7 +214,7 @@ int main(int argc, char *argv[]) {
   pInput->Init();
 
   // Make a scene :D
-  Scene *pScene = new Scene(argc, argv, argvParser);
+  auto *pScene = new Scene(argc, argv, argvParser);
   pScene->Init();
 
   glEnable(GL_DEPTH_TEST);
@@ -212,8 +225,9 @@ int main(int argc, char *argv[]) {
 
     // user input
     pInput->UpdateEvents();
-    if (pInput->IsExitRequested())
+    if (pInput->IsExitRequested()) {
       break;
+    }
 
     // scene update
     pScene->Update();

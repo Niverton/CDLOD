@@ -2,17 +2,22 @@
 #include <IL/il.h>
 #include <IL/ilu.h>
 
-#include <string>
+#include "glad.h" // for GLuint
+#include <string> // for string
 
-#include "stdafx.h"
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
 
 class Texture {
 public:
-  Texture(const std::string &filename);
+  Texture(std::string filename);
   Texture(float *data, int width, int height);
   virtual ~Texture();
 
-  virtual void Load(bool useSRGB = false);
+  virtual void Load(bool useSRGB);
   GLuint GetHandle() {
     return m_Handle;
   }
@@ -27,7 +32,7 @@ private:
   float *m_data = nullptr;
 
 protected:
-  GLuint m_Handle;
-  int m_Width;
-  int m_Height;
+  GLuint m_Handle{};
+  int m_Width{};
+  int m_Height{};
 };

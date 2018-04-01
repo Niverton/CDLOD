@@ -1,41 +1,14 @@
-#include "stdafx.h"
-
 #include "SpriteFont.h"
-
-#include "BinaryReader.h"
-#include "Texture.h"
-
-#ifndef PLATFORM_Win
-#include <cstring>
-#endif
-
-SpriteFont::SpriteFont()
-    : m_pTexture(nullptr), m_CharacterCount(0), m_CharacterSpacing(1),
-      m_FontSize(0), m_FontName(""), m_TextureWidth(0), m_TextureHeight(0),
-      m_TextCache(std::vector<TextCache>()), m_BufferStart(0), m_BufferSize(0),
-      m_IsAddedToRenderer(false) {
-  for (int i = 0; i < CHAR_COUNT; ++i) {
-#ifdef PLATFORM_Win
-    ZeroMemory((void *)&m_CharTable[i], sizeof(FontMetric));
-#else
-    std::memset((void *)&m_CharTable[i], 0, sizeof(FontMetric));
-#endif
-    m_CharTable[i].IsValid = false;
-  }
-}
-
-SpriteFont::~SpriteFont() {
-  SafeDelete(m_pTexture);
-}
+#include "BinaryReader.h" // for BinaryReader
+#include "Texture.h"      // for Texture
+#include "utils.h"        // for SafeDelete
+#include <iostream>       // for operator<<, basic_ostream, endl, cout, ost...
 
 bool SpriteFont::IsCharValid(const wchar_t &character) {
-  if (character >= MIN_CHAR_ID && character <= MAX_CHAR_ID)
-    return true;
-
-  return false;
+  return character >= MIN_CHAR_ID && character <= MAX_CHAR_ID;
 }
 
-void SpriteFont::Load(std::string filename) {
+void SpriteFont::Load(const std::string &filename) {
   auto pBinReader = new BinaryReader(); // Prevent memory leaks
   pBinReader->Open(filename);
 
@@ -56,13 +29,11 @@ void SpriteFont::Load(std::string filename) {
     }
   }
   if (!valid) {
-    std::cout << "[ERROR] "
-              << "Font file header invalid!" << std::endl;
+    std::cerr << "[ERROR] Font file header invalid!\n";
     return;
   }
   if (pBinReader->Read<char>() < 3) {
-    std::cout << "[ERROR] "
-              << "Font version invalid!" << std::endl;
+    std::cerr << "[ERROR] Font version invalid!\n";
     return;
   }
 
@@ -75,7 +46,7 @@ void SpriteFont::Load(std::string filename) {
   m_FontSize = pBinReader->Read<short>();
   pBinReader->SetBufferPosition(pos + 14);
   std::string fn;
-  char cur = pBinReader->Read<char>();
+  auto cur = pBinReader->Read<char>();
   while (cur != '\0') {
     fn += cur;
     cur = pBinReader->Read<char>();
@@ -92,11 +63,10 @@ void SpriteFont::Load(std::string filename) {
   m_TextureWidth = pBinReader->Read<unsigned short>();
   m_TextureHeight = pBinReader->Read<unsigned short>();
   auto pagecount = pBinReader->Read<unsigned short>();
-  if (pagecount > 1)
-    std::cout << "[ERROR] "
-              << "SpriteFont::Load > SpriteFont(.fnt): Only one texture per "
-                 "font allowed"
-              << std::endl;
+  if (pagecount > 1) {
+    std::cerr << "[ERROR] SpriteFont::Load > SpriteFont(.fnt): Only one "
+                 "texture per font allowed\n";
+  }
   pBinReader->SetBufferPosition(pos + Block1Size);
   //**********
   // BLOCK 2 *
@@ -110,30 +80,28 @@ void SpriteFont::Load(std::string filename) {
     pn += cur;
     cur = pBinReader->Read<char>();
   }
-  if (pn.size() == 0)
-    std::cout
-        << "[ERROR] "
-        << "SpriteFont::Load > SpriteFont(.fnt): Invalid Font Sprite [Empty]"
-        << std::endl;
+  if (pn.empty()) {
+    std::cerr << "[ERROR] SpriteFont::Load > SpriteFont(.fnt): Invalid Font "
+                 "Sprite [Empty]\n";
+  }
   auto filepath = filename.substr(0, filename.rfind('/') + 1);
   m_pTexture = new Texture(filepath + pn);
-  m_pTexture->Load();
+  m_pTexture->Load(false);
   pBinReader->SetBufferPosition(pos + Block2Size);
   //**********
   // BLOCK 3 *
   //**********
   pBinReader->Read<char>();
   auto Block3Size = pBinReader->Read<int>();
-  pos = pBinReader->GetBufferPosition();
+  // pos = pBinReader->GetBufferPosition();
   auto numChars = Block3Size / 20;
   m_CharacterCount = numChars;
   for (int i = 0; i < numChars; i++) {
     auto posChar = pBinReader->GetBufferPosition();
-    auto charId = (wchar_t)(pBinReader->Read<unsigned int>());
+    auto charId = static_cast<wchar_t>(pBinReader->Read<unsigned int>());
     if (!(IsCharValid(charId))) {
-      std::cout << "[WARNING] "
-                << "SpriteFont::Load > SpriteFont(.fnt): Invalid Character"
-                << std::endl;
+      std::cerr << "[WARNING] SpriteFont::Load > SpriteFont(.fnt): Invalid "
+                   "Character\n";
       pBinReader->SetBufferPosition(posChar + 20);
     } else {
       auto metric = &GetMetric(charId);
@@ -165,11 +133,10 @@ void SpriteFont::Load(std::string filename) {
         metric->Channel = 4;
         break;
       }
-      metric->TexCoord = glm::vec2((float)xPos / (float)m_TextureWidth,
-                                   (float)yPos / (float)m_TextureHeight);
+      metric->TexCoord = glm::vec2(float(xPos) / float(m_TextureWidth),
+                                   float(yPos) / float(m_TextureHeight));
       pBinReader->SetBufferPosition(posChar + 20);
     }
   }
   delete pBinReader;
-#pragma warning(default : 4702)
 }

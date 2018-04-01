@@ -1,22 +1,15 @@
 #include "Transform.h"
-#include "stdafx.h"
+#include "utils.h"
 
-#include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.inl> // for scale, translate
+#include <glm/gtx/quaternion.hpp>       // for toMat4
+#include <glm/gtx/transform.inl>        // for scale, translate
 
-Transform::Transform() {
-  m_Tranform = glm::mat4(1.0f);
-
-  m_Position = glm::vec3(0.f, 0.f, 0.f);
-  m_Rotation = glm::quat();
-  m_Scale = glm::vec3(1.f, 1.f, 1.f);
-
-  m_Forward = glm::vec3(0.f, 0.f, 1.f);
-  m_Right = glm::vec3(1.f, 0.f, 0.f);
-  m_Up = glm::vec3(0.f, 1.f, 0.f);
-}
+#if PLATFORM_Win
+#include <glm\glm.hpp>
+#else
+#include <glm/glm.hpp>
+#endif
 
 void Transform::UpdateTransforms() {
   m_Tranform = glm::translate(m_Position) * glm::toMat4(m_Rotation) *
@@ -27,5 +20,3 @@ void Transform::UpdateTransforms() {
   m_Up = glm::normalize(glm::cross(m_Forward, m_Right));
 }
 
-Transform::~Transform() {
-}

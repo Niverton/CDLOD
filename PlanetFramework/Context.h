@@ -3,6 +3,11 @@
 #include "Singleton.h"
 #include "Time.h"
 
+#define CONTEXT Context::GetInstance()
+#define TIME Context::GetInstance()->pTime
+#define SCENE Context::GetInstance()->pScene
+#define CAMERA Context::GetInstance()->pCamera
+
 class Camera;
 
 class ContextObjects {
@@ -11,9 +16,9 @@ public:
   }
   ~ContextObjects() {
   }
-  Time *pTime;
-  Camera *pCamera;
-  Scene *pScene;
+  Time *pTime = nullptr;
+  Camera *pCamera = nullptr;
+  Scene *pScene = nullptr;
 };
 
 struct Context : public Singleton<Context>, public ContextObjects {

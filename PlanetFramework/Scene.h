@@ -35,7 +35,7 @@ private:
   SpriteFont *m_pDebugFont = nullptr;
 
   // Planet tech
-  Planet *m_pPlanet;
+  Planet *m_pPlanet = nullptr;
 
   //Planet properties
   /**

@@ -1,11 +1,6 @@
 #include "Procedural.h"
-#include "../../Texture.h"
-#include "stdafx.h"
-#include <IL/il.h>
-#include <IL/ilu.h>
-#include <vector>
+#include "Texture.h"
 #include "Simplex.h"
-
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
 

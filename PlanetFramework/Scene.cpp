@@ -1,25 +1,24 @@
 
 #include "Scene.h"
-#include "stdafx.h"
-
-#include "./PlanetTech/Types/Earth.h"
-#include "./PlanetTech/Types/Moon.h"
-#include "./PlanetTech/Types/Procedural.h"
-#include "Camera.h"
-#include "SpriteFont.h"
-#include "TextRenderer.h"
-
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <cstdlib>
+#include "Camera.h"                      // for Camera
+#include "Context.h"                     // for ContextObjects, Context
+#include "InputManager.h"                // for InputManager
+#include "Planet.h"           // for Planet
+#include "Types/Moon.h"       // for Moon
+#include "Types/Procedural.h" // for ProceduralPlanet
+#include "SpriteFont.h"                  // for SpriteFont
+#include "TextRenderer.h"                // for TextRenderer
+#include "Time.h"                        // for Time
+#include "glad.h"                        // for GL_FRONT_AND_BACK, glDepth...
+#include "utils.h"                       // for SafeDelete, INPUT, CONTEXT
+#include <iomanip>                       // for operator<<, setprecision
+#include <sstream>                       // for stringstream, basic_ostream
+#include <string>                        // for operator+, allocator, to_s...
 
 //#include "Screenshot.h"
 
 Scene::Scene(int argc, char** argv, ArgvParser& parser) {
   CreatePlanetFromArgs(argc, argv, parser);
-
-  //m_pPlanet = new Moon();
   m_pDebugFont = new SpriteFont();
 }
 
@@ -65,8 +64,9 @@ void Scene::Update() {
       break;
     }
   }
-  if (INPUT->IsKeyboardKeyPressed(SDL_SCANCODE_F2))
+  if (INPUT->IsKeyboardKeyPressed(SDL_SCANCODE_F2)) {
     m_DrawUI = !m_DrawUI;
+  }
   if (INPUT->IsKeyboardKeyPressed(SDL_SCANCODE_F1)) {
     //	Screenshot::GetInstance()->Take();
   }
@@ -75,24 +75,29 @@ void Scene::Update() {
 }
 
 void Scene::Draw() {
+  using sstr = std::stringstream;
+  auto *TR = TextRenderer::GetInstance();
   // Draw debug info
-  TextRenderer::GetInstance()->SetFont(m_pDebugFont);
-  TextRenderer::GetInstance()->SetColor(glm::vec4(1, 0.3f, 0.3f, 1));
-  auto fpsStr = std::string("FPS: ") + std::to_string((int)TIME->FPS());
-  TextRenderer::GetInstance()->DrawText(fpsStr, glm::vec2(20, 20));
+  TR->SetFont(m_pDebugFont);
+  TR->SetColor(glm::vec4(1, 0.3f, 0.3f, 1));
+  sstr fpsStr;
+  fpsStr << "FPS: " << std::setw(4) << static_cast<int>(TIME->FPS()) << " ("
+         << std::setw(4) << std::ceil(TIME->DeltaTime() * 1000) << "ms)";
+  TR->DrawText(fpsStr.str(), glm::vec2(20, 20));
 
-  TextRenderer::GetInstance()->SetColor(glm::vec4(1, 1, 1, 1));
-  auto vertStr = std::string("vertex count: ") +
-                 std::to_string(m_pPlanet->GetVertexCount());
-  TextRenderer::GetInstance()->DrawText(vertStr, glm::vec2(20, 60));
+  TR->SetColor(glm::vec4(1, 1, 1, 1));
+  sstr vertStr;
+  vertStr << "Vertex count: " << std::setw(4) << m_pPlanet->GetVertexCount();
+  TR->DrawText(vertStr.str(), glm::vec2(20, 60));
 
-  std::stringstream ss;
-  ss << std::fixed << std::setprecision(3) << m_pCamera->GetAltitude();
-  auto altStr = std::string("altitude: ") + ss.str() + "km";
-  TextRenderer::GetInstance()->DrawText(altStr, glm::vec2(20, 100));
+  sstr altStr;
+  altStr << "Altitude: " << std::fixed << std::setprecision(3)
+         << m_pCamera->GetAltitude() << "km";
+  TR->DrawText(altStr.str(), glm::vec2(20, 100));
 
-  auto fovStr = std::string("FOV: ") + std::to_string(m_pCamera->GetFOV());
-  TextRenderer::GetInstance()->DrawText(fovStr, glm::vec2(20, 140));
+  sstr fovStr;
+  fovStr << "FOV: " << m_pCamera->GetFOV();
+  TR->DrawText(fovStr.str(), glm::vec2(20, 140));
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glDepthRange(0.00001, 1.0);
@@ -111,8 +116,9 @@ void Scene::Draw() {
   // Draw text
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glDepthRange(0.000001, 1.0);
-  if (m_DrawUI)
-    TextRenderer::GetInstance()->Draw();
+  if (m_DrawUI) {
+    TR->Draw();
+  }
 }
 
 void Scene::PostDraw() {

@@ -1,24 +1,24 @@
 #include "Texture.h"
-#include "stdafx.h"
+#include <IL/il.h>  // for ilBindImage, ilDeleteImage, ilGetInteger, ilConv...
+#include <IL/ilu.h> // for iluErrorString
+#include <iostream> // for operator<<, basic_ostream, endl, cout, ostream
 
-#include <IL/il.h>
-#include <IL/ilu.h>
-//#include <IL/ilut.h>
+#ifdef test_textrenderer_update_buffer
+#include "TextRenderer_update_buffer.h"
+#endif
 
-Texture::Texture(const std::string &filename) {
-  m_Name = filename;
+Texture::Texture(std::string filename) : m_Name{std::move(filename)} {
   m_isFile = true;
 }
 
 Texture::Texture(float *data, int width, int height)
-    : m_data{data}, m_Width{width}, m_Height{height}, m_isFile{false} {
+    : m_isFile{false}, m_data{data}, m_Width{width}, m_Height{height} {
 }
 
 void Texture::Load(bool useSRGB) {
-
   std::cout << "Loading Texture: " << m_Name << " . . . ";
 
-  if (m_isFile == true) {
+  if (m_isFile) {
 #ifdef PLATFORM_Linux
     std::string name = m_Name;
 #else
@@ -31,7 +31,7 @@ void Texture::Load(bool useSRGB) {
     ILuint imgName;
     ilGenImages(1, &imgName);
     ilBindImage(imgName);
-    if (ilLoadImage(name.c_str())) {
+    if (ilLoadImage(name.c_str()) != 0u) {
       ilConvertImage(IL_RGB, IL_FLOAT);
 
       m_Width = ilGetInteger(IL_IMAGE_WIDTH);

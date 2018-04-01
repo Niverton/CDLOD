@@ -17,8 +17,6 @@
         http://glad.dav1d.de/#profile=core&language=c&specification=gl&api=gl%3D4.5&extensions=GL_ARB_bindless_texture&extensions=GL_ARB_debug_output&extensions=GL_ARB_sparse_buffer&extensions=GL_ARB_sparse_texture
 */
 
-#include "stdafx.h"
-
 #include "glad.h"
 #include <stdio.h>
 #include <stdlib.h>

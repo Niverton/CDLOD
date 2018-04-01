@@ -1,5 +1,5 @@
 #pragma once
-#include "../Planet.h"
+#include "Planet.h"
 #include <string>
 
 class ProceduralPlanet : public Planet {
