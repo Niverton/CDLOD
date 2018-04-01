@@ -75,7 +75,4 @@ void Texture::Load(bool useSRGB) {
 
 Texture::~Texture() {
   glDeleteTextures(1, &m_Handle);
-  if (not m_isFile) {
-    delete[] m_data;
-  }
 }
