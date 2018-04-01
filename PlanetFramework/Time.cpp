@@ -5,7 +5,6 @@ Time::Time() {
   Start();
 }
 
-
 void Time::Start() {
   begin = Now();
   last = begin;
@@ -33,4 +32,3 @@ HighResDuration Time::Diff(const HighResTime &start,
                            const HighResTime &end) const {
   return end - start;
 }
-

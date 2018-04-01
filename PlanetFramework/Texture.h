@@ -2,8 +2,8 @@
 #include <IL/il.h>
 #include <IL/ilu.h>
 
-#include "StaticDependancies/glad/glad.h" // for GLuint
-#include <string>                         // for string
+#include "glad.h" // for GLuint
+#include <string> // for string
 
 #if PLATFORM_Win
 #include <glm\glm.hpp>

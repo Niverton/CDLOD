@@ -4,7 +4,7 @@
 #include "Patch_test.h"
 #endif
 
-#include "StaticDependancies/glad/glad.h" // for GLint, GLuint
+#include "glad.h" // for GLint, GLuint
 #include "utils.h"                        // for UINT
 
 #if PLATFORM_Win

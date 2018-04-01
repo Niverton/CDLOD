@@ -3,6 +3,10 @@
 #include <IL/ilu.h> // for iluErrorString
 #include <iostream> // for operator<<, basic_ostream, endl, cout, ostream
 
+#ifdef test_textrenderer_update_buffer
+#include "TextRenderer_update_buffer.h"
+#endif
+
 Texture::Texture(const std::string &filename) {
   m_Name = filename;
   m_isFile = true;

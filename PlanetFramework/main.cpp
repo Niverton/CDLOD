@@ -1,9 +1,9 @@
-#include "Context.h"                      // for Context
-#include "InputManager.h"                 // for InputManager
-#include "Scene.h"                        // for Scene
-#include "Settings.h"                     // for Settings, Settings::Window...
-#include "StaticDependancies/glad/glad.h" // for glGetString, gladLoadGLLoader
-#include "utils.h"                        // for SafeDelete
+#include "Context.h"      // for Context
+#include "InputManager.h" // for InputManager
+#include "Scene.h"        // for Scene
+#include "Settings.h"     // for Settings, Settings::Window...
+#include "glad.h"         // for glGetString, gladLoadGLLoader
+#include "utils.h"        // for SafeDelete
 #if PLATFORM_Win
 #include <IL\il.h>  // for ilInit
 #include <IL\ilu.h> // for iluInit
@@ -24,7 +24,7 @@
 // Functions for debugging
 //**************************************
 static void sdl_die(const char *message) {
-  std::cerr << message << ": "<< SDL_GetError() << "\n";
+  std::cerr << message << ": " << SDL_GetError() << "\n";
   exit(2);
 }
 #if defined(DEBUG) | defined(_DEBUG)

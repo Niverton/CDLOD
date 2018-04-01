@@ -1,14 +1,14 @@
 #include "Planet.h"
 #include "Context.h"
-#include "Frustum.h"                      // for Frustum
-#include "InputManager.h"                 // for InputManager
-#include "Patch.h"                        // for Patch
-#include "StaticDependancies/glad/glad.h" // for GLfloat
-#include "Texture.h"                      // for Texture
-#include "Time.h"                         // for Time
-#include "Transform.h"                    // for Transform
-#include "Triangulator.h"                 // for Triangulator
-#include "utils.h"                        // for SafeDelete, INPUT, TIME
+#include "Frustum.h"      // for Frustum
+#include "InputManager.h" // for InputManager
+#include "Patch.h"        // for Patch
+#include "Texture.h"      // for Texture
+#include "Time.h"         // for Time
+#include "Transform.h"    // for Transform
+#include "Triangulator.h" // for Triangulator
+#include "glad.h"         // for GLfloat
+#include "utils.h"        // for SafeDelete, INPUT, TIME
 
 #if PLATFORM_Win
 #include <glm\glm.hpp>

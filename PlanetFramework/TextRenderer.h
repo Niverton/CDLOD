@@ -3,10 +3,10 @@
 #include "Shader.h"
 #include "Singleton.h" // for Singleton
 #include "SpriteFont.h"
-#include "StaticDependancies/glad/glad.h" // for GLint, GLuint
-#include <stddef.h>                       // for size_t
-#include <string>                         // for string
-#include <vector>                         // for vector
+#include "glad.h"   // for GLint, GLuint
+#include <stddef.h> // for size_t
+#include <string>   // for string
+#include <vector>   // for vector
 
 #if PLATFORM_Win
 #include <glm\glm.hpp>

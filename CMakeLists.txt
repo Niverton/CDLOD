@@ -44,8 +44,8 @@ set(SRCS
   PlanetFramework/PlanetTech/Types/Moon.h
   PlanetFramework/Scene.cpp
   PlanetFramework/Scene.h
-  PlanetFramework/Screenshot.cpp
-  PlanetFramework/Screenshot.h
+  #PlanetFramework/Screenshot.cpp
+  #PlanetFramework/Screenshot.h
   PlanetFramework/Settings.h
   PlanetFramework/Shader.cpp
   PlanetFramework/Shader.h
@@ -63,8 +63,6 @@ set(SRCS
   PlanetFramework/PlanetTech/Types/Procedural.h
   PlanetFramework/PlanetTech/Types/Procedural.cpp
   PlanetFramework/utils.h
-  PlanetFramework/StaticDependancies/glad/glad.cpp
-  PlanetFramework/StaticDependancies/glad/glad.h
 )
 
 # --------------------------- EXTERNAL DEPENDENCIES ---------------------------
@@ -130,6 +128,11 @@ endif()
 find_package(OpenGL 3.3 REQUIRED)
 find_package(SDL2 REQUIRED)
 
+add_library(glad OBJECT
+  external/glad/glad.cpp
+  external/glad/glad.h
+  )
+
 # ------------------------------------- # -------------------------------------
 
 # link to directories
@@ -146,14 +149,15 @@ add_custom_target(fonts ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
 # Target
 add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
 set(EXEC PlanetRenderer)
-add_executable(${EXEC} ${SRCS})
+add_executable(${EXEC} ${SRCS} $<TARGET_OBJECTS:glad>)
 target_include_directories(${EXEC}
   PRIVATE
     PlanetFramework/
     PlanetFramework/PlanetTech/
+    external/glad
     )
 # Build this before EXEC
-set (DEPS devil_ext shaders textures fonts)
+set (DEPS devil_ext shaders textures fonts glad)
 #add_dependencies(${EXEC} devil_ext shaders textures fonts)
 if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
   list(APPEND ${DEPS} glm_ext)

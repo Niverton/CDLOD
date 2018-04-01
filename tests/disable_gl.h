@@ -1,12 +1,10 @@
 /*! \file disable_gl.h
  *  \brief Disable all GL calls for testing.
- *  TODO The list is probably incomplete.
  *  Expand it by trying to build your tests and adding the missing calls
  *  to suppress.
  */
 
-/*  TODO Remove me later
- *  Vim:
+/*  Vim:
  *  copy paste linker error, extracts the function names (visual block)
  *  :sort u
  *  to remove duplicate lines
@@ -27,10 +25,12 @@
 #undef glDeleteBuffers
 #undef glDeleteProgram
 #undef glDeleteShader
+#undef glDeleteTextures
 #undef glDeleteVertexArrays
 #undef glDrawArrays
 #undef glEnableVertexAttribArray
 #undef glGenBuffers
+#undef glGenTextures
 #undef glGenVertexArrays
 #undef glGetProgramInfoLog
 #undef glGetProgramiv
@@ -38,7 +38,10 @@
 #undef glGetShaderiv
 #undef glGetUniformLocation
 #undef glLinkProgram
+#undef glPixelStorei
 #undef glShaderSource
+#undef glTexImage2D
+#undef glTexParameteri
 #undef glUniform1i
 #undef glUniform2f
 #undef glUniformMatrix4fv
@@ -60,10 +63,12 @@
 #define glDeleteBuffers			(void)sizeof
 #define glDeleteProgram			(void)sizeof
 #define glDeleteShader			(void)sizeof
+#define glDeleteTextures		(void)sizeof
 #define glDeleteVertexArrays		(void)sizeof
 #define glDrawArrays			(void)sizeof
 #define glEnableVertexAttribArray	(void)sizeof
 #define glGenBuffers			(void)sizeof
+#define glGenTextures			(void)sizeof
 #define glGenVertexArrays		(void)sizeof
 #define glGetProgramInfoLog		(void)sizeof
 #define glGetProgramiv			(void)sizeof
@@ -71,7 +76,10 @@
 #define glGetShaderiv			(void)sizeof
 #define glGetUniformLocation		0;(void)sizeof
 #define glLinkProgram			(void)sizeof
+#define glPixelStorei			(void)sizeof
 #define glShaderSource			(void)sizeof
+#define glTexImage2D			(void)sizeof
+#define glTexParameteri			(void)sizeof
 #define glUniform1i			(void)sizeof
 #define glUniform2f			(void)sizeof
 #define glUniformMatrix4fv		(void)sizeof

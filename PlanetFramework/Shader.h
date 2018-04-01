@@ -16,7 +16,7 @@
 */
 #pragma once
 
-#include "StaticDependancies/glad/glad.h" // for GLuint, GLenum
+#include "glad.h" // for GLuint, GLenum
 #include <string>                         // for string
 class Shader {
 public:
