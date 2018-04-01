@@ -13,7 +13,7 @@
 
 class Texture {
 public:
-  Texture(const std::string &filename);
+  Texture(std::string filename);
   Texture(float *data, int width, int height);
   virtual ~Texture();
 
