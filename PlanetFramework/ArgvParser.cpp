@@ -4,7 +4,6 @@
 
 ArgvParser::ArgvParser(int argc, char** argv){
   m_Mode = std::string (argv[1]);
-  std::cout << "argc: " << argc << '\n';
   for (int i=2; i<argc; i++){
     m_Tokens.emplace_back(Split(argv[i], '='));
   }
@@ -12,7 +11,6 @@ ArgvParser::ArgvParser(int argc, char** argv){
   for (auto& t: m_Tokens){
     std::string e1, e2;
     std::tie(e1, e2) = t;
-    std::cout << "e1 : " << e1 << " e2 : " << e2 << '\n';
   }
 }
 
