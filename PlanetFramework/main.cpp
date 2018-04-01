@@ -43,7 +43,7 @@ static const char* USAGE =
 "\t<common-options> \n"
 "\t--octave=UInt                    4\n"
 "\t--lacunarity=Float               2.0\n"
-"\t--gain=Float                     0.5\n\n";
+"\t--gain=Float                     0.5\n";
 
 void usage(const char* msg){
   std::cout << "Usage: "
@@ -101,6 +101,11 @@ void SetDebuggingOptions() {
 //**************************************
 int main(int argc, char *argv[]) {
   
+
+  if (argc <= 1){
+    usage(argv[0]);
+  }
+
   ArgvParser argvParser {argc, argv};
 
   bool need_h = false;
