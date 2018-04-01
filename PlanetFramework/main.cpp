@@ -24,15 +24,16 @@
 static const char* USAGE =
 " <NOISE> --<noise-option>=<value> --<option>\n\n"
 "option:\n"
-"\t -h  --help      show this page.\n\n"
-"<NOISE> --noise-option=value\n"
+"\t -h  --help      	show this page.\n"
+"\t 	--fullscreen	start program in fullscreen.\n\n"
+"<NOISE> --<noise-option>=<value>\n"
 "Order of option does not matter.\n\n"
 "Common options                     Default value\n"
 "\t --width=Int                     800\n"
 "\t --height=Int                    800\n"
 "\t --max_height=Float              10.0\n\n"
 "SIMPLEX\n"
-"\t\<common-options>\n\n"
+"\t<common-options>\n\n"
 "RIDGEG-NOISE\n"
 "\t<common-options>\n\n"
 "FLOW-NOISE\n"
@@ -113,11 +114,11 @@ void SetDebuggingOptions() {
 // Main
 //**************************************
 int main(int argc, char **argv) {
-  if (argc <= 1){
+  if (argc <= 1) {
     usage(argv[0]);
   }
 
-  ArgvParser argvParser {argc, argv};
+  ArgvParser argvParser{argc, argv};
 
   bool need_h = false;
   argvParser.GetCmdBool("-h", &need_h);
@@ -129,6 +130,8 @@ int main(int argc, char **argv) {
     usage(argv[0]);
   }
 
+  bool use_fullscreen = false;
+  argvParser.GetCmdBool("--fullscreen", &use_fullscreen);
   
   // Initialize SDL, OpenGL, DevIL and GLAD
   //**************************************
@@ -157,6 +160,7 @@ int main(int argc, char **argv) {
 
   // Create window
   Settings *pSettings = Settings::GetInstance(); // Initialize Game Settings
+  pSettings->Window.Fullscreen = use_fullscreen;
   if (pSettings->Window.Fullscreen) {
     pSettings->Window.pWindow =
         SDL_CreateWindow(pSettings->Window.Title.c_str(),
@@ -200,9 +204,9 @@ int main(int argc, char **argv) {
   glEnable(GL_DEBUG_OUTPUT);
   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
-  //Disable for OpenGL 3.3 compatibility
-  //glDebugMessageCallback(openglCallbackFunction, nullptr);
-  //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
+  // Disable for OpenGL 3.3 compatibility
+  // glDebugMessageCallback(openglCallbackFunction, nullptr);
+  // glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
   //                      true);
 #endif
 
@@ -219,13 +223,14 @@ int main(int argc, char **argv) {
 
   glEnable(GL_DEPTH_TEST);
   // Main Loop
-  while (!pInput->IsKeyboardKeyDown(SDL_SCANCODE_ESCAPE)) {
+  while (true) {
     // UPDATE
     //**********
 
     // user input
     pInput->UpdateEvents();
-    if (pInput->IsExitRequested()) {
+    if (pInput->IsExitRequested() or
+        pInput->IsKeyboardKeyPressed(SDL_SCANCODE_ESCAPE)) {
       break;
     }
 

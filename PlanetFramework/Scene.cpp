@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "Camera.h"                      // for Camera
 #include "Context.h"                     // for ContextObjects, Context
+#include <cstdlib>                       // for std::exit, EXIT_FAILURE
+#include "Types/Earth.h"      // for Earth
 #include "InputManager.h"                // for InputManager
 #include "Planet.h"           // for Planet
 #include "Types/Moon.h"       // for Moon
@@ -166,7 +168,9 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       std::cout << "MaxHeight: " << prop.maxHeight << '\n';
 
       m_pPlanet = new ProceduralPlanet(&prop);
-    } else if (noise == "PERLIN" || noise == "perlin") {
+    }
+    /*
+    else if (noise == "PERLIN" || noise == "perlin") {
       ProceduralPlanet::Properties prop;
       prop.noise = ProceduralPlanet::Noise::PERLIN;
 
@@ -185,7 +189,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       std::cout << "Height: " << prop.height<< '\n';
       std::cout << "MaxHeight: " << prop.maxHeight << '\n';
       m_pPlanet = new ProceduralPlanet(&prop);
-    } else if (noise == "RIDGED-NOISE" || noise == "ridged-noise") {
+    }*/ 
+    else if (noise == "RIDGED-NOISE" || noise == "ridged-noise") {
       ProceduralPlanet::Properties prop;
       prop.noise = ProceduralPlanet::Noise::RIDGED_NOISE;
 
@@ -351,18 +356,13 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
      
       m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
                                         (&prop));
+    } else if (noise == "MOON" || noise == "moon") {
+      m_pPlanet = new Moon();
+    } else if (noise == "EARTH" || noise == "earth") {
+      m_pPlanet = new Earth();
     } else {
       std::cerr << "Error: " << argv[1] << " is incorrect noise.\n";
-      std::cerr << argv[0] << " start with default options.\n";
-      ProceduralPlanet::Properties prop;
-
-      std::cerr << "Default options: \n"
-                << "  Noise: SIMPLEX\n"
-                << "  Width: " << prop.width << '\n'
-                << "  Height: " << prop.height << '\n'
-                << "  MaxHeight: " << prop.maxHeight << '\n';
- 
-      m_pPlanet = new ProceduralPlanet(&prop);
+      std::exit(EXIT_FAILURE);
     }
   }
 }

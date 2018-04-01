@@ -13,7 +13,7 @@ ProceduralPlanet::ProceduralPlanet(Properties* properties) {
   Noise n = properties->noise;
 
   m_data = new float[height * width];
-  for (int i = 0; i < height * width; i++) {
+  for (unsigned int i = 0; i < height * width; i++) {
     switch (n){
       case Noise::SIMPLEX: default:
         m_data[i] = glm::simplex(glm::vec3(i % width, i / width, 1.));
