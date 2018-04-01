@@ -22,7 +22,8 @@ set(TIDY_CONFIG
 -google-runtime-int,\
 -cppcoreguidelines-pro-type-union-access,\
 -cppcoreguidelines-pro-bounds-pointer-arithmetic,\
--cppcoreguidelines-pro-bounds-array-to-pointer-decay"
+-cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
+-cppcoreguidelines-pro-type-reinterpret-cast"
   CACHE STRING
   "clang-tidy configuration")
 
@@ -213,7 +214,6 @@ if(SANAL)
       message(STATUS "Found clang-tidy at " ${clang_tidy_loc})
       set_target_properties(${EXEC} PROPERTIES
         CXX_CLANG_TIDY "${clang_tidy_loc};${TIDY_CONFIG}")
-      get_target_property(test ${EXEC} CXX_CLANG_TIDY)
     else()
       message(STATUS "clang-tidy not found")
     endif()

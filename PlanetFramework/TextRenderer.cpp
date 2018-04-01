@@ -54,21 +54,26 @@ void TextRenderer::Init() {
   glEnableVertexAttribArray(3);
   glEnableVertexAttribArray(4);
 
-  glVertexAttribPointer(0, static_cast<GLint>(3), GL_FLOAT, GL_FALSE,
-                        static_cast<GLsizei>(sizeof(TextVertex)),
-                        (GLvoid *)offsetof(TextVertex, Position));
-  glVertexAttribPointer(1, static_cast<GLint>(4), GL_FLOAT, GL_FALSE,
-                        static_cast<GLsizei>(sizeof(TextVertex)),
-                        (GLvoid *)offsetof(TextVertex, Color));
-  glVertexAttribPointer(2, static_cast<GLint>(2), GL_FLOAT, GL_FALSE,
-                        static_cast<GLsizei>(sizeof(TextVertex)),
-                        (GLvoid *)offsetof(TextVertex, TexCoord));
-  glVertexAttribPointer(3, static_cast<GLint>(2), GL_FLOAT, GL_FALSE,
-                        static_cast<GLsizei>(sizeof(TextVertex)),
-                        (GLvoid *)offsetof(TextVertex, CharacterDimension));
-  glVertexAttribIPointer(4, static_cast<GLint>(1), GL_UNSIGNED_INT,
-                         static_cast<GLsizei>(sizeof(TextVertex)),
-                         (GLvoid *)offsetof(TextVertex, ChannelId));
+  glVertexAttribPointer(
+      0, static_cast<GLint>(3), GL_FLOAT, GL_FALSE,
+      static_cast<GLsizei>(sizeof(TextVertex)),
+      reinterpret_cast<GLvoid *>(offsetof(TextVertex, Position)));
+  glVertexAttribPointer(
+      1, static_cast<GLint>(4), GL_FLOAT, GL_FALSE,
+      static_cast<GLsizei>(sizeof(TextVertex)),
+      reinterpret_cast<GLvoid *>(offsetof(TextVertex, Color)));
+  glVertexAttribPointer(
+      2, static_cast<GLint>(2), GL_FLOAT, GL_FALSE,
+      static_cast<GLsizei>(sizeof(TextVertex)),
+      reinterpret_cast<GLvoid *>(offsetof(TextVertex, TexCoord)));
+  glVertexAttribPointer(
+      3, static_cast<GLint>(2), GL_FLOAT, GL_FALSE,
+      static_cast<GLsizei>(sizeof(TextVertex)),
+      reinterpret_cast<GLvoid *>(offsetof(TextVertex, CharacterDimension)));
+  glVertexAttribIPointer(
+      4, static_cast<GLint>(1), GL_UNSIGNED_INT,
+      static_cast<GLsizei>(sizeof(TextVertex)),
+      reinterpret_cast<GLvoid *>(offsetof(TextVertex, ChannelId)));
 
   // unbind
   glBindBuffer(GL_ARRAY_BUFFER, 0);

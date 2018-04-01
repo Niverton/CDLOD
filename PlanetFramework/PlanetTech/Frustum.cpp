@@ -36,7 +36,7 @@ void Frustum::Init() {
   glBufferData(GL_ARRAY_BUFFER, m_Corners.size() * sizeof(glm::vec3),
                m_Corners.data(), GL_STATIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3),
-                        (GLvoid *)nullptr);
+                        reinterpret_cast<GLvoid *>(0));
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
