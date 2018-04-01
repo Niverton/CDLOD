@@ -1,0 +1,227 @@
+\chapter{Tests}\label{tests}
+
+Tests effectués sur le projet: tests unitaires sur la partie génération
+de la géométrie de la planète ainsi qu'analyse du code existant à l'aide
+d'outils externes.
+
+\section{Mise en place}\label{mise-en-place}
+
+Les tests sont intégrés dans notre système de compilation. Ils sont
+compilés avec le projet mais lancés séparément.
+
+Pour certains tests, nous avons eu besoin de désactiver certaines
+parties du projet pour réduire le nombre de dépendances de chaque test.
+En effet certaines classes à tester dépendait d'une autre, qui dépendait
+d'une autre etc. Lorsque les dépendances ne faisait pas partie des
+tests, nous les avons remplacé par de fausses classes vides. Cela permet
+de réduire le temps de compilation des tests et réduit la taille des
+exécutables.
+
+Il a aussi été nécessaire de désactiver les appels à OpenGL dans les
+classes testées car il n'y a pas de contexte graphique. Pour cela nous
+avons utilisé la méthode du ``mocking'', c'est à dire remplacer certains
+appels de fonction par d'autres. Pour cela, nous utilisons des macros
+comme celle ci:
+
+\lstset{language=C++}
+\begin{lstlisting}
+#undef  glActiveTexture
+#define glActiveTexture         (void)sizeof
+\end{lstlisting}
+
+Remplacer l'appel de fonction par un appel à \texttt{sizeof} permet
+d'effacer les paramètres passés à la fonction, en calculant leur taille.
+Le \texttt{cast} en type \texttt{void} spécifie au compilateur que la valeur
+n'est pas utilisée. Si la fonction avait une valeur de retour, une
+valeur de remplissage peut être placée avant le \texttt{sizeof} comme
+ceci:
+
+\lstset{language=C++}
+\begin{lstlisting}
+#define glCreateShader          0;(void)sizeof
+\end{lstlisting}
+
+
+\section{Tests}\label{tests-1}
+
+\subsection{Triangulator}\label{triangulator}
+
+\subsubsection{SplitHeuristic}\label{splitheuristic}
+
+La fonction SplitHeuristic est à la base de la génération du maillage de
+la planète. Elle sert à déterminer si un triangle est visible ou non
+(pyramide de vision de la caméra, masqué par le reste de la planète), et
+s'il doit être découpé en 4 triangles fils, cette fonction fait partie
+du parcours du quadtree.
+
+Fonctionnement:
+
+Ce test est un test en boite grise, il dépend d'une partie de
+l'implémentation de la fonction. Le test utilise de fausses
+implémentations vide de certaines dépendances de \texttt{Triangulator},
+Shader et Frustum qui ne sont pas utilisées dans le test. Le culling des
+triangles est désactivé dans ce test afin de simplifier sa mise en
+place. Le test crée deux cas à tester, un triangle qui devrait être
+coupé en quatre, et un triangle qui ne devrait pas être coupé. La
+fonction est appelée une fois sur chaque triangle et sa valeur de retour
+étudiée.
+
+La mise en place du test a permis de se rendre compte d'un bug dans
+l'implémentation de la fonction. \textbf{Explications Hugo sur
+split/splitcull}.
+
+\subsubsection{RecursiveTriangle}\label{recursivetriangle}
+
+RecursiveTriangle prend en entrée un triangle, un niveau de détail et
+une option pour activer le culling par pyramide de vision de la caméra.
+Elle enregistre dans un tableau de la classe l'ensemble des triangles
+créés récursivement. Cette fonction parcours le quadtree.
+
+Fonctionnement: Ce test crée deux cas, un où le triangle doit être coupé
+et un où le triangle ne doit pas être coupé et vérifie que le nombre de
+triangle est bien celui attendu.
+
+\subsubsection{Triangulator::GenerateGeometry}\label{triangulatorgenerategeometry}
+
+A écrire
+
+\subsection{TextRenderer::UpdateBuffer}\label{textrendererupdatebuffer}
+
+\texttt{UpdateBuffer} prend des entrées via la fonction
+\texttt{DrawText}, sous la forme d'un tableau de chaînes de caractère à
+écrire et de leurs positions sur l'écran. La fonction passe ses
+résultats à OpenGl via la fonction \texttt{glBufferData}. Le tableau de
+données envoyé à OpenGl contient des points correspondants aux coins
+supérieurs gauche de chaque lettre à afficher.
+
+Fonctionnement: Le test est mis en place via ``mocking'' de la fonction
+\texttt{glBufferData}, en la redirigeant vers une fonction de test qui vérifie le
+contenu du tableau pour donner le résultat du test. Le test écrit du
+texte à une position connue, et vérifie que les points créés sont bien
+placés.
+
+\subsection{Patch::GenerateGeometry}\label{patchgenerategeometry}
+
+A écrire
+
+\newpage
+\section{Analyse statique}\label{sec:sanal}
+
+Afin d'améliorer la qualité générale du code du projet, il est
+intéressant d'utiliser des outils afin d'analyser le code source dans le
+but de trouver et corriger de potentielles erreurs. Ces outils peuvent
+être de simplement activer des options du compilateur (augmenter les
+niveaux de ``warnings'', les avertissements compilateur), ou encore des
+outils externes d'analyse statique comme par exemple \texttt{clang-tidy}
+ou \texttt{cppcheck}. Ces outils s'intègre dans notre système de
+configuration CMake, et sont lancés pendant la compilation.
+
+\section{Configuration}\label{configuration}
+
+Il est souhaitable d'activer le plus d'options d'analyse possible,
+cependant certains avertissements ne sont pas utiles pour améliorer
+notre programme, c'est pourquoi nous avons désactivé plusieurs classes
+d'avertissement dans notre configuration:
+
+\begin{itemize}
+\item
+  Politique de Google sur les tailles
+  d'entiers\footnote{\url{https://google.github.io/styleguide/cppguide.html\#Integer_Types}, dernier accès Mars 2018}. Google recommande de remplacer
+  les types d'entiers de tailles non fixes (\texttt{short},
+  \texttt{int}, etc) par des types de tailles connues
+  (\texttt{int16\_t}, \texttt{int32\_t}). En effet, le standard C++
+  défini \texttt{int} comme ayant une taille d'au moins 16 bits par
+  exemple, alors que la plupart des développeurs présument que la taille
+  du type \texttt{int} est d'au moins 32 bits. Cette règle n'existe que
+  dans un soucis de sécurité afin d'éviter les comportements indéfinis
+  lors de dépacements d'entier. Le problème ne se pose pas dans le cadre
+  de notre projet car l'architecture cible est connue à l'avance. Dans
+  un soucis de simplicité et de lisibilité, nous ne prenons pas compte
+  de cet avertissement.
+\item
+  ``Avoid naked \texttt{union}s'' (éviter d'utiliser les \texttt{union}
+  du C), recommandation de la Fondation du Standard
+  C++\footnote{\url{http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#Ru-naked} , dernier accès Mars 2018}. Cet avertissement est levé
+  lorsqu'on accède à un membre d'une \texttt{union}. Il est fondé sur le
+  faits que les \texttt{union}s n'assurent aucune sécurité quand à
+  l'accès à leurs membres, c'est à dire que l'on pourrait accèder à un
+  membre alors que la valeur contenue dans l'\texttt{union} ne
+  correspond pas à ce type, résultant en un comportement indéfini. Les
+  \texttt{union}s sans sécurités sont dangereuses, cependant elles sont
+  utilisées dans la bibliothèque GLM, utilisée dans notre projet. Ces
+  avertissements proviennent de la bibliothèque sur laquelle nous
+  n'avons pas de contrôle, afin de ne pas surcharger les retours des
+  analyseurs cet avertissement a été désactivé.
+\item
+  ``Keep use of pointers simple and straightforward'' (garder
+  l'utilisation des pointeurs simple et
+  évidente)\footnote{\url{http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#es42-keep-use-of-pointers-simple-and-straightforward}, dernier accès Mars 2018}. Cet avertissement recommande de
+  ne jamais utiliser de pointeurs pour représenter un tableau, et de ne
+  pas faire de calculs sur les adresses des pointeurs. Les erreurs sur
+  les accès en dehors de l'espace mémoire alloué à un pointeur sont des
+  comportements indéfinis. Afin d'éviter tous risques, il est préférable
+  de respecter cette règle. Cependant, le projet que nous avons repris
+  ne respecte pas cette règle, et les analyseurs génèrent beaucoup
+  d'avertissements. Afin de s'assurer qu'il n'existait pas de problèmes
+  d'accès mémoire, nous avons utlisé des outils d'analyse de mémoire,
+  sur lesquels nous reviendront plus tard. Les outils d'analyse de
+  mémoire ne relevant aucuns problèmes, nous avons décidé comme solution
+  à court terme de désactiver cet avertissement afin de simplifier
+  l'étude des autres avertissements. Une solution à long terme sera de
+  remplacer les tableaux bruts par les tableaux de la STL
+  (\texttt{std::array} ou \texttt{std::vector}). En plus d'une interface
+  plus complète, ces types proposent des sécurités de vérification
+  d'accès en dehors du tableau en activant les options de débogage des
+  implémentations de la STL.
+\item
+  ``Do not pass an array as a single pointer'' (ne pas passer un tableau
+  en tant que
+  pointeur)\footnote{\url{http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#i13-do-not-pass-an-array-as-a-single-pointer}, dernier accès Mars 2018}. Dans le même esprit que
+  l'avertissement précédent, il est déconseillé de passer un tableau en
+  tant que pointeur. Cet avertissement a été désactivé pour les mêmes
+  raisons.
+\item
+  ``Don't use \texttt{reinterpret\_cast}'' (ne pas utiliser
+  \texttt{reinterpret\_cast})\footnote{\url{http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#Pro-type-reinterpretcast}, dernier accès Mars 2018}. Le cast
+  \texttt{reinterpret\_cast} permet de demander au compilateur
+  d'interpréter une valeur d'un type comme étant d'un autre type. Cela
+  permet entre autre d'utiliser la valeur d'un nombre entier en tant
+  qu'une adresse à mettre dans un pointeur. Ce cast est dangereux car
+  aucune vérification n'est effectuée, et les raisons de l'utiliser sont
+  rares. Cependant, dans notre cas ce cast est très utile à cause d'un
+  défaut de conception de la bibliothèque OpenGL. Nous reviendrons sur
+  les raisons de l'utiliser plus tard. Son utilisation dans notre projet
+  étant légitime et assez courante, nous avons décidé de désactiver cet
+  avertissement.
+\end{itemize}
+
+\section{Correctifs}
+
+\subsection{Lisibilité}
+
+\subsubsection{Entourer les structures de contrôle par des
+accolades}\label{entourer-les-structures-de-contruxf4le-par-des-accolades}
+
+Cette simple amélioration permet d'éviter les erreurs d'inattention en
+oubliant de rajouter les accolades après avoir rajouter une ligne au
+bloc.
+
+\subsubsection{Conversions de type}\label{conversions-de-type}
+
+Le C++ introduit un ensemble de casts nommés pour remplacer le cast
+universel du C. L'objectif et d'exprimer l'intention du cast clairement
+dans le code, le rendant plus lisible et moins susceptible aux erreurs.
+Les casts les plus simples ont été remplacés par \texttt{clang-tidy}
+automatiquement par des \texttt{static\_cast}, effectuant une conversion
+de la valeur vers un autre type.
+
+Cependant, certaines conversions un peu plus complexes ont lieu dans le
+code. En effet, certaines fonctions de la bibliothèque OpenGL attendent
+un nombre en paramètre, mais le paramètre en question est de type
+\texttt{GLvoid\ *}, c'est à dire un pointeur. Les conversions implicites
+d'un entier vers un pointeur étant illégales en C++, un cast est
+nécessaire dans ces conditions.  L'utilisation des casts universels du C
+étant déconseillée, le cast C++ \texttt{reinterpret\_cast} permet de le
+remplacer en demandant au compilateur d'interpréter la variable comme
+étant d'un type différent, sans effectuer de conversion de la valeur.
+

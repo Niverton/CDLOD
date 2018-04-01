@@ -1,0 +1,39 @@
+digraph "Scene"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{Scene\n|- renderMode\l- m_DrawUI\l|+ Scene()\l+ ~Scene()\l+ Init()\land 3 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -m_pPlanet" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{Planet\n|# m_Radius\l# m_MaxHeight\l- m_Rotate\l|+ Planet()\l+ ~Planet()\l+ Init()\land 13 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classPlanet.html"];
+  Node3 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -m_pPatch" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{Patch\n|- m_Vertices\l- m_Indices\l- m_NumInstances\land 15 more...\l|+ Patch()\l+ ~Patch()\l+ SetPlanet()\land 6 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classPatch.html"];
+  Node4 -> Node3 [color="grey25",fontsize="10",style="solid",label=" -m_pPatchShader" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{Shader\n|- m_VertexShader\l- m_GeometryShader\l- m_FragmentShader\land 3 more...\l|+ Shader()\l+ ~Shader()\l+ Build()\land 2 more...\l- CompileShader()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classShader.html"];
+  Node2 -> Node3 [color="grey25",fontsize="10",style="solid",label=" -m_pPlanet" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node5 -> Node2 [color="grey25",fontsize="10",style="solid",label=" #m_pHeight\n#m_pDetail1\n#m_pDiffuse\n#m_pDetail2\n#m_pHeightDetail" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node5 [label="{Texture\n|# m_Handle\l# m_Width\l# m_Height\l- m_Name\l|+ Texture()\l+ ~Texture()\l+ Load()\land 2 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classTexture.html"];
+  //Node6 -> Node2 [color="grey25",fontsize="10",style="solid",label=" #m_pTransform" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node6 [label="{Transform\n|- m_Tranform\l- m_Position\l- m_Rotation\land 4 more...\l|+ Transform()\l+ ~Transform()\l+ UpdateTransforms()\land 16 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classTransform.html"];
+  Node7 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -m_pTriangulator" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{Triangulator\n|- m_AllowedTriPx\l- m_MaxLevel\l- m_Icosahedron\land 6 more...\l|+ Triangulator()\l+ ~Triangulator()\l+ Init()\land 5 more...\l- Precalculate()\l- SplitHeuristic()\l- RecursiveTriangle()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classTriangulator.html"];
+  Node2 -> Node7 [color="grey25",fontsize="10",style="solid",label=" -m_pPlanet" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node8 -> Node7 [color="grey25",fontsize="10",style="solid",label=" -m_pFrustum" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node8 [label="{Frustum\n|- m_CullWorld\l- m_CullInverse\l- m_Planes\land 14 more...\l|+ Frustum()\l+ ~Frustum()\l+ Init()\land 10 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classFrustum.html"];
+  //Node4 -> Node8 [color="grey25",fontsize="10",style="solid",label=" -m_pWireShader" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node9 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -m_pConObj" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node9 [label="{ContextObjects\n||+ ContextObjects()\l+ ~ContextObjects()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classContextObjects.html"];
+  //Node10 -> Node9 [color="grey25",fontsize="10",style="solid",label=" +pCamera" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node10 [label="{Camera\n|- m_Altitude\l- m_Latitude\l- m_Longitude\land 12 more...\l|+ Camera()\l+ ~Camera()\l+ SetFieldOfView()\land 18 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classCamera.html"];
+  Node2 -> Node10 [color="grey25",fontsize="10",style="solid",label=" -m_pPlanet" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node6 -> Node10 [color="grey25",fontsize="10",style="solid",label=" -m_pTransform" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node1 -> Node9 [color="grey25",fontsize="10",style="solid",label=" +pScene" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node11 -> Node9 [color="grey25",fontsize="10",style="solid",label=" +pTime" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node11 [label="{Time\n|- begin\l- last\l- m_DeltaTime\l|+ Time()\l+ ~Time()\l+ Start()\land 4 more...\l- Now()\l- Diff()\l- HRTCast()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classTime.html"];
+  Node10 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -m_pCamera" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node12 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -m_pDebugFont" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node12 [label="{SpriteFont\n|+ MAX_CHAR_ID\l+ MIN_CHAR_ID\l+ CHAR_COUNT\l- m_TextCache\l- m_FontSize\l- m_FontName\land 7 more...\l|+ SpriteFont()\l+ ~SpriteFont()\l+ Load()\l+ IsCharValid()\l- GetMetric()\l- SpriteFont()\l- operator=()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSpriteFont.html"];
+  //Node5 -> Node12 [color="grey25",fontsize="10",style="solid",label=" -m_pTexture" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node13 -> Node12 [color="grey25",fontsize="10",style="solid",label=" -m_CharTable" ,arrowhead="odiamond",fontname="Helvetica"];
+  //Node13 [label="{FontMetric\n|+ IsValid\l+ Character\l+ Width\land 7 more...\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structFontMetric.html"];
+  Node11 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -m_pTime" ,arrowhead="odiamond",fontname="Helvetica"];
+}
