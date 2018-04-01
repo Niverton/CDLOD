@@ -44,7 +44,7 @@ ProceduralPlanet::ProceduralPlanet(Properties* properties) {
       }
       case Noise::FBM_VARIATION:
       {
-        auto prop = static_cast<FbmVariationProperties*>(properties);
+        auto prop = static_cast<FbmProperties*>(properties);
         m_data[i] = Simplex::fBm(Simplex::fBm(glm::vec3(i % width, i / width, 1.),
                     prop->octave, prop->lacunarity, prop->gain),prop->octave, prop->lacunarity, prop->gain);
         break;
@@ -58,7 +58,7 @@ ProceduralPlanet::ProceduralPlanet(Properties* properties) {
       }
       case Noise::DFBM_WARPED_FBM:
       {
-        auto prop = static_cast<DfbmProperties*>(properties);
+        auto prop = static_cast<FbmProperties*>(properties);
         m_data[i] = Simplex::fBm(Simplex::dfBm(glm::vec3(i % width, i / width, 1.),
                     prop->octave, prop->lacunarity, prop->gain),prop->octave, prop->lacunarity, prop->gain);
         break;
@@ -79,7 +79,7 @@ ProceduralPlanet::ProceduralPlanet(Properties* properties) {
       }
       case Noise::RIDGED_MULTI_FRACTAL_VARIATION2:
       {
-        auto prop = static_cast<RidgedMultiFractalVariation2Properties*>(properties);
+        auto prop = static_cast<RidgedMultiFractalVariationProperties*>(properties);
         m_data[i] = Simplex::ridgedMF(glm::vec3(i % width, i / width, 1.),
                     prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain);
         break;
