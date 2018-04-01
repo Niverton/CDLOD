@@ -27,7 +27,8 @@ ArgvParser::Argv_t ArgvParser::Split(char* cmd, char sep){
   for (auto& t: param){
   }
   if (param.size() == 1){
-    return std::make_tuple(param[0], "none");  //optional does not implemented in c++14
+    //true because cmd is set even if value is nil
+    return std::make_tuple(param[0], "true");
   }
 
   return std::make_tuple(param[0], param[1]);

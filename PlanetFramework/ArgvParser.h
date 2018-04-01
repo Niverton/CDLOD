@@ -50,7 +50,23 @@ public:
       }
     }
     *ret = 0.0;
+  }
+
+  void GetCmdBool(const std::string& cmd, bool* ret){
+    for (auto& t: m_Tokens){
+      std::string token, value;
+      std::tie(token, value) = t;
+      int r;
+      if (token == cmd){
+        if (value == "true"){
+          *ret = true;
+        }
+        return;
+      }
     }
+    *ret = false;
+
+  }
 
   std::string GetMode() { return m_Mode; }
 private:
