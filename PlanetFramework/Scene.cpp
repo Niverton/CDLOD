@@ -139,6 +139,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
     m_pPlanet = new ProceduralPlanet(&prop);
   } else {
     std::string noise = argvParser.GetMode();
+    std::cout << '\n';
+
     if (noise == "SIMPLEX" || noise == "simplex") {
       ProceduralPlanet::Properties prop;
       prop.noise = ProceduralPlanet::Noise::SIMPLEX;
@@ -344,7 +346,7 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
                                         (&prop));
     } else {
-      std::cerr << "Error: " << argv[1] << " is incorrect value.\n";
+      std::cerr << "Error: " << argv[1] << " is incorrect noise.\n";
       std::cerr << argv[0] << " start with default options.\n";
       ProceduralPlanet::Properties prop;
 
