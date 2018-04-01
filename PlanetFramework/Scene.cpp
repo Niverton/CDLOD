@@ -1,4 +1,4 @@
-#include "ArgvParser.h"
+
 #include "Scene.h"
 #include "stdafx.h"
 
@@ -16,8 +16,8 @@
 
 //#include "Screenshot.h"
 
-Scene::Scene(int argc, char** argv) {
-  CreatePlanetFromArgs(argc, argv);
+Scene::Scene(int argc, char** argv, ArgvParser& parser) {
+  CreatePlanetFromArgs(argc, argv, parser);
 
   //m_pPlanet = new Moon();
   m_pDebugFont = new SpriteFont();
@@ -132,18 +132,14 @@ Scene::~Scene() {
   SafeDelete(m_pConObj);
 }
 
-void Scene::CreatePlanetFromArgs(int argc, char** argv){
+void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
   if (argc == 1) {
     //Create default planet
     ProceduralPlanet::Properties prop;
     m_pPlanet = new ProceduralPlanet(&prop);
   } else {
-    ArgvParser argvParser {argc, argv};
     std::string noise = argvParser.GetMode();
-    if (noise == "-h" || noise == "--help") {
-      //usage(argv[0]);
-
-    } else if (noise == "SIMPLEX" || noise == "simplex") {
+    if (noise == "SIMPLEX" || noise == "simplex") {
       ProceduralPlanet::Properties prop;
       prop.noise = ProceduralPlanet::Noise::SIMPLEX;
       argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
@@ -175,12 +171,11 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv){
       check_value<unsigned int>(prop.width, 0, 800);
       check_value<unsigned int>(prop.height, 0, 800);
       check_value<float>(prop.maxHeight, 0, 10.0);
-      
+
       std::cout << "PERLIN\n";
       std::cout << "Width: " << prop.width << '\n';
       std::cout << "Height: " << prop.height<< '\n';
       std::cout << "MaxHeight: " << prop.maxHeight << '\n';
-
       m_pPlanet = new ProceduralPlanet(&prop);
     } else if (noise == "RIDGED-NOISE" || noise == "ridged-noise") {
       ProceduralPlanet::Properties prop;
@@ -195,12 +190,12 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv){
       check_value<unsigned int>(prop.width, 0, 800);
       check_value<unsigned int>(prop.height, 0, 800);
       check_value<float>(prop.maxHeight, 0, 10.0);
-      
+
       std::cout << "RIDGED NOISE\n";
       std::cout << "Width: " << prop.width << '\n';
       std::cout << "Height: " << prop.height<< '\n';
       std::cout << "MaxHeight: " << prop.maxHeight << '\n';
-
+      
       m_pPlanet = new ProceduralPlanet(&prop);
     } else if (noise == "FLOW-NOISE" || noise == "flow-noise"){
       FlowNoiseProperties prop;
@@ -218,12 +213,12 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv){
       check_value<float>(prop.maxHeight, 0, 10.0);
       check_value<float>(prop.angle, 0, 0.5);
 
-      std::cout << "RIGDED NOISE\n";
+      std::cout << "FLOW NOISE\n";
       std::cout << "Width: " << prop.width << '\n';
       std::cout << "Height: " << prop.height<< '\n';
       std::cout << "MaxHeight: " << prop.maxHeight << '\n';
       std::cout << "Angle: " << prop.angle << '\n';
-     
+
       m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
                                         (&prop));
     } else if ( noise == "FBM" || noise == "fbm") {
@@ -316,7 +311,7 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv){
      
       m_pPlanet = new ProceduralPlanet(static_cast<ProceduralPlanet::Properties*>
                                         (&prop));
-    } else if (noise == "RIDGED-MULTI-FRACTAL" || noise == "RIDGED-MULTI-FRACTAL") {
+    } else if (noise == "RIDGED-MULTI-FRACTAL" || noise == "ridged-multi-fractal") {
       RidgedMultiFractalVariationProperties prop;
     
       prop.noise = ProceduralPlanet::Noise::RIDGED_MULTI_FRACTAL_VARIATION;

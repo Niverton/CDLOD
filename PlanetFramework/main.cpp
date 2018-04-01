@@ -1,10 +1,56 @@
 #include "stdafx.h"
+#include <cstdlib>
 
+#include "ArgvParser.h"
 #include "Scene.h"
 
 #include <IL/il.h>
 #include <IL/ilu.h>
 //#include <IL/ilut.h>
+
+static const char* USAGE =
+" <NOISE> --<noise-option>=<value> --<option>\n\n"
+"option:\n"
+"\t -h  --help      show this page.\n\n"
+"<NOISE> --noise-option=value\n"
+"Order of option does not matter.\n\n"
+"Common options                     Default value\n"
+"\t --width=Int                     800\n"
+"\t --height=Int                    800\n"
+"\t --max_height=Float              10.0\n\n"
+"SIMPLEX\n"
+"\t\<common-options>\n\n"
+"RIDGEG-NOISE\n"
+"\t<common-options>\n\n"
+"FLOW-NOISE\n"
+"\t<common-options>\n"
+"\t--angle=Float                    0.5\n\n"
+"FBM\n"
+"\t<common-options> \n"
+"\t--octave=UInt                    4\n"
+"\t--lacunarity=Float               2.0 \n"
+"\t--gain=Float                     0.5\n\n"
+"WARPED-FBM \n"
+"\t<common-options> \n"
+"\t--octave=UInt                    4\n"
+"\t--lacunarity=Float               2.0\n"
+"\t--gain=Float                     0.5\n\n"
+"DFBM-WARPED-FBM \n"
+"\t--octave=UInt                    4\n"
+"\t--lacunarity=Float               2.0\n"
+"\t--gain=Float                     0.5\n\n"
+"RIDGED-MULTI-FRACTAL \n"
+"\t<common-options> \n"
+"\t--octave=UInt                    4\n"
+"\t--lacunarity=Float               2.0\n"
+"\t--gain=Float                     0.5\n\n";
+
+void usage(const char* msg){
+  std::cout << "Usage: "
+            << msg
+            << USAGE << '\n';
+  std::exit(0);
+}
 
 //**************************************
 // Functions for debugging
@@ -54,14 +100,20 @@ void SetDebuggingOptions() {
 // Main
 //**************************************
 int main(int argc, char *argv[]) {
-#ifdef PLATFORM_Win
-  UNREFERENCED_PARAMETER(argv);
-  UNREFERENCED_PARAMETER(argc);
+  
+  ArgvParser argvParser {argc, argv};
 
-  // Catch memory leaks etc
-  SetDebuggingOptions();
-#endif
+  bool need_h = false;
+  argvParser.GetCmdBool("-h", &need_h);
 
+  bool need_help = false;
+  argvParser.GetCmdBool("--help", &need_help);
+
+  if (need_h || need_help) {
+    usage(argv[0]);
+  }
+
+  
   // Initialize SDL, OpenGL, DevIL and GLAD
   //**************************************
   //
@@ -129,6 +181,8 @@ int main(int argc, char *argv[]) {
 #ifdef _DEBUG
   glEnable(GL_DEBUG_OUTPUT);
   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+  //Disable for OpenGL 3.3 compatibility
   //glDebugMessageCallback(openglCallbackFunction, nullptr);
   //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
   //                      true);
@@ -142,7 +196,7 @@ int main(int argc, char *argv[]) {
   pInput->Init();
 
   // Make a scene :D
-  Scene *pScene = new Scene();
+  Scene *pScene = new Scene(argc, argv, argvParser);
   pScene->Init();
 
   glEnable(GL_DEPTH_TEST);
