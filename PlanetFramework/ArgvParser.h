@@ -10,8 +10,7 @@ class ArgvParser {
 public:
   ArgvParser(int argc, char** argv);
   ~ArgvParser() {}
-
-  // Use integer type for T such as int or unsigned int
+  
   template <typename T>
   void GetCmdInt(const std::string& cmd, T* ret){
     for (auto& t: m_Tokens){
@@ -31,13 +30,10 @@ public:
     *ret = 0;
   }
 
-  // Use float type for T such as float or unsigned float
-  template <typename T>
-  void GetCmdFloat(const std::string& cmd, T* ret){
+  void GetCmdFloat(const std::string& cmd, float* ret){
     for (auto& t: m_Tokens){
       std::string token, value;
       std::tie(token, value) = t;
-      int r;
       if (token == cmd){
         try {
           *ret = std::stof(value);
@@ -56,7 +52,6 @@ public:
     for (auto& t: m_Tokens){
       std::string token, value;
       std::tie(token, value) = t;
-      int r;
       if (token == cmd){
         if (value == "true"){
           *ret = true;

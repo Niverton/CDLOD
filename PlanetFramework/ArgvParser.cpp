@@ -22,8 +22,6 @@ ArgvParser::Argv_t ArgvParser::Split(char* cmd, char sep){
   for (std::string line; std::getline(input, line, sep); ){
     param.emplace_back(line);
   }
-  for (auto& t: param){
-  }
   if (param.size() == 1){
     //true because cmd is set even if value is nil
     return std::make_tuple(param[0], "true");
