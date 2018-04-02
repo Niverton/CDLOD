@@ -25,7 +25,9 @@ static const char* USAGE =
 " <NOISE> --<noise-option>=<value> --<option>\n\n"
 "option:\n"
 "\t -h  --help      	show this page.\n"
-"\t 	--fullscreen	start program in fullscreen.\n\n"
+"\t     --fullscreen	start program in fullscreen.\n"
+"\t     --use-vsync	start program with vsync.\n"
+"\n"
 "<NOISE> --<noise-option>=<value>\n"
 "Order of option does not matter.\n\n"
 "Common options                     Default value\n"
@@ -132,7 +134,10 @@ int main(int argc, char **argv) {
 
   bool use_fullscreen = false;
   argvParser.GetCmdBool("--fullscreen", &use_fullscreen);
-  
+
+  bool use_vsync = false;
+  argvParser.GetCmdBool("--use-vsync", &use_vsync);
+
   // Initialize SDL, OpenGL, DevIL and GLAD
   //**************************************
   //
@@ -161,6 +166,8 @@ int main(int argc, char **argv) {
   // Create window
   Settings *pSettings = Settings::GetInstance(); // Initialize Game Settings
   pSettings->Window.Fullscreen = use_fullscreen;
+  pSettings->Window.VSyncEnabled = use_vsync;
+
   if (pSettings->Window.Fullscreen) {
     pSettings->Window.pWindow =
         SDL_CreateWindow(pSettings->Window.Title.c_str(),
