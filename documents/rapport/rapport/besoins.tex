@@ -33,29 +33,29 @@ dernier accès Mars 2018}
       méridiens et parallèles. Cette technique est simple mais les faces
       de la sphère ne sont pas toutes égales, ce qui ne place pas les
       points de manière uniforme sur la surface de la sphère, posant
-      problème lors de la découpe du terrain dans le quadtree
-      (voir~\ref{explication quadtree}).
+      problème lors de la découpe du terrain dans le \emph{quadtree}
+      (voir~\ref{sec:quadtree}).
   \item
     Déformation de cube: Générer le maillage d'un cube puis le déformer en
       gonflant ses faces. Le cube peut être déformé de plusieurs manières,
       cependant les faces de la sphère ne sont là encore jamais
       parfaitement égales.
   \item
-    Subdivision d'icosahèdre: Former un icosaèdre (polyèdre à 20 faces
+    Subdivision d'icosaèdre: Former un icosaèdre (polyèdre à 20 faces
       triangulaires égales) puis subdiviser chaque face en quatre autres
-      triangles égaux (voir~\ref{subsec:icosahedre}). Le maillage qui en
+      triangles égaux (voir~\ref{subsec:icosaèdre}). Le maillage qui en
       résulte est uniforme.
   \end{itemize}
 
 \item
   Gérer les informations de détails du terrain sous forme de
-    quadtree~\ref{sec:quadtree}. Parcourir le quadtree permettra de
+    \emph{quadtree}~\ref{sec:quadtree}. Parcourir le \emph{quadtree} permettra de
     générer le maillage de la sphère par rapport à la distance de chaque
     noeud à la caméra~\ref{sec:chunked-lod}.
 \item
   Effectuer un \emph{morphing} entre deux niveaux de détails afin de
-    lisser les transitions entre les deux niveaux~\ref{sec:morphing}. La
-    taille du \emph{morphing} ansi que sa position sont déterminées en
+    lisser les transitions entre les deux niveaux~\ref{subsec:morphing}. La
+    taille du \emph{morphing} ainsi que sa position sont déterminées en
     fonction du niveau de détail. Plus le niveau de détails est bas
     (plus profond dans l'arbre, plus détaillé --- niveaux LOD0, LOD1).
 \end{itemize}
@@ -63,7 +63,7 @@ dernier accès Mars 2018}
 \subsection{Interface graphique}\label{interface-graphique}
 
 Proposer une interface graphique afin de voir l'effet de l'algorithme
-sur un maillage. L'interface est composée d'un rendu ``temps réel'' du
+sur un maillage. L'interface est composée d'un rendu "temps réel" du
 maillage de la planète, et d'un affichage d'informations complémentaires
 comportant le nombre de triangles actuellement affiché à l'écran ainsi
 que le nombre d'images générées par seconde. L'utilisateur doit pouvoir
@@ -75,7 +75,7 @@ l'orienter à la souris.\\
 Générer procéduralement le terrain de la planète, en proposant un choix
 de la méthode de génération de la carte de hauteur. Le choix de la
 méthode se fait en option de lancement du programme \textbf{(Préciser
-comment fonctionne le choix, probablement un nom de méthode a
+comment fonctionne le choix, probablement un nom de méthode à
 entrer)}.\\
 Cette partie ne fait pas partie du projet que nous reprenons.
 \textbf{(Rajouter partie description de la gen de carte de hauteur, d'où
@@ -83,11 +83,13 @@ proviennent les algos utilisés)}
 
 \section{Besoins non fonctionnels}\label{besoins-non-fonctionnels}
 
-Suite au demandes du client, le projet doit être implémenté en C++11/14
+\subsection{Langage de programmation}
+
+Suite aux demandes du client, le projet doit être implémenté en C++11/14
 . Utiliser ces standards implique d'utiliser des compilateurs
-compatibles. Voici les version minimales à respecter pour les
+compatibles. Voici les versions minimales à respecter pour les
 compilateurs GCC et Clang (les deux plus gros compilateurs pour la
-platforme cible --- Linux):
+plateforme cible --- Linux):
 
 \begin{longtable}[]{@{}lll@{}}
 \toprule
@@ -101,12 +103,16 @@ Clang & C++14 & 3.4\tabularnewline
 \bottomrule
 \end{longtable}
 
-Le client requiert aussi que la version d'OpenGL soit au maximum 3.3
-afind que le projet fonctionne sur sa machine personnelle.
+\subsection{Interface de programmation}
+
+Le client requiert que la version d'OpenGL soit au maximum 3.3
+afin que le projet fonctionne sur une machine avec un driver libre\footnote{\url{https://mesamatrix.net/}}.
 PlanetRenderer étant prévu pour OpenGL 4.5, certaines modifications
 seront nécessaires. Après étude des fonctions OpenGL utilisées dans le
 projet, le portage ne s'avère pas difficile. Ce portage sera étudié plus
 loin.
+
+\subsection{Système de compilation}
 
 Une dernière demande du client sur l'implémentation du projet est
 d'utiliser CMake\footnote{\url{https://cmake.org/}} comme système de
@@ -114,12 +120,29 @@ compilation. PlanetRenderer étant basé sur GENie\footnote{\url{https://github.
 il faudra porter le projet vers CMake. Cela implique de réécrire
 totalement le système de compilation.
 
-L'application étant une application de rendu ``temps réel'', le rendu
-doit être fluide, c'est à dire à au moins 60 images par seconde. D'après
-nos premiers tests PlanetRenderer respecte ce besoin en étant capable
-d'afficher 120 000 triangles à 60 images par seconde sur une carte
-graphique Nvidia GTX 960M.
+\subsection{Performances}
 
-Aucun tests ne sont écrit dans le projet PlanetRenderer. Des tests
+L’objectif du projet étant de tester les performances d’une implémentation
+de Filip Strugar~\cite{CDLOD}, il n’y a pas de contrainte de performance imposée
+par le client. Mais étant donné que l'application est une application de rendu "temps réel", le rendu
+doit être fluide, c'est-à-dire à au moins 60 images par seconde. 
+D'après nos premiers tests PlanetRenderer respecte ce besoin en étant capable
+d'afficher 120 000 triangles à 60 images par seconde sur une carte
+graphique Nvidia GTX 960M. Nous pouvons prévoir grâce aux études de performances de
+F.Strugar, l’impact de performance de l’algorithme de CDLOD. Sur
+des processeurs performants de l’époque, F.Strugar mesure en moyenne
+0.08ms de temps de parcours de l’arbre nécessaire pour générer le maillage
+du terrain. À cela devront s’ajouter les coups de génération du maillage, ainsi
+que les coups de rendu de la scène. Pour un rendu très fluide, lorsque la caméra
+se déplace dans la scène, il faudrait atteindre au moins 60 images par
+seconde, donc passer moins de 16ms de calcul par image. F.Strugar atteint
+des performances élevées en effectuant une partie des calculs de la scène
+sur GPU.
+
+
+
+\subsection{Tests}
+
+Aucun test n'est écrit dans le projet PlanetRenderer. Des tests
 unitaires sur la génération du maillage devront donc être écrits afin de
 s'assurer du bon fonctionnement de l'application.

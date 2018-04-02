@@ -1,0 +1,22 @@
+\section*{ArgvParser}
+
+\lstset{language=C++}
+  \begin{lstlisting}
+     #include <optional>
+     #include <string>
+     #include <tuple>
+     #include <vector>
+     
+     class ArgvParser {
+        using Argv_t = std::tuple<
+                        std::optional<std::string>,
+                        std::optional<std::string>>;
+        
+        public:
+            // ...
+        
+        private:
+            std::vector<Argv_t> m_Tokens;
+     };
+  \end{lstlisting}
+  
