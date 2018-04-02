@@ -1,5 +1,5 @@
 #include "BinaryReader.h"
-#include "utils.h"  // for SafeDelete, UINT, UINT32
+#include "utils.h" // for SafeDelete
 #include <fstream>  // for basic_ifstream
 #include <iostream> // for operator<<, endl, stringstream, basic_ostream, cout
 #include <sstream>
@@ -64,7 +64,7 @@ void BinaryReader::Open(const std::string &binaryFile) {
   }
 }
 
-void BinaryReader::Open(char *s, UINT32 size) {
+void BinaryReader::Open(char *s, unsigned int size) {
   Close();
 
   std::string data(s, size);

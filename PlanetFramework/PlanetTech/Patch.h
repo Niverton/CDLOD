@@ -5,7 +5,6 @@
 #endif
 
 #include "glad.h" // for GLint, GLuint
-#include "utils.h"                        // for UINT
 
 #if PLATFORM_Win
 #include <glm\glm.hpp>
@@ -49,7 +48,7 @@ public:
     m_pPlanet = pPlanet;
   }
 
-  UINT GetVertexCount() {
+  unsigned int GetVertexCount() {
     return m_Vertices.size();
   }
 
@@ -90,14 +89,14 @@ private:
   friend int test();
 #endif
   std::vector<PatchVertex> m_Vertices;
-  std::vector<UINT> m_Indices;
+  std::vector<unsigned int> m_Indices;
 
   Planet *m_pPlanet = nullptr;
 
   int m_NumInstances = 0;
 
   short m_Levels;
-  UINT m_RC{};
+  unsigned int m_RC{};
 
   // OpenGl stuff
   GLuint m_VAO{};

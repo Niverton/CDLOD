@@ -11,10 +11,3 @@ inline void SafeDelete(T &pObjectToDelete) {
     pObjectToDelete = nullptr;
   }
 }
-
-// TODO move this to a custom file with a solid ruleset
-#define UINT32 unsigned int
-#define UINT unsigned int
-#define BYTE char
-#define USHORT unsigned short
-#define UCHAR unsigned char
