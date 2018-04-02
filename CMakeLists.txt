@@ -385,9 +385,8 @@ if(BUILD_TESTS)
     tests/dummies/Frustum.cpp
     )  
   
-  # Heightmap
-  make_test(procedural_heightmap
-    tests/Procedural_heightmap.cpp
+  make_test(argv_parser
+    PlanetFramework/ArgvParser.cpp
+    tests/Argv_parser.cpp
     )
-
 endif()
