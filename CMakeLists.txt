@@ -284,7 +284,8 @@ if(BUILD_TESTS)
     add_executable(${name}_test
       # EXCLUDE_FROM_ALL # Don't build with the target ALL
       tests/main.cpp
-      PlanetFramework/StaticDependancies/glad/glad.cpp
+      external/glad/glad.cpp
+      external/glad/glad.h
       ${ARGN})
 
     set_target_properties(${name}_test PROPERTIES
