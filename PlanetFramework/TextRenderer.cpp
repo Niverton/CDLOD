@@ -3,7 +3,7 @@
 #include "Shader.h"     // for Shader
 #include "SpriteFont.h" // for SpriteFont, FontMetric, TextCache
 #include "Texture.h"    // for Texture
-#include "utils.h"      // for WINDOW, SafeDelete, UINT
+#include "utils.h"      // for WINDOW, SafeDelete
 #include <algorithm>    // for find
 #include <iostream>     // for operator<<, endl, basic_ostream
 #include <iterator>     // for each loop (begin and end)
@@ -189,7 +189,7 @@ void TextRenderer::UpdateBuffer() {
   // Bind Object vertex array
   glBindVertexArray(m_VAO);
 
-  UINT buffersize = tVerts.size() * sizeof(TextVertex);
+  unsigned int buffersize = tVerts.size() * sizeof(TextVertex);
 
   // Send the vertex buffer again
   glBindBuffer(GL_ARRAY_BUFFER, m_VBO);

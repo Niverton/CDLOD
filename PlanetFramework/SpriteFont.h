@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Texture.h" //for Texture
-#include "utils.h"   // for UCHAR, USHORT
+#include "utils.h"   // SafeDelete
 #include <string>    // for string
 #include <vector>    // for vector
 

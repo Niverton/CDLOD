@@ -119,13 +119,15 @@ int main(int argc, char **argv) {
   if (argc <= 1) {
     usage(argv[0]);
   }
-
+  
+  bool need_h = false;
+  bool need_help = false;
+  if (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h") {
+    usage(argv[0]);
+  }
   ArgvParser argvParser{argc, argv};
 
-  bool need_h = false;
   argvParser.GetCmdBool("-h", &need_h);
-
-  bool need_help = false;
   argvParser.GetCmdBool("--help", &need_help);
 
   if (need_h || need_help) {

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7.2)
+cmake_minimum_required(VERSION 3.5.1)
 
 #Export build configuration for external tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -83,12 +83,13 @@ include(ExternalProject)
 externalproject_add(devil_ext
   GIT_REPOSITORY        "https://github.com/DentonW/DevIL.git"
   GIT_TAG               "v1.8.0"
-  SOURCE_SUBDIR         "DevIL"
+  #SOURCE_SUBDIR         "DevIL"
+  CONFIGURE_COMMAND ${CMAKE_COMMAND} <SOURCE_DIR>/DevIL
   INSTALL_COMMAND       ""
 
   #Enable opengl support
-  PATCH_COMMAND patch "DevIL/src-ILUT/CMakeLists.txt"
-                      "${CMAKE_SOURCE_DIR}/devil.patch"
+  #PATCH_COMMAND patch "DevIL/src-ILUT/CMakeLists.txt"
+  #                    "${CMAKE_SOURCE_DIR}/devil.patch"
 )
 
 externalproject_get_property(devil_ext source_dir)
@@ -179,7 +180,7 @@ endif()
 add_dependencies(${EXEC} ${DEPS})
 
 # Compile options
-if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
   if(CMAKE_BUILD_TYPE MATCHES "Debug")
     target_compile_options(${EXEC} PRIVATE
       "-Wall" "-Wpedantic")
@@ -202,6 +203,8 @@ target_include_directories(${EXEC} PRIVATE ${OPENGL_INCLUDE_DIR})
 #GLM
 target_include_directories(${EXEC} PRIVATE ${GLM_INCLUDE_DIRS})
 #SDL
+  # Fix errors with old versions of the SDL's cmake config files
+string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
 target_link_libraries(${EXEC} PRIVATE ${SDL2_LIBRARIES})
 target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
 

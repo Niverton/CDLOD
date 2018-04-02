@@ -105,12 +105,12 @@ void Patch::GenerateGeometry(short levels) {
 
   float delta = 1 / static_cast<float>(m_RC - 1);
 
-  UINT rowIdx = 0;
-  UINT nextIdx = 0;
-  for (UINT row = 0; row < m_RC; row++) {
-    UINT numCols = m_RC - row;
+  unsigned int rowIdx = 0;
+  unsigned int nextIdx = 0;
+  for (unsigned int row = 0; row < m_RC; row++) {
+    unsigned int numCols = m_RC - row;
     nextIdx += numCols;
-    for (UINT column = 0; column < numCols; column++) {
+    for (unsigned int column = 0; column < numCols; column++) {
       // calc position
       glm::vec2 pos = glm::vec2(column / static_cast<float>(m_RC - 1),
                                 row / static_cast<float>(m_RC - 1));
