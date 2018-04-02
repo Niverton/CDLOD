@@ -36,14 +36,14 @@ public:
   */
   void DrawWire();
 
-  float GetRadius() {
+  float GetRadius() const {
     return m_Radius;
   }
-  float GetMaxHeight() {
+  float GetMaxHeight() const {
     return m_MaxHeight;
   }
   int GetVertexCount();
-  Transform *GetTransform() {
+  Transform *GetTransform() const {
     return m_pTransform;
   }
   Triangulator *GetTriangulator() {
