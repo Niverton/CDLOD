@@ -279,16 +279,12 @@ endif()
 if(BUILD_TESTS)
   enable_testing()
 
-  # Build the tests with make test
-  add_custom_target(build_tests)
-  add_test(NAME test_build_tests COMMAND 
-    "${CMAKE_COMMAND}" --build ${CMAKE_BINARY_DIR} --target build_tests)
-
   # All extra arguments are passed to add_executable
   macro(make_test name)
     add_executable(${name}_test
-      EXCLUDE_FROM_ALL # Don't build with the target ALL
+      # EXCLUDE_FROM_ALL # Don't build with the target ALL
       tests/main.cpp
+      PlanetFramework/StaticDependancies/glad/glad.cpp
       ${ARGN})
 
     set_target_properties(${name}_test PROPERTIES
@@ -300,20 +296,35 @@ if(BUILD_TESTS)
 
     get_target_property(LIBS ${EXEC} LINK_LIBRARIES)
     get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
-    #get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
+    get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
+    if(DEPS)
+      add_dependencies(${name}_test ${DEPS})
+    endif()
 
     target_link_libraries(${name}_test ${LIBS})
     target_include_directories(${name}_test PRIVATE
       ${INCL}
       tests/
+      PlanetFramework/
+      PlanetFramework/Textures
+      PlanetFramework/HeightMapGenerator
+      PlanetFramework/Shaders
+      PlanetFramework/Fonts
+      PlanetFramework/PlanetTech
+      PlanetFramework/PlanetTech/Types
       )
 
-    add_dependencies(${name}_test ${DEPS})
-    add_dependencies(build_tests ${name}_test)
+    if (DEPS)
+      add_dependencies(${name}_test ${DEPS})
+    else()
+      add_dependencies(${name}_test devil_ext)
+      if(TARGET glm_ext)
+        add_dependencies(${name}_test glm_ext)
+      endif()
+    endif()
 
     add_test(NAME ${name}
       COMMAND ${name}_test)
-    set_tests_properties(${name} PROPERTIES DEPENDS test_build_tests)
   endmacro()
 
   # How to write a test:
@@ -347,25 +358,25 @@ if(BUILD_TESTS)
     )
 
   # Patch
-  #make_test(patch_generate_geometry
-  #  tests/Patch_generate_geometry.cpp
-  #  tests/Patch_generate_geometry.h
-  #  PlanetFramework/PlanetTech/Patch.cpp
-  #  PlanetFramework/PlanetTech/Patch.h
-  #  tests/dummies/Shader.cpp
-  #  )
+  make_test(patch_generate_geometry
+    tests/Patch_generate_geometry.cpp
+    tests/Patch_generate_geometry.h
+    PlanetFramework/PlanetTech/Patch.cpp
+    PlanetFramework/PlanetTech/Patch.h
+    tests/dummies/Shader.cpp
+    )
 
   # Triangulator
-  #make_test(triangulator_generate_geometry
-  #  tests/Triangulator_generate_geometry.cpp
-  #  tests/Triangulator_generate_geometry.h
-  #  PlanetFramework/PlanetTech/Triangulator.cpp
-  #  PlanetFramework/PlanetTech/Triangulator.h
-  #  PlanetFramework/InputManager.cpp
-  #  PlanetFramework/InputManager.h
-  #  tests/dummies/Shader.cpp
-  #  tests/dummies/Frustum.cpp
-  #  )
+  make_test(triangulator_generate_geometry
+    tests/Triangulator_generate_geometry.cpp
+    tests/Triangulator_generate_geometry.h
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/PlanetTech/Triangulator.h
+    PlanetFramework/InputManager.cpp
+    PlanetFramework/InputManager.h
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )
   make_test(triangulator_split_heuristic
     tests/Triangulator_split_heuristic.cpp
     tests/Triangulator_split_heuristic.h
