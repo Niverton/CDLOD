@@ -12,7 +12,7 @@
 #include "Time.h"         // for Time
 #include "Transform.h"    // for Transform
 #include "utils.h"       // for INPUT, TIME, WINDOW
-#include <SDL_scancode.h> // for ::SDL_SCANCODE_KP_4
+#include <SDL2/SDL_scancode.h> // for ::SDL_SCANCODE_KP_4
 #include <cmath>          // for powf, cos, sin, sqrtf
 
 /*!

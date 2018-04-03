@@ -174,7 +174,7 @@ target_include_directories(${EXEC}
 set (DEPS devil_ext shaders textures fonts glad)
 #add_dependencies(${EXEC} devil_ext shaders textures fonts)
 if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
-  list(APPEND ${DEPS} glm_ext)
+  list(APPEND DEPS glm_ext)
   #add_dependencies(${EXEC} glm_ext)
 endif()
 add_dependencies(${EXEC} ${DEPS})
@@ -203,10 +203,14 @@ target_include_directories(${EXEC} PRIVATE ${OPENGL_INCLUDE_DIR})
 #GLM
 target_include_directories(${EXEC} PRIVATE ${GLM_INCLUDE_DIRS})
 #SDL
+if (TARGET SDL2::SDL2)
+  target_link_libraries(${EXEC} PRIVATE SDL2::SDL2)
+else()
   # Fix errors with old versions of the SDL's cmake config files
-string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
-target_link_libraries(${EXEC} PRIVATE ${SDL2_LIBRARIES})
-target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
+  string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
+  target_link_libraries(${EXEC} PRIVATE ${SDL2_LIBRARIES})
+  target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
+endif()
 
 #Force c++14
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
