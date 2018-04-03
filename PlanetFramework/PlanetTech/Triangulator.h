@@ -77,13 +77,13 @@ public:
   */
   void GenerateGeometry();
 
-  bool IsFrustumLocked() {
+  bool IsFrustumLocked() const {
     return m_LockFrustum;
   }
   Frustum *GetFrustum() {
     return m_pFrustum;
   }
-  int GetVertexCount() {
+  int GetVertexCount() const {
     return m_Positions.size();
   }
 

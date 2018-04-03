@@ -160,8 +160,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       argvParser.GetCmdFloat("--radius", &prop.radius);
 
       check_value<float>(prop.radius, 0, 1737.1);
-      check_value<unsigned int>(prop.width, 0, 800);
-      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.width, 0, 1024);
+      check_value<unsigned int>(prop.height, 0, 1024);
       check_value<float>(prop.maxHeight, 0, 10.0);
 
       std::cout << "SIMPLEX:\n";
@@ -207,8 +207,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       argvParser.GetCmdFloat("--radius", &prop.radius);
 
       check_value<float>(prop.radius, 0, 1737.1);
-      check_value<unsigned int>(prop.width, 0, 800);
-      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.width, 0, 1024);
+      check_value<unsigned int>(prop.height, 0, 1024);
       check_value<float>(prop.maxHeight, 0, 10.0);
 
       std::cout << "RIDGED NOISE\n";
@@ -232,8 +232,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       argvParser.GetCmdFloat("--radius", &prop.radius);
 
       check_value<float>(prop.radius, 0, 1737.1);
-      check_value<unsigned int>(prop.width, 0, 800);
-      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.width, 0, 1024);
+      check_value<unsigned int>(prop.height, 0, 1024);
       check_value<float>(prop.maxHeight, 0, 10.0);
       check_value<float>(prop.angle, 0, 0.5);
 
@@ -263,8 +263,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       argvParser.GetCmdFloat("--radius", &prop.radius);
 
       check_value<float>(prop.radius, 0, 1737.1);
-      check_value<unsigned int>(prop.width, 0, 800);
-      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.width, 0, 1024);
+      check_value<unsigned int>(prop.height, 0, 1024);
       check_value<unsigned int>(prop.octave, 0, 4);
       check_value<float>(prop.maxHeight, 0, 10.0);
       check_value<float>(prop.lacunarity, 0, 2.0);
@@ -298,8 +298,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       argvParser.GetCmdFloat("--radius", &prop.radius);
 
       check_value<float>(prop.radius, 0, 1737.1);
-      check_value<unsigned int>(prop.width, 0, 800);
-      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.width, 0, 1024);
+      check_value<unsigned int>(prop.height, 0, 1024);
       check_value<unsigned int>(prop.octave, 0, 4);
       check_value<float>(prop.maxHeight, 0, 10.0);
       check_value<float>(prop.lacunarity, 0, 2.0);
@@ -333,8 +333,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       argvParser.GetCmdFloat("--radius", &prop.radius);
 
       check_value<float>(prop.radius, 0, 1737.1);
-      check_value<unsigned int>(prop.width, 0, 800);
-      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.width, 0, 1024);
+      check_value<unsigned int>(prop.height, 0, 1024);
       check_value<unsigned int>(prop.octave, 0, 4);
       check_value<float>(prop.maxHeight, 0, 10.0);
       check_value<float>(prop.lacunarity, 0, 2.0);
@@ -369,8 +369,8 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       argvParser.GetCmdFloat("--radius", &prop.radius);
 
       check_value<float>(prop.radius, 0, 1737.1);
-      check_value<unsigned int>(prop.width, 0, 800);
-      check_value<unsigned int>(prop.height, 0, 800);
+      check_value<unsigned int>(prop.width, 0, 1024);
+      check_value<unsigned int>(prop.height, 0, 1024);
       check_value<unsigned int>(prop.octave, 0, 4);
       check_value<float>(prop.maxHeight, 0, 10.0);
       check_value<float>(prop.lacunarity, 0, 2.0);

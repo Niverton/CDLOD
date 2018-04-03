@@ -12,7 +12,7 @@
 #include "Time.h"         // for Time
 #include "Transform.h"    // for Transform
 #include "utils.h"       // for INPUT, TIME, WINDOW
-#include <SDL_scancode.h> // for ::SDL_SCANCODE_KP_4
+#include <SDL2/SDL_scancode.h> // for ::SDL_SCANCODE_KP_4
 #include <cmath>          // for powf, cos, sin, sqrtf
 
 /*!
@@ -38,13 +38,13 @@ public:
     m_FarPlane = farPlane;
   }
 
-  float GetFOV() {
+  float GetFOV() const {
     return m_FOV;
   }
-  float GetNearPlane() {
+  float GetNearPlane() const {
     return m_NearPlane;
   }
-  float GetFarPlane() {
+  float GetFarPlane() const {
     return m_FarPlane;
   }
 
@@ -69,19 +69,19 @@ public:
   */
   void Update();
 
-  glm::mat4 GetView() {
+  glm::mat4 GetView() const {
     return m_View;
   }
-  glm::mat4 GetProj() {
+  glm::mat4 GetProj() const {
     return m_Projection;
   }
-  glm::mat4 GetViewInv() {
+  glm::mat4 GetViewInv() const {
     return m_ViewInverse;
   }
-  glm::mat4 GetViewProj() {
+  glm::mat4 GetViewProj() const {
     return m_ViewProjection;
   }
-  glm::mat4 GetViewProjInv() {
+  glm::mat4 GetViewProjInv() const {
     return m_ViewProjectionInverse;
   }
 
@@ -89,14 +89,14 @@ public:
   void SetPlanet(Planet *pPlanet) {
     m_pPlanet = pPlanet;
   }
-  bool HasMoved() {
+  bool HasMoved() const {
     return m_Moved;
   }
   Transform *GetTransform() {
     return m_pTransform;
   }
 
-  float GetAltitude() {
+  float GetAltitude() const {
     return m_Altitude;
   }
 

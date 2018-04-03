@@ -18,11 +18,12 @@ public:
   virtual ~Texture();
 
   virtual void Load(bool useSRGB);
-  GLuint GetHandle() {
+
+  GLuint GetHandle() const {
     return m_Handle;
   }
 
-  glm::vec2 GetDimension() {
+  glm::vec2 GetDimension() const {
     return glm::vec2(m_Width, m_Height);
   }
 

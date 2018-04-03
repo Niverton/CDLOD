@@ -36,11 +36,11 @@ public:
             Some compilation and lincking status has printed in standard output.
   */
   void Build();
-  GLuint GetProgram() {
+  GLuint GetProgram() const {
     return m_ShaderProgram;
   }
 
-  std::string GetSourceLocation() {
+  std::string GetSourceLocation() const {
     return m_FileName;
   }
 

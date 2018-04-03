@@ -48,7 +48,7 @@ public:
     m_pPlanet = pPlanet;
   }
 
-  unsigned int GetVertexCount() {
+  unsigned int GetVertexCount() const {
     return m_Vertices.size();
   }
 
