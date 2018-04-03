@@ -408,4 +408,18 @@ if(BUILD_TESTS)
     PlanetFramework/ArgvParser.cpp
     tests/Argv_parser.cpp
     )
+  
+  make_test(perf-noise
+    PlanetFramework/PlanetTech/Types/Procedural.cpp
+    PlanetFramework/PlanetTech/Planet.cpp
+    PlanetFramework/Texture.cpp
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/PlanetTech/Patch.cpp
+    PlanetFramework/Time.cpp
+    PlanetFramework/PlanetTech/Frustum.cpp
+    PlanetFramework/InputManager.cpp
+    PlanetFramework/Transform.cpp
+    PlanetFramework/Shader.cpp
+    tests/Perf-noise.cpp
+    )
 endif()
