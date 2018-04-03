@@ -3,10 +3,7 @@
 #include "Planet.h"
 #include "Types/Procedural.h"
 #include "utils.h"
-#include <functional>
-#include <memory>
 #include <cmath>
-#include <vector>
 
 /*
     \brief    Use for compute elapse time of function Fun
