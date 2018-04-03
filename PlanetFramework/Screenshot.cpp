@@ -1,15 +1,12 @@
-#include "stdafx.h"
-
 #include "Screenshot.h"
-
-#include <IL/il.h>
-#include <IL/ilu.h>
-#include <IL/ilut.h>
-
-#include <algorithm>
+#include <IL/il.h>   // for ilBindImage, ilDeleteImage, ilEnable, ilGenImage
+#include <IL/ilut.h> // for ilutGLScreen
+#include <string>
 
 #ifdef WIN32
+#include <vector>
 #include <windows.h>
+
 int getNumber(std::string directory) {
   std::vector<int> names;
   std::string searchPath = directory + "/*.*";

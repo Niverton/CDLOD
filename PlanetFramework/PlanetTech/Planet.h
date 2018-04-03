@@ -1,11 +1,9 @@
 #pragma once
 
-class Shader;
-class Transform;
-class Frustum;
-class Texture;
-class Triangulator;
-class Patch;
+class Patch;  // lines 8-8
+class Texture;  // lines 6-6
+class Transform;  // lines 4-4
+class Triangulator;  // lines 7-7
 
 /**
   \brief  Extend this class for create new planet type.
@@ -38,14 +36,14 @@ public:
   */
   void DrawWire();
 
-  float GetRadius() {
+  float GetRadius() const {
     return m_Radius;
   }
-  float GetMaxHeight() {
+  float GetMaxHeight() const {
     return m_MaxHeight;
   }
   int GetVertexCount();
-  Transform *GetTransform() {
+  Transform *GetTransform() const {
     return m_pTransform;
   }
   Triangulator *GetTriangulator() {

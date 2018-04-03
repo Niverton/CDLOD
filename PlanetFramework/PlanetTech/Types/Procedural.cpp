@@ -1,23 +1,19 @@
 #include "Procedural.h"
-#include "../../Texture.h"
-#include "stdafx.h"
-#include <IL/il.h>
-#include <IL/ilu.h>
-#include <vector>
+#include "Texture.h"
 #include "Simplex.h"
-
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
 
-ProceduralPlanet::ProceduralPlanet(Noise n, Properties* properties) {
+ProceduralPlanet::ProceduralPlanet(Properties* properties) {
   
   unsigned int width = properties->width;
   unsigned int height = properties->height;
   m_Radius = properties->radius;
   m_MaxHeight = properties->maxHeight;
+  Noise n = properties->noise;
 
   m_data = new float[height * width];
-  for (int i = 0; i < height * width; i++) {
+  for (unsigned int i = 0; i < height * width; i++) {
     switch (n){
       case Noise::SIMPLEX: default:
         m_data[i] = glm::simplex(glm::vec3(i % width, i / width, 1.));
@@ -43,7 +39,7 @@ ProceduralPlanet::ProceduralPlanet(Noise n, Properties* properties) {
       }
       case Noise::FBM_VARIATION:
       {
-        auto prop = static_cast<FbmVariationProperties*>(properties);
+        auto prop = static_cast<FbmProperties*>(properties);
         m_data[i] = Simplex::fBm(Simplex::fBm(glm::vec3(i % width, i / width, 1.),
                     prop->octave, prop->lacunarity, prop->gain),prop->octave, prop->lacunarity, prop->gain);
         break;
@@ -57,7 +53,7 @@ ProceduralPlanet::ProceduralPlanet(Noise n, Properties* properties) {
       }
       case Noise::DFBM_WARPED_FBM:
       {
-        auto prop = static_cast<DfbmProperties*>(properties);
+        auto prop = static_cast<FbmProperties*>(properties);
         m_data[i] = Simplex::fBm(Simplex::dfBm(glm::vec3(i % width, i / width, 1.),
                     prop->octave, prop->lacunarity, prop->gain),prop->octave, prop->lacunarity, prop->gain);
         break;
@@ -69,7 +65,7 @@ ProceduralPlanet::ProceduralPlanet(Noise n, Properties* properties) {
                     prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain);
         break;
       }   
-      case Noise::WARPED_RIDGED_MULTI-FRACTAL:
+      case Noise::WARPED_RIDGED_MULTI_FRACTAL:
       {
         auto prop = static_cast<WarpedRidgedMultiFractalProperties*>(properties);
         m_data[i] = Simplex::ridgedMF(Simplex::ridgedMF(glm::vec3(i % width, i / width, 1.),
@@ -78,7 +74,7 @@ ProceduralPlanet::ProceduralPlanet(Noise n, Properties* properties) {
       }
       case Noise::RIDGED_MULTI_FRACTAL_VARIATION2:
       {
-        auto prop = static_cast<RidgedMultiFractalVariation2Properties*>(properties);
+        auto prop = static_cast<RidgedMultiFractalVariationProperties*>(properties);
         m_data[i] = Simplex::ridgedMF(glm::vec3(i % width, i / width, 1.),
                     prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain);
         break;

@@ -1,15 +1,25 @@
-#include "stdafx.h"
-
 #include "Patch.h"
+#include "Camera.h" // for Camera
+#include "Context.h"
+#include "Frustum.h"      // for Frustum
+#include "Planet.h"       // for Planet
+#include "Shader.h"       // for Shader
+#include "Texture.h"      // for Texture
+#include "Transform.h"    // for Transform
+#include "Triangulator.h" // for Triangulator
+#include <cmath>          // for pow
+#include <cstddef>        // for offsetof, size_t
+#include <string>         // for allocator, operator+, to_string
 
-#include "../Camera.h"
-#include "../Shader.h"
-#include "../Texture.h"
-#include "../Transform.h"
-
-#include "Frustum.h"
-#include "Planet.h"
-#include "Triangulator.h"
+#if PLATFORM_Win
+#include <SDL.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+#else
+#include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#endif
 
 Patch::Patch(short levels) : m_Levels(levels) {
   m_pPatchShader = new Shader("./Shaders/patch.glsl");
@@ -54,9 +64,9 @@ void Patch::Init() {
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(PatchVertex),
-                        (GLvoid *)offsetof(PatchVertex, pos));
+                        reinterpret_cast<GLvoid *>(offsetof(PatchVertex, pos)));
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(PatchVertex),
-                        (GLvoid *)offsetof(PatchVertex, morph));
+                        reinterpret_cast<GLvoid *>(offsetof(PatchVertex, morph)));
   // instances
   // bind
   glBindBuffer(GL_ARRAY_BUFFER, m_VBOInstance);
@@ -65,13 +75,13 @@ void Patch::Init() {
   glEnableVertexAttribArray(4);
   glEnableVertexAttribArray(5);
   glVertexAttribIPointer(2, 1, GL_INT, sizeof(PatchInstance),
-                         (GLvoid *)offsetof(PatchInstance, level));
+                         reinterpret_cast<GLvoid *>(offsetof(PatchInstance, level)));
   glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(PatchInstance),
-                        (GLvoid *)offsetof(PatchInstance, a));
+                        reinterpret_cast<GLvoid *>(offsetof(PatchInstance, a)));
   glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(PatchInstance),
-                        (GLvoid *)offsetof(PatchInstance, r));
+                        reinterpret_cast<GLvoid *>(offsetof(PatchInstance, r)));
   glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(PatchInstance),
-                        (GLvoid *)offsetof(PatchInstance, s));
+                        reinterpret_cast<GLvoid *>(offsetof(PatchInstance, s)));
   glVertexAttribDivisor(2, 1);
   glVertexAttribDivisor(3, 1);
   glVertexAttribDivisor(4, 1);
@@ -91,32 +101,34 @@ void Patch::GenerateGeometry(short levels) {
   m_Indices.clear();
   // Generate
   m_Levels = levels;
-  m_RC = 1 + (unsigned int)pow(2, (int)m_Levels);
+  m_RC = 1 + static_cast<unsigned int>(pow(2, static_cast<int>(m_Levels)));
 
-  float delta = 1 / (float)(m_RC - 1);
+  float delta = 1 / static_cast<float>(m_RC - 1);
 
-  UINT rowIdx = 0;
-  UINT nextIdx = 0;
-  for (UINT row = 0; row < m_RC; row++) {
-    UINT numCols = m_RC - row;
+  unsigned int rowIdx = 0;
+  unsigned int nextIdx = 0;
+  for (unsigned int row = 0; row < m_RC; row++) {
+    unsigned int numCols = m_RC - row;
     nextIdx += numCols;
-    for (UINT column = 0; column < numCols; column++) {
+    for (unsigned int column = 0; column < numCols; column++) {
       // calc position
-      glm::vec2 pos =
-          glm::vec2(column / (float)(m_RC - 1), row / (float)(m_RC - 1));
+      glm::vec2 pos = glm::vec2(column / static_cast<float>(m_RC - 1),
+                                row / static_cast<float>(m_RC - 1));
       // calc morph
       glm::vec2 morph = glm::vec2(0, 0);
       if (row % 2 == 0) {
-        if (column % 2 == 1)
+        if (column % 2 == 1) {
           morph = glm::vec2(-delta, 0);
+        }
       } else {
-        if (column % 2 == 0)
+        if (column % 2 == 0) {
           morph = glm::vec2(0, delta);
-        else
+        } else {
           morph = glm::vec2(delta, -delta);
+        }
       }
       // create vertex
-      m_Vertices.push_back(PatchVertex(pos, morph));
+      m_Vertices.emplace_back(pos, morph);
       // calc index
       if (row < m_RC - 1 && column < numCols - 1) {
         m_Indices.push_back(rowIdx + column);
@@ -189,8 +201,8 @@ void Patch::Draw(bool white) {
   glBindVertexArray(m_VAO);
 
   // Draw the object
-  glDrawElementsInstanced(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0,
-                          m_NumInstances);
+  glDrawElementsInstanced(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT,
+                          nullptr, m_NumInstances);
 
   // unbind vertex array
   glBindVertexArray(0);

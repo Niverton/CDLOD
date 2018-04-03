@@ -1,6 +1,13 @@
-#include "stdafx.h"
-
 #include "InputManager.h"
+#include "utils.h"
+#include <cctype>  // for toupper
+#include <cstring> // for memcpy, NULL
+
+#if PLATFORM_Win
+#include <SDL.h>
+#else
+#include <SDL2/SDL.h>
+#endif
 
 //----------------------------
 // Constructor and Destructor
@@ -62,7 +69,7 @@ void InputManager::Init() {
       &m_KeyboardLength); // Set this map to be constantly updated
   m_pKeyMapNew = new Uint8[m_KeyboardLength];
   m_pKeyMapOld = new Uint8[m_KeyboardLength];
-  m_MouseMapNew = SDL_GetMouseState(NULL, NULL);
+  m_MouseMapNew = SDL_GetMouseState(nullptr, nullptr);
   m_MouseMapOld = m_MouseMapNew;
 }
 void InputManager::UpdateEvents() {
@@ -70,8 +77,8 @@ void InputManager::UpdateEvents() {
               m_KeyboardLength); // Update Old Keyboard state
   m_MouseMapOld = m_MouseMapNew; // Update old Mouse state
   // Pump SDL events
-  SDL_Event evnt;
-  while (SDL_PollEvent(&evnt)) {
+  SDL_Event evnt{};
+  while (SDL_PollEvent(&evnt) != 0) {
     switch (evnt.type) {
     case SDL_QUIT:
       m_ExitRequested = true;
@@ -91,8 +98,9 @@ void InputManager::UpdateEvents() {
   int mPosOldY = m_MousePosY;
   m_MouseMapNew = SDL_GetMouseState(
       &m_MousePosX, &m_MousePosY); // Update new Mouse state and position
-  m_MouseMove = glm::vec2((float)(m_MousePosX - mPosOldX),
-                          (float)(m_MousePosY - mPosOldY));
+  m_MouseMove = glm::vec2(static_cast<float>(m_MousePosX - mPosOldX),
+                          static_cast<float>(m_MousePosY - mPosOldY));
+
 }
 //----------------------------
 // Getters
@@ -104,41 +112,40 @@ bool InputManager::IsExitRequested() {
 // Keyboard
 //----------------------------
 bool InputManager::GetScancode(SDL_Scancode &code, char key) {
-  key = (char)toupper(key);
+  key = static_cast<char>(toupper(key));
   if (m_CharToSdlMap.find(key) == m_CharToSdlMap.end()) {
     return false;
-  } else {
-    code = m_CharToSdlMap[key];
-    return true;
   }
+  code = m_CharToSdlMap[key];
+  return true;
 }
 bool InputManager::IsKeyboardKeyPressed(SDL_Scancode key) {
-  return m_pKeyMapNew[key] && !m_pKeyMapOld[key];
+  return (m_pKeyMapNew[key] != 0u) && (m_pKeyMapOld[key] == 0u);
 }
 bool InputManager::IsKeyboardKeyPressed(char key) {
   SDL_Scancode sKey;
   if (GetScancode(sKey, key)) {
-    return m_pKeyMapNew[sKey] && !m_pKeyMapOld[sKey];
+    return (m_pKeyMapNew[sKey] != 0u) && (m_pKeyMapOld[sKey] == 0u);
   }
   return false;
 }
 bool InputManager::IsKeyboardKeyDown(SDL_Scancode key) {
-  return m_pKeyMapNew[key] && m_pKeyMapOld[key];
+  return (m_pKeyMapNew[key] != 0u) && (m_pKeyMapOld[key] != 0u);
 }
 bool InputManager::IsKeyboardKeyDown(char key) {
   SDL_Scancode sKey;
   if (GetScancode(sKey, key)) {
-    return m_pKeyMapNew[sKey] && m_pKeyMapOld[sKey];
+    return (m_pKeyMapNew[sKey] != 0u) && (m_pKeyMapOld[sKey] != 0u);
   }
   return false;
 }
 bool InputManager::IsKeyboardKeyReleased(SDL_Scancode key) {
-  return !m_pKeyMapNew[key] && m_pKeyMapOld[key];
+  return (m_pKeyMapNew[key] == 0u) && (m_pKeyMapOld[key] != 0u);
 }
 bool InputManager::IsKeyboardKeyReleased(char key) {
   SDL_Scancode sKey;
   if (GetScancode(sKey, key)) {
-    return !m_pKeyMapNew[sKey] && m_pKeyMapOld[sKey];
+    return (m_pKeyMapNew[sKey] == 0u) && (m_pKeyMapOld[sKey] != 0u);
   }
   return false;
 }
@@ -146,17 +153,18 @@ bool InputManager::IsKeyboardKeyReleased(char key) {
 // Mouse
 //----------------------------
 bool InputManager::IsMouseButtonPressed(int button) {
-  return (m_MouseMapNew & SDL_BUTTON(button)) &&
-         !(m_MouseMapOld & SDL_BUTTON(button));
+  return ((m_MouseMapNew & SDL_BUTTON(button)) != 0u) &&
+         ((m_MouseMapOld & SDL_BUTTON(button)) == 0u);
 }
 bool InputManager::IsMouseButtonDown(int button) {
-  return (m_MouseMapNew & SDL_BUTTON(button)) &&
-         (m_MouseMapOld & SDL_BUTTON(button));
+  return ((m_MouseMapNew & SDL_BUTTON(button)) != 0u) &&
+         ((m_MouseMapOld & SDL_BUTTON(button)) != 0u);
 }
 bool InputManager::IsMouseButtonReleased(int button) {
-  return !(m_MouseMapNew & SDL_BUTTON(button)) &&
-         (m_MouseMapOld & SDL_BUTTON(button));
+  return ((m_MouseMapNew & SDL_BUTTON(button)) == 0u) &&
+         ((m_MouseMapOld & SDL_BUTTON(button)) != 0u);
 }
 glm::vec2 InputManager::GetMousePosition() {
-  return glm::vec2((float)m_MousePosX, (float)m_MousePosY);
+  return glm::vec2(static_cast<float>(m_MousePosX),
+                   static_cast<float>(m_MousePosY));
 }

@@ -1,16 +1,78 @@
-#include "stdafx.h"
+#include "ArgvParser.h"
+#include "Context.h"      // for Context
+#include "InputManager.h" // for InputManager
+#include "Scene.h"        // for Scene
+#include "Settings.h"     // for Settings, Settings::Window...
+#include "glad.h"         // for glGetString, gladLoadGLLoader
+#include "utils.h"        // for SafeDelete
+#if PLATFORM_Win
+#include <IL\il.h>  // for ilInit
+#include <IL\ilu.h> // for iluInit
+#include <SDL.h>
+#include <glm\glm.hpp>
+#else
+#include <IL/il.h>  // for ilInit
+#include <IL/ilu.h> // for iluInit
+#include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#endif
+#include <cstdio>   // for fprintf, stderr
+#include <cstdlib>  // for atexit, exit, NULL
+#include <iostream> // for operator<<, endl, basic_os...
+#include <string>   // for char_traits, string
 
-#include "Scene.h"
+static const char* USAGE =
+" <NOISE> --<noise-option>=<value> --<option>\n\n"
+"option:\n"
+"\t -h  --help      	show this page.\n"
+"\t     --fullscreen	start program in fullscreen.\n"
+"\t     --use-vsync	start program with vsync.\n"
+"\n"
+"<NOISE> --<noise-option>=<value>\n"
+"Order of option does not matter.\n\n"
+"Common options                     Default value\n"
+"\t --width=UInt                    1024\n"
+"\t --height=UInt                   1024\n"
+"\t --max_height=Float              10.0\n\n"
+"SIMPLEX\n"
+"\t<common-options>\n\n"
+"RIDGEG-NOISE\n"
+"\t<common-options>\n\n"
+"FLOW-NOISE\n"
+"\t<common-options>\n"
+"\t--angle=Float                    0.5\n\n"
+"FBM\n"
+"\t<common-options> \n"
+"\t--octave=UInt                    4\n"
+"\t--lacunarity=Float               2.0 \n"
+"\t--gain=Float                     0.5\n\n"
+"WARPED-FBM \n"
+"\t<common-options> \n"
+"\t--octave=UInt                    4\n"
+"\t--lacunarity=Float               2.0\n"
+"\t--gain=Float                     0.5\n\n"
+"DFBM-WARPED-FBM \n"
+"\t--octave=UInt                    4\n"
+"\t--lacunarity=Float               2.0\n"
+"\t--gain=Float                     0.5\n\n"
+"RIDGED-MULTI-FRACTAL \n"
+"\t<common-options> \n"
+"\t--octave=UInt                    4\n"
+"\t--lacunarity=Float               2.0\n"
+"\t--gain=Float                     0.5\n";
 
-#include <IL/il.h>
-#include <IL/ilu.h>
-//#include <IL/ilut.h>
+void usage(const char* msg){
+  std::cout << "Usage: "
+            << msg
+            << USAGE << '\n';
+  std::exit(0);
+}
 
 //**************************************
 // Functions for debugging
 //**************************************
 static void sdl_die(const char *message) {
-  fprintf(stderr, "%s: %s\n", message, SDL_GetError());
+  std::cerr << message << ": " << SDL_GetError() << "\n";
   exit(2);
 }
 #if defined(DEBUG) | defined(_DEBUG)
@@ -53,29 +115,40 @@ void SetDebuggingOptions() {
 //**************************************
 // Main
 //**************************************
-int main(int argc, char *argv[]) {
-#ifdef PLATFORM_Win
-  UNREFERENCED_PARAMETER(argv);
-  UNREFERENCED_PARAMETER(argc);
+int main(int argc, char **argv) {
+  if (argc <= 1) {
+    usage(argv[0]);
+  }
+  
+  bool need_h = false;
+  bool need_help = false;
+  if (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h") {
+    usage(argv[0]);
+  }
+  ArgvParser argvParser{argc, argv};
 
-  // Catch memory leaks etc
-  SetDebuggingOptions();
-#endif
+  argvParser.GetCmdBool("-h", &need_h);
+  argvParser.GetCmdBool("--help", &need_help);
+
+  if (need_h || need_help) {
+    usage(argv[0]);
+  }
+
+  bool use_fullscreen = false;
+  argvParser.GetCmdBool("--fullscreen", &use_fullscreen);
+
+  bool use_vsync = false;
+  argvParser.GetCmdBool("--use-vsync", &use_vsync);
 
   // Initialize SDL, OpenGL, DevIL and GLAD
   //**************************************
   //
   // SDL init
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     sdl_die("Couldn't initialize SDL");
+  }
   atexit(SDL_Quit);
-  SDL_GL_LoadLibrary(NULL);
-
-  // SDL init
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    sdl_die("Couldn't initialize SDL");
-  atexit(SDL_Quit);
-  SDL_GL_LoadLibrary(NULL);
+  SDL_GL_LoadLibrary(nullptr);
 
   // request opengl context
   SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -87,7 +160,6 @@ int main(int argc, char *argv[]) {
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-
 // Request a debug context.
 #if defined(DEBUG) | defined(_DEBUG)
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
@@ -95,6 +167,9 @@ int main(int argc, char *argv[]) {
 
   // Create window
   Settings *pSettings = Settings::GetInstance(); // Initialize Game Settings
+  pSettings->Window.Fullscreen = use_fullscreen;
+  pSettings->Window.VSyncEnabled = use_vsync;
+
   if (pSettings->Window.Fullscreen) {
     pSettings->Window.pWindow =
         SDL_CreateWindow(pSettings->Window.Title.c_str(),
@@ -107,15 +182,17 @@ int main(int argc, char *argv[]) {
         SDL_WINDOWPOS_CENTERED, pSettings->Window.Width,
         pSettings->Window.Height, SDL_WINDOW_OPENGL);
   }
-  if (pSettings->Window.pWindow == NULL)
+  if (pSettings->Window.pWindow == nullptr) {
     sdl_die("Couldn't set video mode");
+  }
 
   // OpenGL context creation
   SDL_GLContext context = SDL_GL_CreateContext(pSettings->Window.pWindow);
-  if (context == NULL)
+  if (context == nullptr) {
     sdl_die("Failed to create OpenGL context");
+  }
   // Use v-sync
-  SDL_GL_SetSwapInterval(pSettings->Window.VSyncEnabled);
+  SDL_GL_SetSwapInterval(static_cast<int>(pSettings->Window.VSyncEnabled));
 
   // Initialize DevIL
 
@@ -135,8 +212,10 @@ int main(int argc, char *argv[]) {
 #ifdef _DEBUG
   glEnable(GL_DEBUG_OUTPUT);
   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-  //glDebugMessageCallback(openglCallbackFunction, nullptr);
-  //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
+
+  // Disable for OpenGL 3.3 compatibility
+  // glDebugMessageCallback(openglCallbackFunction, nullptr);
+  // glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL,
   //                      true);
 #endif
 
@@ -148,19 +227,21 @@ int main(int argc, char *argv[]) {
   pInput->Init();
 
   // Make a scene :D
-  Scene *pScene = new Scene();
+  auto *pScene = new Scene(argc, argv, argvParser);
   pScene->Init();
 
   glEnable(GL_DEPTH_TEST);
   // Main Loop
-  while (!pInput->IsKeyboardKeyDown(SDL_SCANCODE_ESCAPE)) {
+  while (true) {
     // UPDATE
     //**********
 
     // user input
     pInput->UpdateEvents();
-    if (pInput->IsExitRequested())
+    if (pInput->IsExitRequested() or
+        pInput->IsKeyboardKeyPressed(SDL_SCANCODE_ESCAPE)) {
       break;
+    }
 
     // scene update
     pScene->Update();

@@ -1,10 +1,13 @@
-#include "stdafx.h"
-
 #include "Shader.h"
+#include <fstream>
+#include <iostream> // for operator<<, endl, basic_ostream, cout, ostream
+#include <utility>
 
-Shader::Shader(std::string filename, bool build) : m_FileName(filename) {
-  if (build)
+Shader::Shader(std::string filename, bool build)
+    : m_FileName(std::move(filename)) {
+  if (build) {
     Build();
+  }
 }
 
 void Shader::Build() {
@@ -25,7 +28,7 @@ void Shader::Build() {
     std::cout << "    Opening shader file failed." << std::endl;
     return;
   }
-  while (shaderFile.eof() == false) {
+  while (!shaderFile.eof()) {
     // Get the line
     getline(shaderFile, extractedLine);
     // Precompile types
@@ -72,15 +75,17 @@ void Shader::Build() {
 
   // Compile
   m_VertexShader = CompileShader(vertSource, GL_VERTEX_SHADER);
-  if (useGeo)
+  if (useGeo) {
     m_GeometryShader = CompileShader(geoSource, GL_GEOMETRY_SHADER);
+  }
   m_FragmentShader = CompileShader(fragSource, GL_FRAGMENT_SHADER);
 
   // Combine Shaders
   m_ShaderProgram = glCreateProgram();
   glAttachShader(m_ShaderProgram, m_VertexShader);
-  if (useGeo)
+  if (useGeo) {
     glAttachShader(m_ShaderProgram, m_GeometryShader);
+  }
   glAttachShader(m_ShaderProgram, m_FragmentShader);
   glBindFragDataLocation(m_ShaderProgram, 0, "outColor");
   glLinkProgram(m_ShaderProgram);
@@ -90,31 +95,33 @@ void Shader::Build() {
   glGetProgramiv(m_ShaderProgram, GL_LINK_STATUS, &status);
   if (!(status == GL_TRUE)) {
     char buffer[512];
-    glGetProgramInfoLog(m_ShaderProgram, 512, NULL, buffer);
+    glGetProgramInfoLog(m_ShaderProgram, 512, nullptr, buffer);
     std::cout << "[ERROR] Shader>Build: Program linking failed\n"
               << buffer << std::endl;
     std::cout << "  . . . FAILED!" << std::endl;
-  } else
+  } else {
     std::cout << "  . . . SUCCESS!" << std::endl;
+  }
 
   // Delete those shaders
   glDeleteShader(m_VertexShader);
-  if (useGeo)
+  if (useGeo) {
     glDeleteShader(m_GeometryShader);
+  }
   glDeleteShader(m_FragmentShader);
 }
 
 GLuint Shader::CompileShader(const std::string &shaderSourceStr, GLenum type) {
   const char *shaderSource = shaderSourceStr.c_str();
   GLuint shader = glCreateShader(type);
-  glShaderSource(shader, 1, &shaderSource, NULL);
+  glShaderSource(shader, 1, &shaderSource, nullptr);
 
   GLint status;
   glCompileShader(shader);
   glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
   if (!(status == GL_TRUE)) {
     char buffer[512];
-    glGetShaderInfoLog(shader, 512, NULL, buffer);
+    glGetShaderInfoLog(shader, 512, nullptr, buffer);
     std::cout << "  . . . FAILED!" << std::endl;
     std::string sName;
     switch (type) {

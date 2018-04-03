@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ArgvParser.h"
+
 class Time;
 class Camera;
 class ContextObjects;
@@ -10,7 +12,7 @@ class Planet;
 
 class Scene {
 public:
-  Scene();
+  Scene(int argc, char** argv, ArgvParser& parser);
   ~Scene();
 
   void Init();
@@ -33,5 +35,21 @@ private:
   SpriteFont *m_pDebugFont = nullptr;
 
   // Planet tech
-  Planet *m_pPlanet;
+  Planet *m_pPlanet = nullptr;
+
+  //Planet properties
+  /**
+    \brief  if val == cmp then val is set to default value def
+            T must be overload == operator
+  */
+  template <typename T>
+  bool check_value(T& val, T cmp, T def){
+    if (val == cmp){
+      val = def;
+      return true;
+    }
+    return false;
+  }
+
+  void CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser);
 };

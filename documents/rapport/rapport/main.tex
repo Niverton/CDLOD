@@ -6,12 +6,16 @@
   \usepackage{graphicx}
   \usepackage{wrapfig}
   \usepackage{caption}
+  \usepackage{float}
   \usepackage[colorinlistoftodos]{todonotes}
   \usepackage[strings]{underscore}
   \usepackage{url}
   \usepackage{hyperref}
   \usepackage{soul}
-  
+  \usepackage{longtable,booktabs}
+  \usepackage{listings}
+  \usepackage{subcaption}
+  \usepackage{listings}
   
   \hypersetup{%
       pdfborder = {0 0 0}
@@ -21,7 +25,7 @@
   
  
 
-  %-----------------------------------------------------------------%
+  %-----------------------------------------------------------------%   
   %    PAGE DE TITRE
   %-----------------------------------------------------------------%
   
@@ -29,14 +33,34 @@
   \input{titre.tex}
   
 
+
+  %-----------------------------------------------------------------%
+  %   Introduction
+  %-----------------------------------------------------------------%
+
+  \newpage
+  
+  \input{abstract.tex}
+  
+  \thispagestyle{empty}
+
+
+
   %-----------------------------------------------------------------%
   %   Table des Matières
   %-----------------------------------------------------------------%
-  
+  \newpage
   
   \tableofcontents
   
   \thispagestyle{empty} % empeche l'affichage du numero de cet page
+  
+  %-----------------------------------------------------------------%
+  %    DEFINITION
+  %-----------------------------------------------------------------%
+  
+  \newpage
+  %\input{definitions.tex}
   
 
   %-----------------------------------------------------------------%
@@ -46,8 +70,12 @@
   
   \input{intro.tex}
   
-
   
+  %-----------------------------------------------------------------%
+  %   Etats de l'existant
+  %-----------------------------------------------------------------%
+  \newpage
+  \input{existant.tex}
   
   
   %-----------------------------------------------------------------%
@@ -60,82 +88,71 @@
   \input{CDLOD.tex}
   
   
-
-  
-
-  
-
-<<<<<<< HEAD
-  	
   %-----------------------------------------------------------------%
-  %   Architecture et explication détaillé de l'implémentation
+  %   Besoins
   %-----------------------------------------------------------------%
-  \chapter{Architecture du programme}
-	
+  
+  \newpage
+  
+  \input{besoins.tex}
     
+  %-----------------------------------------------------------------%
+  %   Architecture
+  %-----------------------------------------------------------------%
   
-  \section{Système de rendu}
-  \section{Génération du maillage}	% Explication de triangulator.
-  % icosahèdre ?
-  % triangulator ?
-  % structure de données
-	Il existe plusieurs manières de générer un maillage de planète, la méthode utilisé ici
-	se base sur un icosahédron, une forme géométrique composée de douze sommets de base et 
-	de vingt faces triangulaire. Chaque face étant un triangle équilateral de taille identique.
-	La figure XX représente un icosahèdre.\\
-
-	% Insert icosahedron image here	
-	
-	La génération du maillage et l'entierté de la partie LOD de l'algorithme se fait dans la classe Triangulator.
-	L'arbre de données est implémenté avec la méthode des flux du CDLOD, c'est à dire que l'arbre n'est
-	pas conservé en mémoire mais est regénérer à chaque itéation de la boucle. Les avantages de cette méthode seront 
-	expliqué plus bas.
-	
-	Pour accélérer les temps d'accès mémoire, les distances avec les différents triangles sont conservées
-	dans un tableau. \\
-
-	Dans l'abre, chaque noeud possède trois positions correspondant aux trois points du triangle,
-	ainsi que quatre pointeur vers ne niveaux suivant.
-	D'autre information sont stocké comme un pointeur vers son parent, le niveau actuelle du
-	noeud dans l'abre ou encore un tag correspondant au type du noeud.
-	Le tag sous forme d'un enum permet de distinguer le noeud qui sont a l'interieur de l'abre de ceux
-	qui ne le sont pas. Il permet aussi de renseigner si le noeud est une feuille.
-		
-	Pour chaque triangle, on commence par tester si le triangle est visible, c'est à dire si il est
-	présent à l'interieur du cône de vision de la caméra. Si c'est la cas, on prend le centre de chaque
-	arrete du triangle l'on recommence de manière récursive tans que une subdivision est nécessaire.
-	C'est à dire tans que le noeud contenant le triangle n'est pas une feuille. Dans le cas contraire,
-	
-	\begin{figure}[!h]
-    \includegraphics[width=12cm]{img/TriangleSplit.png}
-    \caption{Division}
-    \label{fig:TriangleSplit}
-	\end{figure}
-	
-	La figure XX représente un diagramme de la fonction récursive. Lorsque l'on passe d'un niveau à un
-	niveau inferieur dans l'arbre, le noeud courant pointer vers quatre fils, il est donc nécéssaire
-	d'appeler récursivement quatre fois la fonction.
-	
-	On peut se rendre compte de la découpe du triangle en quatre plus petit dans la figure 
-	\cite{TriangleSplit}.
-	Les appels récursifs se font dans l'ordre aBC, AbC, ABc et enfin le triangle du milieux ABC.\\
-	
-	La fonction splitHeuristic permet en fonction de trois coordonnées représentant un triangle 
-	et du niveau d'établir si ce triangle est dans le cône de vision ou non et de retourner le bon tag.
-	Les méthodes permettant de déterminer si le cône de vision contient un triangle sont définies dans
-	la classe Frustum.
-	
-  \section{Application du morphing}
-
-
+  \newpage
   
+  \input{archi.tex}
+  
+ 
+  %-----------------------------------------------------------------%
+  %   Implementation
+  %-----------------------------------------------------------------%
+  
+  \newpage
+  
+  \input{implementation.tex}
+
+
+
+  \newpage
+  \input{tests.tex}
+  
+  
+  \newpage
+  \input{futur.tex}
+  
+  
+  %-----------------------------------------------------------------%
+  %   Conclusion
+  %-----------------------------------------------------------------%
+  
+  \newpage
+  
+  \input{conclusion.tex}
+  
+  
+  
+  %-----------------------------------------------------------------%
+  %   Annexe
+  %-----------------------------------------------------------------%
+  
+  \newpage
+  
+  \input{annexe/annexe.tex}
   
   
   %-----------------------------------------------------------------%
   %   END
   %-----------------------------------------------------------------%
   
+  \clearpage
+
+  \phantomsection
+
+  \addcontentsline{toc}{chapter}{Bibliographie}
   \bibliography{biblio}{}
   \bibliographystyle{plain}
+    
   
   \end{document}

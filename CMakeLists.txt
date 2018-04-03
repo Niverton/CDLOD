@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7.2)
+cmake_minimum_required(VERSION 3.5.1)
 
 #Export build configuration for external tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -17,7 +17,18 @@ set(ASAN NO CACHE BOOL
   "Enable -fsanitize=address ?")
 set(SANAL NO CACHE BOOL
   "Run static analysers during build ?")
+set(TIDY_CONFIG
+  "-checks=*,\
+-google-runtime-int,\
+-cppcoreguidelines-pro-type-union-access,\
+-cppcoreguidelines-pro-bounds-pointer-arithmetic,\
+-cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
+-cppcoreguidelines-pro-type-reinterpret-cast"
+  CACHE STRING
+  "clang-tidy configuration")
 
+set(BUILD_TESTS YES CACHE BOOL
+  "Should build test executables ?")
 
 # Fichiers source
 set(SRCS
@@ -35,26 +46,22 @@ set(SRCS
   PlanetFramework/PlanetTech/Patch.h
   PlanetFramework/PlanetTech/Planet.cpp
   PlanetFramework/PlanetTech/Planet.h
-  PlanetFramework/PlanetTech/stdafx.h
   PlanetFramework/PlanetTech/Triangulator.cpp
   PlanetFramework/PlanetTech/Triangulator.h
   PlanetFramework/PlanetTech/Types/Earth.cpp
   PlanetFramework/PlanetTech/Types/Earth.h
   PlanetFramework/PlanetTech/Types/Moon.cpp
   PlanetFramework/PlanetTech/Types/Moon.h
-  PlanetFramework/PlanetTech/Types/stdafx.h
   PlanetFramework/Scene.cpp
   PlanetFramework/Scene.h
-  PlanetFramework/Screenshot.cpp
-  PlanetFramework/Screenshot.h
+  #PlanetFramework/Screenshot.cpp
+  #PlanetFramework/Screenshot.h
   PlanetFramework/Settings.h
   PlanetFramework/Shader.cpp
   PlanetFramework/Shader.h
   PlanetFramework/Singleton.h
   PlanetFramework/SpriteFont.cpp
   PlanetFramework/SpriteFont.h
-  PlanetFramework/stdafx.cpp
-  PlanetFramework/stdafx.h
   PlanetFramework/TextRenderer.cpp
   PlanetFramework/TextRenderer.h
   PlanetFramework/Texture.cpp
@@ -63,11 +70,11 @@ set(SRCS
   PlanetFramework/Time.h
   PlanetFramework/Transform.cpp
   PlanetFramework/Transform.h
+  PlanetFramework/ArgvParser.h
+  PlanetFramework/ArgvParser.cpp
   PlanetFramework/PlanetTech/Types/Procedural.h
   PlanetFramework/PlanetTech/Types/Procedural.cpp
-  PlanetFramework/StaticDependancies/glad/glad.cpp
-  PlanetFramework/StaticDependancies/glad/glad.h
-  PlanetFramework/StaticDependancies/glad/stdafx.h
+  PlanetFramework/utils.h
 )
 
 # --------------------------- EXTERNAL DEPENDENCIES ---------------------------
@@ -76,12 +83,13 @@ include(ExternalProject)
 externalproject_add(devil_ext
   GIT_REPOSITORY        "https://github.com/DentonW/DevIL.git"
   GIT_TAG               "v1.8.0"
-  SOURCE_SUBDIR         "DevIL"
+  #SOURCE_SUBDIR         "DevIL"
+  CONFIGURE_COMMAND ${CMAKE_COMMAND} <SOURCE_DIR>/DevIL
   INSTALL_COMMAND       ""
 
   #Enable opengl support
-  PATCH_COMMAND patch "DevIL/src-ILUT/CMakeLists.txt"
-                      "${CMAKE_SOURCE_DIR}/devil.patch"
+  #PATCH_COMMAND patch "DevIL/src-ILUT/CMakeLists.txt"
+  #                    "${CMAKE_SOURCE_DIR}/devil.patch"
 )
 
 externalproject_get_property(devil_ext source_dir)
@@ -133,6 +141,11 @@ endif()
 find_package(OpenGL 3.3 REQUIRED)
 find_package(SDL2 REQUIRED)
 
+add_library(glad OBJECT
+  external/glad/glad.cpp
+  external/glad/glad.h
+  )
+
 # ------------------------------------- # -------------------------------------
 
 # link to directories
@@ -149,15 +162,25 @@ add_custom_target(fonts ALL COMMAND ${CMAKE_COMMAND} -E create_symlink
 # Target
 add_definitions(-DILUT_USE_OPENGL -DPLATFORM_Linux)
 set(EXEC PlanetRenderer)
-add_executable(${EXEC} ${SRCS})
+add_executable(${EXEC} ${SRCS} $<TARGET_OBJECTS:glad>)
+target_include_directories(${EXEC}
+  PRIVATE
+    PlanetFramework/
+    PlanetFramework/PlanetTech/
+    external/glad
+    external/
+    )
 # Build this before EXEC
-add_dependencies(${EXEC} devil_ext shaders textures)
+set (DEPS devil_ext shaders textures fonts glad)
+#add_dependencies(${EXEC} devil_ext shaders textures fonts)
 if((NOT ${glm_FOUND}) AND (NOT ${GLM_USE_NATIVE}))
-  add_dependencies(${EXEC} glm_ext)
+  list(APPEND ${DEPS} glm_ext)
+  #add_dependencies(${EXEC} glm_ext)
 endif()
+add_dependencies(${EXEC} ${DEPS})
 
 # Compile options
-if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
   if(CMAKE_BUILD_TYPE MATCHES "Debug")
     target_compile_options(${EXEC} PRIVATE
       "-Wall" "-Wpedantic")
@@ -180,23 +203,23 @@ target_include_directories(${EXEC} PRIVATE ${OPENGL_INCLUDE_DIR})
 #GLM
 target_include_directories(${EXEC} PRIVATE ${GLM_INCLUDE_DIRS})
 #SDL
+  # Fix errors with old versions of the SDL's cmake config files
+string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
 target_link_libraries(${EXEC} PRIVATE ${SDL2_LIBRARIES})
 target_include_directories(${EXEC} PRIVATE ${SDL2_INCLUDE_DIRS})
 
-target_include_directories(${EXEC} PRIVATE include)
 #Force c++14
 target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
 
 # Add static analysers
-if(STATIC_ANALYSIS)
+if(SANAL)
   if(NOT DEFINED CMAKE_CXX_CLANG_TIDY)
     #CMAKE_CXX_CLANG_TIDY was not set
     find_program(clang_tidy_loc clang-tidy)
     if (EXISTS ${clang_tidy_loc})
       message(STATUS "Found clang-tidy at " ${clang_tidy_loc})
       set_target_properties(${EXEC} PROPERTIES
-        CXX_CLANG_TIDY "${clang_tidy_loc};-checks=*")
-      get_target_property(test ${EXEC} CXX_CLANG_TIDY)
+        CXX_CLANG_TIDY "${clang_tidy_loc};${TIDY_CONFIG}")
     else()
       message(STATUS "clang-tidy not found")
     endif()
@@ -253,4 +276,132 @@ if(COMMAND doxygen_add_docs)
 else()
   message(WARNING "doxygen_add_docs not available, doxygen target\
   disabled. Update CMake.")
+endif()
+
+# ---------------------------Tests--------------------------------
+if(BUILD_TESTS)
+  enable_testing()
+
+  # All extra arguments are passed to add_executable
+  macro(make_test name)
+    add_executable(${name}_test
+      # EXCLUDE_FROM_ALL # Don't build with the target ALL
+      tests/main.cpp
+      external/glad/glad.cpp
+      external/glad/glad.h
+      ${ARGN})
+
+    set_target_properties(${name}_test PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY tests
+      COMPILE_DEFINITIONS test_${name})
+
+    #Force c++14
+    target_compile_features(${EXEC} PRIVATE cxx_decltype_auto)
+
+    get_target_property(LIBS ${EXEC} LINK_LIBRARIES)
+    get_target_property(INCL ${EXEC} INCLUDE_DIRECTORIES)
+    get_target_property(DEPS ${EXEC} MANUALLY_ADDED_DEPENDENCIES)
+    if(DEPS)
+      add_dependencies(${name}_test ${DEPS})
+    endif()
+
+    target_link_libraries(${name}_test ${LIBS})
+    target_include_directories(${name}_test PRIVATE
+      ${INCL}
+      tests/
+      PlanetFramework/
+      PlanetFramework/Textures
+      PlanetFramework/HeightMapGenerator
+      PlanetFramework/Shaders
+      PlanetFramework/Fonts
+      PlanetFramework/PlanetTech
+      PlanetFramework/PlanetTech/Types
+      )
+
+    if (DEPS)
+      add_dependencies(${name}_test ${DEPS})
+    else()
+      add_dependencies(${name}_test devil_ext)
+      if(TARGET glm_ext)
+        add_dependencies(${name}_test glm_ext)
+      endif()
+    endif()
+
+    add_test(NAME ${name}
+      COMMAND ${name}_test)
+  endmacro()
+
+  # How to write a test:
+  # 1) Write a header file with mocks for the functions to intercept
+  # 2) Write a source file defining the function `int test()` to run the
+  #    tests
+  # 3) Create a test target with make_test
+  # 4) Include your test's header in the tested files if building in
+  #    test mode
+  #
+  # Ex: create the t1 test using t1.cpp t1.h files testing the file
+  # ToTest.cpp
+  # make_test defines the TEST_${name} macro in the target
+  #
+  # make_test(t1 t1.cpp t1.h ToTest.cpp)
+
+  # TextRenderer
+  make_test(textrenderer_update_buffer
+    tests/TextRenderer_update_buffer.cpp
+    tests/TextRenderer_update_buffer.h
+    PlanetFramework/TextRenderer.cpp
+    PlanetFramework/TextRenderer.h
+    tests/dummies/Shader.cpp
+    #tests/dummies/SpriteFont.cpp
+    PlanetFramework/SpriteFont.cpp
+    PlanetFramework/SpriteFont.h
+    PlanetFramework/BinaryReader.cpp
+    PlanetFramework/BinaryReader.h
+    PlanetFramework/Texture.cpp
+    PlanetFramework/Texture.h
+    )
+
+  # Patch
+  make_test(patch_generate_geometry
+    tests/Patch_generate_geometry.cpp
+    tests/Patch_generate_geometry.h
+    PlanetFramework/PlanetTech/Patch.cpp
+    PlanetFramework/PlanetTech/Patch.h
+    tests/dummies/Shader.cpp
+    )
+
+  # Triangulator
+  make_test(triangulator_generate_geometry
+    tests/Triangulator_generate_geometry.cpp
+    tests/Triangulator_generate_geometry.h
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/PlanetTech/Triangulator.h
+    PlanetFramework/InputManager.cpp
+    PlanetFramework/InputManager.h
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )
+  make_test(triangulator_split_heuristic
+    tests/Triangulator_split_heuristic.cpp
+    tests/Triangulator_split_heuristic.h
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/PlanetTech/Triangulator.h
+    PlanetFramework/InputManager.cpp
+    PlanetFramework/InputManager.h
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )
+  make_test(triangulator_recursive_triangle
+    tests/Triangulator_recursive_triangle.cpp
+    PlanetFramework/PlanetTech/Triangulator.cpp
+    PlanetFramework/InputManager.cpp
+    tests/dummies/Planet.cpp    
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
+    )  
+  
+  make_test(argv_parser
+    PlanetFramework/ArgvParser.cpp
+    tests/Argv_parser.cpp
+    )
 endif()
