@@ -22,6 +22,9 @@
 #include <string>   // for char_traits, string
 
 static const char* USAGE =
+
+
+"\nFor non procedural run on Earth or Moon: just type MOON/EARTH \n\nFor procedurals runs:\n\n"
 " <NOISE> --<noise-option>=<value> --<option>\n\n"
 "option:\n"
 "\t -h  --help      	show this page.\n"
