@@ -7,8 +7,8 @@
 #include "TextRenderer_update_buffer.h"
 #endif
 
-Texture::Texture(std::string filename) : m_Name{std::move(filename)} {
-  m_isFile = true;
+Texture::Texture(std::string filename)
+    : m_Name{std::move(filename)}, m_isFile{true} {
 }
 
 Texture::Texture(float *data, int width, int height)
