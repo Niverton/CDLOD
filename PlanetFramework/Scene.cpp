@@ -164,37 +164,49 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
     };
 
     std::string noise = argvParser.GetMode();
-    std::cout << '\n';
-
-    argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
-    argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
-    argvParser.GetCmdFloat("--max-height", &prop.maxHeight);
-    argvParser.GetCmdInt<unsigned int>("--octave", &prop.octave);
-    argvParser.GetCmdFloat("--lacunarity", &prop.lacunarity);
-    argvParser.GetCmdFloat("--gain", &prop.gain);
-    argvParser.GetCmdFloat("--offset", &prop.ridgeOffset);
-    argvParser.GetCmdFloat("--radius", &prop.radius);
-
-    check_value<float>(prop.radius, 0, 1737.1);
-    check_value<unsigned int>(prop.width, 0, 1024);
-    check_value<unsigned int>(prop.height, 0, 1024);
-    check_value<unsigned int>(prop.octave, 0, 4);
-    check_value<float>(prop.maxHeight, 0, 10.0);
-    check_value<float>(prop.lacunarity, 0, 2.0);
-    check_value<float>(prop.gain, 0, 0.5);
-    check_value<float>(prop.ridgeOffset, 0, 0.1);
-
-    for (int i=0; i<8; i++){
-      if (noise == NOISES[i] || noise == noises[i]){
-        prop.noise = static_cast<ProceduralPlanet::Noise> (i);
-      }
+    if ( noise == "MOON" || noise == "moon"){
+      m_pPlanet = new Moon();
     }
+    else if ( noise == "EARTH" || noise == "earth"){
+      m_pPlanet = new Earth();
+    } else {
 
-    try { 
-      m_pPlanet = new ProceduralPlanet(&prop);
-    } catch (...) {
-      std::cerr << PLANET_ERROR << '\n';
-    	std::exit(EXIT_FAILURE);
+      argvParser.GetCmdInt<unsigned int>("--width", &prop.width);
+      argvParser.GetCmdInt<unsigned int>("--height", &prop.height);
+      argvParser.GetCmdFloat("--max-height", &prop.maxHeight);
+      argvParser.GetCmdInt<unsigned int>("--octave", &prop.octave);
+      argvParser.GetCmdFloat("--lacunarity", &prop.lacunarity);
+      argvParser.GetCmdFloat("--gain", &prop.gain);
+      argvParser.GetCmdFloat("--offset", &prop.ridgeOffset);
+      argvParser.GetCmdFloat("--radius", &prop.radius);
+
+      check_value<float>(prop.radius, 0, 1737.1);
+      check_value<unsigned int>(prop.width, 0, 1024);
+      check_value<unsigned int>(prop.height, 0, 1024);
+      check_value<unsigned int>(prop.octave, 0, 4);
+      check_value<float>(prop.maxHeight, 0, 10.0);
+      check_value<float>(prop.lacunarity, 0, 2.0);
+      check_value<float>(prop.gain, 0, 0.5);
+      check_value<float>(prop.ridgeOffset, 0, 0.1);
+
+      bool found = false;
+      for (int i=0; i<8; i++){
+        if (noise == NOISES[i] || noise == noises[i]){
+          found = true;
+          prop.noise = static_cast<ProceduralPlanet::Noise> (i);
+        }
+      }
+      if (!found){
+        std::cerr << "Error please specify a correct noise, see usage for more info.\n";
+        std::exit(EXIT_FAILURE);
+      }
+
+      try { 
+        m_pPlanet = new ProceduralPlanet(&prop);
+      } catch (...) {
+        std::cerr << PLANET_ERROR << '\n';
+        std::exit(EXIT_FAILURE);
+      }
     }
   }
 }
