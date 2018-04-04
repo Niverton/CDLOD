@@ -26,74 +26,23 @@ double Timer(Fun f, int nb){
 }
 
 bool test(){
-  
-  auto simplex = [] (int i) {
+  auto noise = [] (int i) {
               ProceduralPlanet::Properties prop;
-              prop.width = prop.height = pow(2, i);
-              prop.noise = ProceduralPlanet::Noise::SIMPLEX;
-              
-              Planet* p = new ProceduralPlanet (&prop);
-            };
-  
-  auto ridged = [] (int i) {
-              ProceduralPlanet::Properties prop;
-              prop.width = prop.height = pow(2, i);
-              prop.noise = ProceduralPlanet::Noise::RIDGED_NOISE;
-              
-              Planet* p = new ProceduralPlanet (&prop);
-  	    };
-
-  auto flow = [] (int i) {
-              FlowNoiseProperties prop;
-              prop.width = prop.height = pow(2, i);
-              prop.noise = ProceduralPlanet::Noise::FLOW_NOISE;
-              
-              Planet* p = new ProceduralPlanet (&prop);
-            };
-
-  auto fbm = [] (int i) {
-              FbmProperties prop;
-              prop.width = prop.height = pow(2, i);
-              prop.noise = ProceduralPlanet::Noise::FBM;
-              
-              Planet* p = new ProceduralPlanet (&prop);
-	   };
-
-  auto warped = [] (int i) {
-              FbmProperties prop;
-              prop.width = prop.height = pow(2, i);
-              prop.noise = ProceduralPlanet::Noise::WARPED_FBM;
+              prop.width = pow(2, i);
+              prop.height = pow(2, i);
               
               Planet* p = new ProceduralPlanet (&prop);
            };
 
-  auto dfbm = [] (int i) {
-              FbmProperties prop;
-              prop.width = prop.height = pow(2, i);
-              prop.noise = ProceduralPlanet::Noise::DFBM_WARPED_FBM;
-              
-              Planet* p = new ProceduralPlanet (&prop);
-            };
+  std::cout << "simplex;perlin;ridged;flow;fbm;warped;dfbm;fractal;\n";
+  //[6..11] -> [64x64 .. 2048x2048]
+  static const int nb_tests = 5;
+  for (int i=6; i <= 6 + nb_tests; i++){
 
-  auto fractal = [] (int i) {
-              RidgedMultiFractalVariationProperties prop;
-              prop.width = prop.height = pow(2, i);
-      	      prop.noise = ProceduralPlanet::Noise::RIDGED_MULTI_FRACTAL_VARIATION;
 
-              Planet* p = new ProceduralPlanet (&prop);
-  	    };
-
-  std::cout << "SIMPLEX;RIDGED;FLOW;FBM;WARPED;DFBM;FRACTAL;\n";
-  //[6..12] -> [64x64 .. 4096x4096]
-  static const int nb_tests = 6;
-  for (int i=6; i < 6 + nb_tests; i++){
-    std::cout << Timer(simplex, i)  << ';';
-    std::cout << Timer(ridged, i)   << ';';
-    std::cout << Timer(flow, i)     << ';';
-    std::cout << Timer(fbm, i)      << ';';
-    std::cout << Timer(warped, i)   << ';';
-    std::cout << Timer(dfbm, i)     << ';';
-    std::cout << Timer(fractal, i)  << ';';
+    for (int j=0; j<8; j++){
+      std::cout << Timer(noise, i)  << ';';
+    }
     std::cout << '\n';
   }
 

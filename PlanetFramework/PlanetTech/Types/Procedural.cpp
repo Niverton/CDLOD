@@ -5,12 +5,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
 
-ProceduralPlanet::ProceduralPlanet(Properties *properties) {
-  unsigned int width = properties->width;
-  unsigned int height = properties->height;
-  m_Radius = properties->radius;
-  m_MaxHeight = properties->maxHeight;
-  Noise n = properties->noise;
+ProceduralPlanet::ProceduralPlanet(Properties *prop) {
+  unsigned int width = prop->width;
+  unsigned int height = prop->height;
+  m_Radius = prop->radius;
+  m_MaxHeight = prop->maxHeight;
+  Noise n = prop->noise;
 
   std::function<double(glm::vec3)> noise_maker;
   /* Added NOLINT to prevent clang-tidy from flagging suspicious but
@@ -28,21 +28,16 @@ ProceduralPlanet::ProceduralPlanet(Properties *properties) {
     noise_maker = [](const glm::vec3 &p) { return Simplex::ridgedNoise(p); };
     break;
   case Noise::FLOW_NOISE: {
-    auto prop = static_cast<FlowNoiseProperties *>(properties); // NOLINT
     noise_maker = [&](const glm::vec3 &p) {
       return Simplex::flowNoise(p, prop->angle);
     };
   } break;
-  case Noise::FBM:
-    /* Fall Through*/
-  case Noise::FBM_VARIATION: {
-    auto prop = static_cast<FbmProperties *>(properties); // NOLINT
+  case Noise::FBM: {
     noise_maker = [&](const glm::vec3 &p) {
       return Simplex::fBm(p, prop->octave, prop->lacunarity, prop->gain);
     };
   } break;
   case Noise::WARPED_FBM: {
-    auto prop = static_cast<FbmProperties *>(properties); // NOLINT
     noise_maker = [&](const glm::vec3 &p) {
       return Simplex::fBm(
           Simplex::fBm(p, prop->octave, prop->lacunarity, prop->gain),
@@ -50,7 +45,6 @@ ProceduralPlanet::ProceduralPlanet(Properties *properties) {
     };
   } break;
   case Noise::DFBM_WARPED_FBM: {
-    auto prop = static_cast<FbmProperties *>(properties); // NOLINT
     noise_maker = [&](const glm::vec3 &p) {
       return Simplex::fBm(
           Simplex::dfBm(p, prop->octave, prop->lacunarity, prop->gain),
@@ -58,27 +52,7 @@ ProceduralPlanet::ProceduralPlanet(Properties *properties) {
     };
   } break;
 
-  case Noise::RIDGED_MULTI_FRACTAL_VARIATION: {
-    auto prop = static_cast<RidgedMultiFractalVariationProperties *>( // NOLINT
-        properties);
-    noise_maker = [&](const glm::vec3 &p) {
-      return Simplex::ridgedMF(p, prop->ridgeOffset, prop->octave,
-                               prop->lacunarity, prop->gain);
-    };
-  } break;
-  case Noise::WARPED_RIDGED_MULTI_FRACTAL: {
-    auto prop = static_cast<WarpedRidgedMultiFractalProperties *>( // NOLINT
-        properties);
-    noise_maker = [&](const glm::vec3 &p) {
-      return Simplex::ridgedMF(
-          Simplex::ridgedMF(p, prop->ridgeOffset, prop->octave,
-                            prop->lacunarity, prop->gain),
-          prop->ridgeOffset, prop->octave, prop->lacunarity, prop->gain);
-    };
-  } break;
-  case Noise::RIDGED_MULTI_FRACTAL_VARIATION2: {
-    auto prop = static_cast<RidgedMultiFractalVariationProperties *>( // NOLINT
-        properties);
+  case Noise::RIDGED_MULTI_FRACTAL: {
     noise_maker = [&](const glm::vec3 &p) {
       return Simplex::ridgedMF(p, prop->ridgeOffset, prop->octave,
                                prop->lacunarity, prop->gain);
