@@ -48,7 +48,7 @@
   
 \vspace{1.5cm}
 
-\section{Continuous Distant-Dependent LOD ****}
+\section{Continuous Distant-Dependent LOD}
 
 
   La méthode \textit{CDLOD}, est basé sur la méthode \textit{CLOD} "Chuncked LOD" développé par Thatcher Ulrich~\cite{CLOD} (dont nous proposons un résumé en annexe \ref{sec:chunked-lod}).
@@ -56,7 +56,7 @@
 
   Cette méthode organise une \emph{heightmap} dans un \emph{quadtree}, qui est utilisé pour sélectionner les niveaux de détails nécessaires au rendu. Lors de l'exécution le \emph{quadtree} est généré et composé des niveaux de détails, les \emph{LOD} nécessaires sont calculés et ainsi utilisés depuis le \emph{quadtree}. L'algorithme va assurer que le nombre de triangles affichés à l'écran reste constant, quelle que soit la distance entre la caméra et le terrain.
   
- \subsection{Sélection des n\oe{}uds dans le Quadtree ****}
+ \subsection{Sélection des n\oe{}uds dans le Quadtree}
  
     Pour pouvoir assurer que le nombre de triangles affichés à l'écran reste constant, il est nécessaire d'effectuer la sélection dans le \emph{quadtree} à chaque fois que la caméra bouge.\\
     \vspace{0.5cm}
@@ -65,12 +65,12 @@
    \caption[Quadtree]{Quadtree\protect\footnotemark}
    \label{fig:quadtree-selection}
  \end{wrapfigure}
- \footnotetext{Extrait de \url{https://flylib.com/books/en/2.124.1.130/1/}, dernier accès Mars 2018}
+ \footnotetext{Extrait de \url{https://flylib.com/books/en/2.124.1.130/1/}, dernier accès: mars 2018}
     Le rendu du terrain est alors effectué en fonction de la distance entre le terrain et la caméra. Pour afficher un n\oe{}ud, le \emph{quadtree} est parcouru depuis la racine avec une tolérance maximale prédéfinie. Si le n\oe{}ud parcouru est valide il est affiché et s'il y a un trop grand écart alors on vérifie ses fils dans le \emph{quadtree}, et ainsi de suite. Les zones proches auront un niveau de détails élevé, alors que les zones plus lointaines seront moins détaillées. Le niveau de détails correspond alors à la profondeur dans le \emph{quadtree}, comme on peut l'observer sur la figure \ref{fig:quadtree-selection}
 
 \newpage
 
-\subsection{Intervention du Morphing ****}
+\subsection{Intervention du Morphing}
 \label{subsec:interventionMorphing}
     l'algorithme de CDLOD garde en continue un niveau de détail en utilisant sans arrêt des transitions. Contrairement à la méthode Chuncked-LOD de Ulrich.T ~\cite{CLOD} , Strugar.F dans sa méthode ~\cite{CDLOD}, n'utilise pas de "rideau" pour recouvrir le vide provoqué par la différence de niveau de détail, mais s'assure que le maillage du niveau supérieur soit complètement transformé en maillage de niveau inférieur avant que le changement ne se produise. Pour ce faire le \emph{morphing} expliqué dans la partie \ref{subsec:morphing} va être appliqué à chaque n\oe{}ud nécessitant l'augmentation ou la réduction de son niveau de détail. Afin de laisser une marge de mouvement au morphing pour arriver progressivement, la zone de transition couvre environ 15 à 30\% de chaque LOD. La figure \ref{fig:morph-area} montre les différents niveaux de transition du système de morphing, le niveau L1 étant le niveau le plus proche de la caméra et donc le niveau avec le plus de détail. On peut voir que les différents niveaux de transition ne sont pas linéaires en fonction de la distance.
 \begin{figure}[!ht]
@@ -80,14 +80,14 @@
 \end{figure}
     \footnotetext{Extrait de \url{http://www.vertexasylum.com/downloads/cdlod/cdlod_latest.pdf}, dernier accès Mars 2018}
 
-\subsection{Morphing ****}
+\subsection{Morphing}
 \label{subsec:morphing}
 
   L'opération de \emph{morphing} est utilisée pour éviter l'apparition/disparition brusque des niveaux de détails. Chaque n\oe{}ud peut être transformé pour correspondre à un n\oe{}ud de niveau de détails plus élevé (en descendant plus profondément dans le \emph{quadtree} ou un niveau de détails moins élevé (en remontant dans le \emph{quadtree}. Le \emph{morphing} est réalisé de telle manière que chaque bloc de deux triangles sont  facilement transformés en un bloc correspondant de huit triangles. 
   
   Ce \emph{morphing} se traduira par des transitions en douceur sans discontinuité. Lors du rapprochement(ou éloignement) de la caméra par rapport au terrain, les sommets sont déplacés verticalement pour correspondre au niveau souhaité. Les transitions effectuées pour l'augmentation du niveau de détails sont représentées sur la figure \ref{fig:morph-transition}, expliquée ci-dessous. 
   
-  On cherche à augmenter le niveau de détails du rectangle formé par les deux triangles \ref{subfig:morph-rectangle5}. Pour ce faire quatre nouveaux sommets vont être créés pour diviser le rectangle en quatre, puis vont se déplacer le long des arêtes afin que le point de jonction des rectangles suive la diagonale jusqu'au centre du rectangle (représenté par la ligne rouge \ref{subfig:morph-rectangle4} qui n'apparaît pas lors du rendu). Les rectangles vont ainsi grandir progressivement et sans discontinuité (observable sur les rectangles \ref{subfig:morph-rectangle4}, \ref{subfig:morph-rectangle3} et \ref{subfig:morph-rectangle2}) pour finalement diviser le rectangle d'origine en 4 nouveaux rectangles de même tailles, ayant donc augmenté son niveau de détail.
+  On cherche à augmenter le niveau de détails du rectangle formé par les deux triangles \ref{subfig:morph-rectangle5}. Pour ce faire quatre nouveaux sommets vont être créés pour diviser le rectangle en quatre, puis vont se déplacer le long des arêtes afin que le point de jonction des rectangles suive la diagonale jusqu'au centre du rectangle (représenté par la ligne rouge \ref{subfig:morph-rectangle4} qui n'apparaît pas lors du rendu). Les rectangles vont ainsi grandir progressivement et sans discontinuité (observable sur les rectangles \ref{subfig:morph-rectangle4}, \ref{subfig:morph-rectangle3} et \ref{subfig:morph-rectangle2}) pour finalement diviser le rectangle d'origine en quatre nouveaux rectangles de même tailles, ayant donc augmenté son niveau de détail.
   
 \begin{figure}[H]
     \centering
@@ -122,6 +122,6 @@
 
 \subsection{Basic et Streaming Version}
 
-    Il existe deux façons de stocker le Quadtree qui d'une version à l'autre réduit considérablement la mémoire utilisé. En effet la version BasicCDLOD assez simple à mettre en \oe{}uvre étend et stock entièrement tous les LOD, et, va venir parcourir la structure de données afin de sélectionner les niveaux nécessaires.
+    Tout comme pour la génération de terrains via \emph{Chucked-LOD} de T.Ulrich~\cite{CLOD}. La méthode \emph{CDLOD} peut être implémentée de deux façons, dans la manière de stocker le Quadtree, qui d'une version à l'autre réduit considérablement la mémoire utilisée. En effet, la version BasicCDLOD assez simple à mettre en \oe{}uvre étend et stock entièrement tous les LOD, et va venir parcourir la structure de données afin de sélectionner les niveaux nécessaires.
    
-    Une autre version proposé, plus complexe à mettre en oeuvre mais qui économise grandement la mémoire, est la méthode StreamingCDLOD où seuls les parties nécessaires à la vue actuelle sont conservées. Les n\oe{}uds sont ensuite permutés si nécessaire. Par conséquent, les n\oe{}uds qui n'ont pas été utilisé pendant un certain temps peuvent être libérés.
+   La deuxième version proposée, plus complexe à mettre en \oe{}uvre mais qui économise grandement la mémoire, est la méthode StreamingCDLOD où seules les parties nécessaires à la vue actuelle sont conservées. Les n\oe{}uds sont ensuite permutés si nécessaire. Par conséquent, les n\oe{}uds qui n'ont pas été utilisés pendant un certain temps peuvent être libérés.

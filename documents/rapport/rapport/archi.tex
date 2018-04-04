@@ -5,21 +5,9 @@
   \chapter{Architecture du programme}
   
   \section{Lancement du programme}
-  A été rajouté au programme des options de lancement, l'usage est disponible 
+  Des options de lancement ont été rajouté au programme , leurs utilisations sont disponible en annexe \ref{annexe:usage}
   
-  \section{Carte de hauteur}
-  
-  Le programme utilise un \emph{quadtree} pour générer les différents niveaux de détail. 
-  Ensuite une nouvelle hauteur est appliquée à ce point pour le déplacer. 
-  Cependant, le \emph{quadtree} ne stocke pas la hauteur du sommet. Cette dernière
-  est enregistrée dans une texture 2d et est envoyé à la carte graphique. 
-  Chaque pixel de la texture représente donc une valeur codée sur un nombre flottant entre -1 et 1.
-  La texture récupérée par la carte graphique, est plaquée sur le maillage de la sphère et la hauteur du sommet
-  est déduite de l'interpolation des texels de la texture sur le maillage.
-  %définir texel
-  %définir interpolation ?
-  
-  
+
   \section{Système de rendu}
   Le programme est découpé en classes afin d'abstraire les appels à la bibliothèque OpenGL. La figure \ref{fig:uml_scene} représente le diagramme des classes qui forment l'abstraction principale du programme.
   Les classes relatives à la génération, l'affichage de la planète et l'utilisation du CDLOD sont strockés dans le dossier
@@ -41,9 +29,16 @@
   seconde ou le nombre de sommets actuellement affiché.
   
   La classe Planet représente la sphère à afficher. Ses classes filles
-  spécialisent le type de planète à afficher, ce sont elles qui
-  définissent la taille de la sphère, sa texture et sa carte de hauteur.\\
-  \textbf{graphe d'héritage de Planet quand Procedural sera merge}
+  (voir figure \ref{fig:inh_planet} spécialisent le type de planète
+  à afficher, ce sont elles qui définissent la taille de la sphère,
+  sa texture et sa carte de hauteur.\\
+  
+  \begin{figure}
+  \centering
+  \includegraphics[width=10cm]{img/planet_inh.png}
+  \caption{Diagramme d'héritage de Planet}
+  \label{fig:inh_planet}
+  \end{figure}
   
   %\begin{figure}
   %centering
@@ -57,6 +52,18 @@
   fois au début du programme, et les étapes de mise à jour et d'affichage
   se répètent tout le long de l'exécution.
   
+\section{Heightmap}
+  
+  Le programme utilise un \emph{quadtree} pour générer les différents niveaux de détail. 
+  Ensuite une nouvelle hauteur est appliquée à ce point pour le déplacer. 
+  Cependant, le \emph{quadtree} ne stocke pas la hauteur du sommet. Cette dernière
+  est enregistrée dans une texture 2d et est envoyé à la carte graphique. 
+  Chaque pixel de la texture représente donc une valeur codée sur un nombre flottant entre -1 et 1.
+  La texture récupérée par la carte graphique, est plaquée sur le maillage de la sphère et la hauteur du sommet
+  est déduite de l'interpolation des texels de la texture sur le maillage.
+    %définir texel
+  %définir interpolation ?
+  
   \section{Triangulator}
   La classe Triangulator permet de générer le \emph{quadtree} utilisé pour le système de niveau de détail.
   Un objet Frustum est utilisé pour décider si un triangle de l'arbre est ou non dans le cône 
@@ -64,23 +71,22 @@
   Triangulator. Les différents composants seront analysés plus loin dans le chapitre implémentation.
   
   \section{Patch}
-  La classe Patch permet de générer et d'afficher le maillage en y appliquant l'algorithme de morphing.
-  Le morphing est ce qui permet d'avoir des transissions douces entre les différents niveaux de détails.
-  Les détails seront expliqués plus loin dans la partie implémentation.
+  La classe Patch récupère les triangles envoyés par Triangulator, et les subdivise (beaucoup) tout en appliquant l'algorithme de morphing. La subdivision n'est calculée qu'une seule fois à l'initialisation, tous les triangles sont en suites subdivisé de la même façon. Ce mécanisme est possible grâce au mécanisme de EBO/VBO d'openGL. C'est excellent en terme de performance. Cela permet d'atteindre un grand nombre de triangle sans que ceux ci n'apparaissent directement dans la récursion du CPU. Cela diminue aussi la taille des transferts.
+  Le morphing permet quand à lui d'adoucir les différences entre les niveaux de détails et notamment d'éliminer les trous.
   
   
   \begin{figure}
   \centering
-  \includegraphics[width=10cm]{img/triangulator.png}
+  \includegraphics[width=5cm]{img/tri_class2.png}
   \caption{Diagramme de classe de Triangulator}
   \label{fig:plan}
   \end{figure}
   
   \section{Frustum}
-  La classe Frustum permet de faire des opérations sur les triangles qui sont dans le cône de vision de la caméra. Le Frustum utilisé par la classe Triangulator pour permettre les tests d'union entre les triangles est le cône de vision. La classe Frustum permet aussi de décider si un triangle est à afficher ou non.\\
+  La classe Frustum permet de faire la différence entre un triangle dans le champs, un triangle partiellement dans le champs, et un triangle hors champ. Le Frustum est utilisé par la classe Triangulator lors de la construction du maillage.\\
   
-  Cette classe permet entre autres d'éliminer les triangles qui ne sont pas visibles de la caméra. Cette opération appelée \textit{culling} permet d'éviter d'envoyer des triangles inutiles à la carte graphique.
-  Dans ce cas ci,-cela permet aussi d'éliminer ces triangles de l'arbre et donc d'optimiser sa génération.
+  Cette classe a pour but d'éliminer les triangles qui ne sont pas visibles. Cette opération appelée \textit{culling} accélère la génération en supprimant des noeuds de récursion, diminue la taille des transfère entre CPU/GPU, et diminue le nombre de triangle à dessiner dans la carte graphique.
+  
   
  \newpage %pour placer les images correctement
  

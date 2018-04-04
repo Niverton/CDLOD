@@ -2,17 +2,6 @@
 \addcontentsline{toc}{chapter}{État de l'art}
 \setcounter{chapter}{0}
 
-\textbf{Inchangé}
-
-En vue de l'ampleur du projet, il est préférable de reprendre un projet
-déjà existant et de l'étendre pour compléter nos besoins. Nous devons
-cependant respecter les contraintes du client. Notamment, le projet doit
-être écrit en C++ et visant Linux. Nous reviendrons plus en
-détail sur ces contraintes, mais le système d'exploitation visé réduit
-nos choix pour reprendre un projet existant. Dans un premier temps, nous
-nous intéresserons à la partie génération procédurale du terrain, puis
-nous regarderons la partie \emph{CDLOD}.\\
-
 La génération procédurale de terrain est très répandue pour obtenir des
 surfaces variées et de taille conséquente sans avoir à les créer à la
 main. De nombreux logiciels mettent en pratique ces méthodes, par
@@ -25,38 +14,45 @@ implémentées dans des bibliothèques, comme
 libnoise\footnote{\url{http://libnoise.sourceforge.net/}} ou
 GLM\footnote{\url{https://glm.g-truc.net/0.9.8/index.html}}.\\
 
+
 Dans son article~\cite{CDLOD}, F. Strugar propose une implémentation
 complète de son algorithme, sous licence libre
-(zlib\footnote{\url{https://opensource.org/licenses/zlib-license.php}, dernier accès Mars 2018}).
-Ce projet propose un affichage de démonstration d'un terrain plat
-permettant de voir le fonctionnement de l'algorithme. Cette
-implémentation est en C++, cependant elle utilise la bibliothèque
-graphique DirectX9, réservée au système d'exploitation Windows et
-incompatible avec Linux. Aussi, l'algorithme original étant prévu pour
-des terrains plats, l'implémentation n'est pas faite pour les maillages
-sphériques. Ce projet n'est pas intéressant à reprendre car il nécessite
-beaucoup trop de changements.
+(zlib\footnote{\url{https://opensource.org/licenses/zlib-license.php},
+dernier accès mars 2018}). Ce projet propose un affichage de
+démonstration d'un terrain plat permettant de voir le fonctionnement de
+l'algorithme. Cette implémentation est en C++, cependant elle utilise la
+bibliothèque graphique DirectX9, réservée au système d'exploitation
+Windows et incompatible avec Linux. Aussi, l'algorithme original étant
+prévu pour des terrains plats, l'implémentation n'est pas faite pour les
+maillages sphériques.
 
-Un autre candidat potentiel est le projet WorldGenerator de Leif
+Nous avons aussi trouvé le projet WorldGenerator de Leif
 Erkenbrach\footnote{\url{http://leifnode.com/} |
-\url{https://github.com/LeifNode/World-Generator}, dernier accès: mars 2018} sous licence MIT. Ce
-projet permet de visualiser une planète en trois dimensions générée
-procéduralement. Implémenté en C++ et utilisant OpenGL 4.4, bibliothèque
-graphique disponible pour Linux. Cependant, le projet n'implémente pas
-l'algorithme complet de CDLOD, et nécessite d'être porté sous Linux.
-Nous avions décidé que ce projet était une base viable, et avons
-commencé à le porter sous Linux. Nous nous sommes rendu compte que le
-projet ne respectait pas correctement le standard OpenGL 4.5. Corriger
-ce problème nécessiterait de réécrire une bonne partie du pipeline
-graphique (processus de rendu graphique). Nous avons donc décidé de
-chercher une autre base.
+\url{https://github.com/LeifNode/World-Generator}, dernier accès: mars
+2018} sous licence MIT. Ce projet permet de visualiser une planète en
+trois dimensions générée procéduralement. Implémenté en C++ et utilisant
+OpenGL 4.4, bibliothèque graphique disponible pour Linux. Cependant, le
+projet n'implémente pas l'algorithme complet de CDLOD, et nécessite
+d'être porté sous Linux. Nous avions décidé que ce projet était une base
+viable, et avons commencé à le porter sous Linux. Cependant, nous nous
+sommes rendu compte lors de tests que les
+shaders\footnote{\texttt{Shader:} programme effectuant une partie du
+rendu sur le processeur graphique} utilisés dans le projet
+n'étaient pas compatibles avec les drivers graphique Linux.  Corriger ce
+problème nécessitait de réécrire une bonne partie du pipeline graphique
+(processus de rendu graphique). 
 
-Enfin, une troisième base intéressante est le projet Planet Renderer de
-Robert
-Lindner\footnote{\url{https://github.com/Illation/PlanetRenderer}, dernier accès avril 2018}. Ce
-projet, sous licence MIT, affiche une planète en trois dimensions ainsi
-que son maillage. L'algorithme de CDLOD est respecté. Le projet est
-écrit en C++ et avec OpenGL 4.5. Il est prévu pour Linux et Windows.
-Après tests, le projet est une base intéressante, et après concertations
-avec le client, la licence lui convient. Nous avons donc décidé de
-l'utiliser.
+Enfin, le projet Planet Renderer de Robert
+Lindner\footnote{\url{https://github.com/Illation/PlanetRenderer},
+dernier accès avril 2018}. Ce projet, sous licence MIT, affiche une
+planète en trois dimensions ainsi que son maillage. L'algorithme de
+CDLOD est respecté. Le projet est écrit en C++ et avec OpenGL 4.5 et il
+est prévu pour Linux et Windows. Après tests, le projet est une base
+intéressante.
+
+En vu de nos besoins sur l'algorithme à implémenter et sur les
+conditions de l'implémentation (voir l'analyse des
+besoins~\ref{cahier-des-besoins}), le projet PlanetRenderer est une base
+intéressante. Le système d'exploitation (Linux) et la bibliothèque
+graphique utilisée (OpenGL) sont adaptés à nos besoins, et l'algorithme
+de CDLOD est entièrement implémenté.

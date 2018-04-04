@@ -1,0 +1,10 @@
+Dans ce projet, certains problèmes ont été découvert, creusés, et résolue. D'autre découvert mais incompris. Et d'autre encore ignorés. C'est un exercice difficile que de lire un code non commenté qui ne semble pas avoir de sens, et de le classifier comme étant une erreur ou une optimisation/euristique voulue.
+\subsubsection{Bug résolues}
+La version de Split Euristic de l'auteur était fausse. Elle provoquait une alternance des modes culling et non culling. La branche Tests dans github contient un commit mettant en évidence le problème.
+
+\subsubsection{Bug en cour de résolution}
+//si le temps, j le passerais en résolue.
+Dans le shader, le calcul du morph semble erroné. Une version dans la branche expérimentation (commit other morphFactor) tente de corriger le problème, pour correspondre à ce qui a été présenté en ce qui concerne le morph et les niveaux de détails (Mais aussi le nom de la variable morphRange). 
+\subsubsection{Problème}
+Sur les ordinateurs du cremi,lorsqu'il y'a du relief, une cassure est présente au niveau de l'équateur. Quand il n'y a pas de relief, celle ci disparaît.
+ 
