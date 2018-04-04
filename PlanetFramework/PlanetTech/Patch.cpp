@@ -187,6 +187,7 @@ void Patch::Draw(bool white) {
       m_pPlanet->GetTriangulator()->GetFrustum()->GetPositionOS();
   glUniform3f(m_uCamPos, camPos.x, camPos.y, camPos.z);
   glUniform1f(m_uRadius, m_pPlanet->GetRadius());
+  glUniform1f(m_uMaxHeight, m_pPlanet->GetMaxHeight());
   glUniform1f(m_uMorphRange, m_MorphRange);
 
   glm::vec3 amb = white ? glm::vec3(10, 10, 10) : m_Ambient;
