@@ -18,7 +18,7 @@
 	uniform mat4 viewProj;
 	//Height sampling
 	uniform sampler2D texHeight;
-	uniform float maxHeight = 10.7f;
+	uniform float maxHeight;// = 10.7f;
 	//outputs
 	out vec3 Tex3;
 	out vec3 Normal;
@@ -74,7 +74,7 @@
 	uniform vec3 diffuse = vec3(1.0f, 0.5f, 0.2f);
 	uniform vec3 ambient = vec3(0.05f, 0.05f, 0.08f);
 	
-	uniform float maxHeight = 10.7f;
+	uniform float maxHeight;// = 10.7f;
 	uniform vec3 texOffset = vec3(1.0f/8192.0f, 1.0f/4096.0f, 0.0f);
 	uniform vec3 texOffsetDetail = vec3(1.0f/800.0f, 1.0f/800.0f, 0.0f);
 
