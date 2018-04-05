@@ -2,14 +2,14 @@
   \addcontentsline{toc}{chapter}{Introduction}
   \setcounter{chapter}{0}
   
-  La génération de terrains et son rendu sont des exigences majeures dans diverses applications telles que les simulations et les jeux vidéo, dont les performances sont cruciales.
+  La génération de terrains et son rendu sont des exigences majeures dans diverses applications telles que les simulations ou les jeux vidéo, dont les performances sont cruciales.
   
-  Une des manières les plus utilisées pour générer et afficher un terrain, est d'utiliser une \emph{heightmap} (carte de hauteur) qui est une image pouvant être générée à l'aide d'algorithmes, et utilisée pour appliquer du relief au terrain(cf explication plus détaillée dans la section \ref{sec:heightmap}).
+  Une des manières les plus utilisées pour générer et afficher un terrain, est d'utiliser une \emph{heightmap} (carte de hauteur) qui est une image pouvant être générée à l'aide d'algorithmes, et utilisée pour appliquer du relief au terrain (cf explication plus détaillée dans la section \ref{sec:heightmap}).
   
-  La façon la plus simple par la suite pour former le terrain à partir de la \emph{heightmap}, tel que chaque sommet obtenue en les associant aux pixels de l'image, soit relié à ses sommets voisins formant ainsi le \emph{maillage} du terrain.
+  La façon la plus simple par la suite pour former le terrain à partir de la \emph{heightmap}, tel que chaque sommet obtenue en les associant aux pixels de l'image, soit relié à ses sommets voisins formant ainsi le maillage\footnote{Le maillage est la représentation d'un modèle sous forme d'un ensemble de sommets relié par des arêtes de manières à former des triangles ou des carrés. Dans ce projet, le maillage est uniquement formé à partir de triangles.} du terrain.
   
   Dans le cas d'objets de grande taille comme un terrain, une partie de
-  ses triangles sont éloignés de l'observateur. Il est alors inutile d'en
+  ses triangles est éloignée de l'observateur. Il est alors inutile d'en
   afficher tous les détails, ceux-ci étant difficilement visibles. On peut
   donc réduire le nombre de triangles utilisés pour décrire la partie
   éloignée du terrain, réduisant le temps de calcul nécessaire pour
@@ -17,7 +17,7 @@
   faire un rendu en temps interactif, c'est-à-dire de générer entre 30 et
   60 images par seconde.
   
-  L'objectif est donc d'implémenter un système de \emph{LOD} (niveaux de détails) à appliquer au \emph{maillage} du terrain. La méthode choisie pour répondre à cette demande est celle de "\emph{Continuous Distance-Dependent Level of Detail for Rendering Heightma"}(CDLOD) par Filip Strugar~\cite{CDLOD}. La méthode se sert d'une \emph{heightmap} et se base sur la distance entre la caméra et le terrain, ainsi que le champ de vision pour la sélection et l'affichage des niveaux de détails du terrain nécessaire.
+  L'objectif est donc d'implémenter un système de \emph{LOD} (niveaux de détails) à appliquer au maillage du terrain. La méthode choisie pour répondre à cette demande est celle de "\emph{Continuous Distance-Dependent Level of Detail for Rendering Heightma}"(CDLOD) par Filip Strugar~\cite{CDLOD}. La méthode se sert d'une \emph{heightmap} et se base sur la distance entre la caméra et le terrain, ainsi que le champ de vision pour la sélection et l'affichage des niveaux de détails du terrain nécessaire.
   
-  Une des difficultés de ce projet repose sur l'application d'une telle méthode à un terrain sphérique, afin de pouvoir lui donner l'aspect d'une planète, ce qui est peut vite devenir beaucoup plus complexe qu'un terrain plat exempté de bordure.
+  Une des difficultés de ce projet repose sur l'application d'une telle méthode à un terrain sphérique, rajoutant la problématique de l'absence de bords.
   

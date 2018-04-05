@@ -50,18 +50,18 @@ ceci:
 
 \paragraph{SplitHeuristic}
 
-La fonction SplitHeuristic est à la base de la génération du maillage de
+La fonction \textit{extSplitHeuristic} est à la base de la génération du maillage de
 la planète. Elle sert à déterminer si un triangle est visible ou non
 (pyramide de vision de la caméra, masqué par le reste de la planète), et
 s'il doit être découpé en 4 triangles fils, cette fonction fait partie
-du parcours du quadtree.
+du parcours du \textit{quadtree}.
 
 Fonctionnement:
 
 Ce test est un test en boîte grise, il dépend d'une partie de
 l'implémentation de la fonction. Le test utilisé de fausses
 implémentations vide de certaines dépendances de \texttt{Triangulator},
-Shader et Frustum qui ne sont pas utilisés dans le test. Le culling des
+\textit{shaders} et \textit{frustum} qui ne sont pas utilisés dans le test. Le \textit{culling} des
 triangles est désactivé dans ce test afin de simplifier sa mise en
 place. Le test crée deux cas à tester, un triangle qui devrait être
 coupé en quatre, et un triangle qui ne devrait pas être coupé. La
@@ -69,13 +69,13 @@ fonction est appelée une fois sur chaque triangle et sa valeur de retour
 étudiée.
 
 La mise en place du test a permis de se rendre compte d'un bug dans
-l'implémentation de la fonction. \textbf{Explications Hugo sur
-split/splitcull}.
+l'implémentation originel de la fonction. (voir \ref{sec:culling_bug}).\\
+
 
 \paragraph{RecursiveTriangle}\label{recursivetriangle}
 
 RecursiveTriangle prend en entrée un triangle, un niveau de détail et
-une option pour activer le culling par pyramide de vision de la caméra.
+une option pour activer le \textit{culling} par pyramide de vision de la caméra.
 Elle enregistre dans un tableau de la classe l'ensemble des triangles
 créés récursivement. Cette fonction parcourt le \emph{quadtree}. Le test
 doit d'assurer que la fonction ne découpe pas le triangle en trop de
@@ -91,13 +91,13 @@ l'avance, en déterminant le nombre de récursions prévues par le test.
 
 %A écrire
 
-\paragraph{TextRenderer::UpdateBuffer}\label{textrendererupdatebuffer}
+\paragraph{\texttt{TextRenderer::UpdateBuffer}}\label{textrendererupdatebuffer}
 
 \texttt{UpdateBuffer} prend des entrées via la fonction
 \texttt{DrawText}, sous la forme d'un tableau de chaînes de caractère à
 écrire et de leurs positions sur l'écran. La fonction passe ses
-résultats à OpenGl via la fonction \texttt{glBufferData}. Le tableau de
-données envoyé à OpenGl contient des points correspondant au coin
+résultats à OpenGL via la fonction \texttt{glBufferData}. Le tableau de
+données envoyé à OpenGL contient des points correspondant au coin
 supérieur gauche de chaque lettre à afficher. Le test doit s'assurer
 qu'il y a autant de points que de lettres, et que les positions des
 points respectent la police d'écriture.
@@ -114,7 +114,7 @@ placés.
 
 \paragraph{noise-performance}
 
-Des tests de performances on été réalisé sur les différents bruits proposés. Une serie de planète est créée avec un taille de texture différentes. Pour chaque type de bruit, six planète sont construites avec à chaque fois une taille correspondant à $2^{i} * 2^{i}$ avec i l'ième planète du bruit. Pour des raisons de cohérences, les textures sont créée avec une taille commençant à $2^{6}$ c'est à dire 64x64 jusqu'a une taille de $2^{11}$ c'est à dire une taille de 2048x2048. Le processeur est récupéré avant et après la création de la planète, une différences est ensuite affichée à l'écran.\\
+Des tests de performances on été réalisé sur les différents bruits proposés. Une serie de planète est créée avec un taille de texture différentes. Pour chaque type de bruit, six planète sont construites avec à chaque fois une taille correspondant à $2^{i} * 2^{i}$ avec i l'i-ème planète du bruit. Pour des raisons de cohérences, les textures sont créée avec une taille commençant à $2^{6}$ c'est à dire 64x64 jusqu'a une taille de $2^{11}$ c'est à dire une taille de 2048x2048. Le processeur est récupéré avant et après la création de la planète, une différences est ensuite affichée à l'écran.\\
 
 Les résultats sont affichés sous format csv \textit{comma separted value}. C'est à dire que les valeurs sont séparées par des ";". Cela permet d'être facilement exploitable par un tableur tel que \textit{Libreoffice calc}.
 
@@ -122,18 +122,22 @@ Les résultats sont affichés sous format csv \textit{comma separted value}. C'e
 %A refaire
 \begin{figure}
     \centering
-    \includegraphics[width=10cm]{img/noise-perf_i7-4700HQ.png}
-    \caption{Test de performance, processeur Intel® core i7-4700HQ}
+    \includegraphics[width=10cm]{img/bench_i53570.png}
+    \caption{Test de performance, processeur Intel® core i5-3570}
     \label{fig:bench}
 \end{figure}
 
-La figure \ref{fig:bench} montre les résultats du test fait sur un processeur Intel® core i7-4700HQ.
+La figure \ref{fig:bench} montre les résultats du test fait sur un processeur Intel® core i5-3570.\\
+En ordonnée est représenté le temps d'exécution en milli-seconde, en abscisse l'itération du tests.
+À la première itération, chaque bruit est créé à partir d'une taille de 64x64. Jusqu'à l'itération 6 ou est créé une texture de bruit de 2048x2048.
 
-L'analyse des résultats montre que les bruits de Simplex classique est bien moins performant que les autres bruit. Cela est très probablement due à l'implémentation puisque Simplex est la version développé dans \textit{glm} alors que les autres bruits (tous basé sur Simplex) sont issue d'une autre bibliothèque. \\
+
+L'analyse des résultats montre que les bruits de \textit{Simplex} classique est bien moins performant que les autres bruit. Cela est très probablement due à l'implémentation puisque Simplex est la version développé dans \textit{glm} alors que les autres bruits (tous basé sur Simplex) sont issue d'une autre bibliothèque. \\
 
 \paragraph{Remarque}
 
-Le système de tests de \textit{Cmake} capture la sortie standard, il est nécessaire de lancer l'outil de manière autonome : \textit{./tests/perf-noise_test $>$ perf.csv}\\
+Le test s'exécute en même temps que les autres en utilisant la commande \textit{make test}.
+La sortie standard étant attrapée par ctest, les résultats sont sauvegardé dans le fichier \textit{Testing/Temporary/LastestTest.log}
 
 %Remarque, les tests ne fonctionne plus à réparer
 %Remarque, essayer de corriger cette histoire de ~Texture qui segfault

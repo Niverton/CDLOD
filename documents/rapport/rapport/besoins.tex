@@ -2,31 +2,26 @@
 
 \section{Besoins fonctionnels}\label{besoins-fonctionnels}
 
-\textbf{(TODO: Rajouter la quantification en temps, difficulté etc)}
-
 \subsection{Algorithme de CDLOD sur terrain sphérique}\label{algorithme-de-cdlod}
-
 
 Implémenter l'algorithme de CDLOD expliqué dans le chapitre \ref{chap:cdlod} de F.
 Strugar~\cite{CDLOD}, sur un terrain sphérique:\\
+
+  \begin{figure}[!ht]
+  \centerline{
+    \includegraphics[width=12cm]{img/spheres.png}}
+     \caption[Sphère génération]{Différentes manières de former le maillage d'une sphère, avec le nombre de triangles associé.\protect\footnotemark}
+    \label{fig:spheres}
+    \end{figure}
+\footnotetext{Extrait de \url{https://github.com/caosdoar/spheres/tree/master/},
+dernier accès: avril 2018}
+
 \begin{itemize}
 \item 
   Former un terrain sphérique. La sphère sera approximée à l'aide d'un
     maillage géométrique à base de triangles. Plusieurs méthodes sont
     disponibles pour générer une sphère à partir de triangles (ou de
-    rectangles --- composés de deux triangles).
-
-
-  \begin{figure}[!ht]
-  \centerline{
-    \includegraphics[width=12cm]{img/spheres.png}}
-     \caption[Sphère génération]{Différentes manières de former le maillage d'une sphère, avec le nombre de triangles associé. Tirée de\protect\footnotemark}
-    \label{fig:spheres}
-    \end{figure}
-\footnotetext{\url{https://github.com/caosdoar/spheres/tree/master/},
-dernier accès Mars 2018}
-  
-
+    rectangles composés de deux triangles).
   \begin{itemize}
   \item
     UV Sphere: Générer la sphère en plaçant les points le long des
@@ -51,14 +46,15 @@ dernier accès Mars 2018}
   Gérer les informations de détails du terrain sous forme de
     \emph{quadtree}~\ref{sec:quadtree}. Parcourir le \emph{quadtree} permettra de
     générer le maillage de la sphère par rapport à la distance de chaque
-    noeud à la caméra~\ref{sec:chunked-lod}.
+    noeud à la caméra.
 \item
   Effectuer un \emph{morphing} entre deux niveaux de détails afin de
     lisser les transitions entre les deux niveaux~\ref{subsec:morphing}. La
     taille du \emph{morphing} ainsi que sa position sont déterminées en
-    fonction du niveau de détail. Plus le niveau de détails est bas
-    (plus profond dans l'arbre, plus détaillé --- niveaux LOD0, LOD1).
+    fonction du niveau de détail. Plus le niveau de détails est bas, plus il est profond dans l'arbre, plus détaillé (niveaux LOD0, LOD1).
 \end{itemize}
+
+Cette partie est complexe et devrait nécessiter quatre semaines de travail.
 
 \subsection{Interface graphique}\label{interface-graphique}
 
@@ -70,16 +66,19 @@ que le nombre d'images générées par seconde. L'utilisateur doit pouvoir
 déplacer la caméra autour de la planète à l'aide du clavier et
 l'orienter à la souris.\\
 
+Cette partie est simple et ne devrait nécessiter qu'une semaine de travail.
+
 \subsection{Génération procédurale}\label{generation-procedurale}
 
 Générer procéduralement le terrain de la planète, en proposant un choix
 de la méthode de génération de la carte de hauteur. Le choix de la
-méthode se fait en option de lancement du programme \textbf{(Préciser
-comment fonctionne le choix, probablement un nom de méthode à
-entrer)}.\\
-Cette partie ne fait pas partie du projet que nous reprenons.
-\textbf{(Rajouter partie description de la gen de carte de hauteur, d'où
-proviennent les algos utilisés)}
+méthode se fait en option de lancement du programme. L'utilisateur entre le nom de la méthode de génération, ainsi que les paramètres associés. Les paramètres varient en fonction de la méthode, cependant certains paramètres sont toujours disponibles:
+\begin{itemize}
+    \item La taille de la carte;
+    \item La hauteur maximale d'un sommet.
+\end{itemize}
+
+Cette partie est plutôt complexe, le temps de développement devrait être de des à trois semaines.
 
 \section{Besoins non fonctionnels}\label{besoins-non-fonctionnels}
 
@@ -105,8 +104,11 @@ Clang & C++14 & 3.4\tabularnewline
 
 \subsection{Interface de programmation}
 
-Le client requiert que la version d'OpenGL soit au maximum 3.3
-afin que le projet fonctionne sur une machine avec un driver libre\footnote{\url{https://mesamatrix.net/}}.
+%Le client requiert que la version d'OpenGL soit au maximum 3.3
+%afin que le projet fonctionne sur une machine avec un driver libre\footnote{\url{https://mesamatrix.net/}}.
+Le client requiert que le programme fonctionne sous Linux avec des drivers graphiques libres.
+Selon le site \url{https://mesamatrix.net/}, la version d'OpenGL la plus récente supportée
+par tous les drivers libres est OpenGL 3.3.
 PlanetRenderer étant prévu pour OpenGL 4.5, certaines modifications
 seront nécessaires. Après étude des fonctions OpenGL utilisées dans le
 projet, le portage ne s'avère pas difficile. Ce portage sera étudié plus
@@ -124,12 +126,12 @@ totalement le système de compilation.
 
 L’objectif du projet étant de tester les performances d’une implémentation
 de Filip Strugar~\cite{CDLOD}, il n’y a pas de contrainte de performance imposée
-par le client. Mais étant donné que l'application est une application de rendu "temps réel", le rendu
+par le client. Mais étant donné que l'application est une application de rendu en temps interactif le rendu
 doit être fluide, c'est-à-dire à au moins 60 images par seconde. 
 D'après nos premiers tests PlanetRenderer respecte ce besoin en étant capable
 d'afficher 120 000 triangles à 60 images par seconde sur une carte
 graphique Nvidia GTX 960M. Nous pouvons prévoir grâce aux études de performances de
-F.Strugar, l’impact de performance de l’algorithme de CDLOD. Sur
+F.Strugar l’impact de performance de l’algorithme de CDLOD. Sur
 des processeurs performants de l’époque, F.Strugar mesure en moyenne
 0.08ms de temps de parcours de l’arbre nécessaire pour générer le maillage
 du terrain. À cela devront s’ajouter les coups de génération du maillage, ainsi
@@ -143,6 +145,4 @@ sur GPU.
 
 \subsection{Tests}
 
-Aucun test n'est écrit dans le projet PlanetRenderer. Des tests
-unitaires sur la génération du maillage devront donc être écrits afin de
-s'assurer du bon fonctionnement de l'application.
+Des tests unitaires seront écrits sur les parties génération du maillage et parcours du quadtree, afin de s'assurer que le programme fonctionne correctement.

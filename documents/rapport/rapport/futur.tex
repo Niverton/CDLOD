@@ -2,7 +2,7 @@
 
 \section{Résultats}
 
-La figure \ref{fig:rmf_800} est un example de résultat obtenue à partir d'un bruit \textit{RIDGED MULTI FRACTAL}. 
+La figure \ref{fig:rmf_800} est un exemple de résultat obtenue à partir d'un bruit \textit{RIDGED MULTI FRACTAL}. 
 
 \begin{figure}
     \centering
@@ -11,8 +11,9 @@ La figure \ref{fig:rmf_800} est un example de résultat obtenue à partir d'un b
     \label{fig:rmf_800}
 \end{figure}
 
-Ce bruit est un bruit basé sur simplex, la figure \ref{fig:rmf} est une représentation sur deux dimensions de ce bruit. 
+Ce bruit est un bruit basé sur \textit{simplex}, la figure \ref{fig:rmf} est une représentation sur deux dimensions de ce bruit.
 Le bruit de la figure \ref{fig:rmf} et le bruit appliqué sur la planète ne sont pas identiques, la figure \ref{fig:rmf} n'est qu'une représentation.
+D'autre résultats sont disponibles en annexe.
 
 \begin{figure}
     \centering
@@ -46,7 +47,7 @@ Le remplacer par un autre qui ne crée pas les problèmes de pixelisation des om
 
 Il peut être par exemple remplacé par un calcul des couleurs en fonction de l'altitude. C'est-à-dire affecter une couleur différente suivant la hauteur du sommet. Cela permettrait de facilement visualiser les hauteurs.\\
 
-Il peut être envisagé d'utiliser \textit{OpenMP} pour accélérer la génération de la texture. Cette amélioration n'est pas essentielle au vues de la résolution des textures qui sont générés mais cela peut avoir un impact non négligeable sur des textures plus grandes.
+Il peut être envisagé d'utiliser \textit{OpenMP} pour accélérer la génération de la texture. Cette amélioration n'est pas essentielle au vues de la résolution des textures qui sont générés mais cela peut avoir un impact non négligeable sur des textures plus grandes. (voir \ref{fig:bench}).
 
 \textit{OpenMP} est une bibliothèque permettant de faciliter le calcule d'une tâche sur plusieurs processeurs.
 

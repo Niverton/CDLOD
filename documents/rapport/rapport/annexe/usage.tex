@@ -1,23 +1,31 @@
-\section*{Usage}
+\section*{Section: Usage}
 \label{annexe:usage}
+
+Voici l'usage du programme, il peut être affiché grâce aux options "-h" ou "--help".
 
 \begin{center}
 \lstset{language=sh}
 \begin{lstlisting}[basicstyle=\small]
+./PlanetRenderer -h     
+Usage: ./PlanetRenderer
+For non procedural run on Earth or Moon: just type MOON/EARTH 
 
-./PlanetRenderer <NOISE> --<noise-option>=<value> --<option>
+For procedurals runs:
+
+ <NOISE> --<noise-option>=<value> --<option>
 
 option:
-	 -h  --help         show this page.
- 	     --fullscreen   start program in fullscreen.
- 	     --use-vsync    start program with vsync.
- 	
+	 -h  --help      	show this page.
+	     --fullscreen	start program in fullscreen.
+	     --use-vsync	start program with vsync.
+
 <NOISE> --<noise-option>=<value>
-Order of option does not matter.
+Order of options does not matter.
+if you set a flag with a wrong noise, it will be ignored
 
 Common options                     Default value
-	 --width=Int                     1024
-	 --height=Int                    1024
+	 --width=UInt                    1024
+	 --height=UInt                   1024
 	 --max_height=Float              10.0
 
 SIMPLEX
@@ -51,7 +59,7 @@ RIDGED-MULTI-FRACTAL
 	<common-options> 
 	--octave=UInt                    4
 	--lacunarity=Float               2.0
-	--gain=Float                     0.5
+
 
 \end{lstlisting}
 \end{center}
