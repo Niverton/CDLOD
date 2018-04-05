@@ -44,30 +44,30 @@ void Triangulator::Init() {
   ico.emplace_back(scale, ratio, 0);   // ru 10
   ico.emplace_back(scale, -ratio, 0);  // rd 11
   // Triangles on planes
-  m_Icosahedron.emplace_back(ico[1], ico[3], ico[8], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[1], ico[3], ico[9], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[0], ico[2], ico[10], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[0], ico[2], ico[11], nullptr, 0);
+  m_Icosahedron.emplace_back(ico[1], ico[3], ico[8], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[1], ico[3], ico[9], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[0], ico[2], ico[10], nullptr,1);
+  m_Icosahedron.emplace_back(ico[0], ico[2], ico[11], nullptr, 1);
 
-  m_Icosahedron.emplace_back(ico[5], ico[7], ico[0], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[5], ico[7], ico[1], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[4], ico[6], ico[2], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[4], ico[6], ico[3], nullptr, 0);
+  m_Icosahedron.emplace_back(ico[5], ico[7], ico[0], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[5], ico[7], ico[1], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[4], ico[6], ico[2], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[4], ico[6], ico[3], nullptr, 1);
 
-  m_Icosahedron.emplace_back(ico[9], ico[11], ico[4], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[9], ico[11], ico[5], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[8], ico[10], ico[6], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[8], ico[10], ico[7], nullptr, 0);
+  m_Icosahedron.emplace_back(ico[9], ico[11], ico[4], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[9], ico[11], ico[5], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[8], ico[10], ico[6], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[8], ico[10], ico[7], nullptr, 1);
 
-  m_Icosahedron.emplace_back(ico[1], ico[7], ico[8], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[1], ico[5], ico[9], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[0], ico[7], ico[10], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[0], ico[5], ico[11], nullptr, 0);
+  m_Icosahedron.emplace_back(ico[1], ico[7], ico[8], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[1], ico[5], ico[9], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[0], ico[7], ico[10], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[0], ico[5], ico[11], nullptr, 1);
 
-  m_Icosahedron.emplace_back(ico[3], ico[6], ico[8], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[3], ico[4], ico[9], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[2], ico[6], ico[10], nullptr, 0);
-  m_Icosahedron.emplace_back(ico[2], ico[4], ico[11], nullptr, 0);
+  m_Icosahedron.emplace_back(ico[3], ico[6], ico[8], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[3], ico[4], ico[9], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[2], ico[6], ico[10], nullptr, 1);
+  m_Icosahedron.emplace_back(ico[2], ico[4], ico[11], nullptr, 1);
 
   Precalculate();
 
@@ -152,6 +152,8 @@ void Triangulator::GenerateGeometry() {
   float sizeL = glm::length(m_Icosahedron[0].a - m_Icosahedron[0].b);
   float frac = tanf((m_AllowedTriPx * glm::radians(m_pFrustum->GetFOV())) /
                     WINDOW.Width);
+
+  m_DistanceLUT.push_back(2*sizeL/frac);
   for (int level = 0; level < m_MaxLevel + 5; level++) {
     m_DistanceLUT.push_back(sizeL / frac);
     sizeL *= 0.5f;
