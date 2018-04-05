@@ -1,10 +1,10 @@
 \chapter{Implémentation}
     Le projet est développé en c++ utilisant des notions de programmation modernes.
-    Un fichier \textit{stdafx.h} était utilisé. Ce fichier avait pour but de centraliser l'intégralité des fichiers d'en tête du projet. Il était ensuite inclue dans tous les fichiers sources. Ce système permet de précompiler les fichiers d'en-tête. Après discussion avec le client, cette fonctionnalité a été enlevée.
+    Un fichier \textit{stdafx.h} était utilisé. Ce fichier avait pour but de centraliser l'intégralité des fichiers d'en tête du projet. Il était ensuite inclus dans tous les fichiers sources. Ce système permet de précompiler les fichiers d'en-tête. Après discussion avec le client, cette fonctionnalité a été enlevée.
 
     \section{Implémentation générale}
     \subsection{Problème rencontré}
-    Le contexte OpenGL crée par le développeur d'origine du projet était faux. Ça se traduisait au niveau
+    Le contexte OpenGL créé par le développeur d'origine du projet était faux. Ça se traduisait au niveau
     de l'application par un plantage d'OpengGL sur certaines cartes graphiques. En particulier sur les processeurs graphiques intégrés. Cette erreur a été très vite corrigée.
    
     \subsection{Portage vers \textit{CMake}}
@@ -12,7 +12,7 @@
     logiciel de configuration utilisant des scripts Lua pour décrire la
     structure du projet, ses dépendances etc. CMake est aussi un logiciel de
     configuration, cependant les scripts de configurations sont écrits dans
-    un langage créé pour CMake. Le script de configuration initial étant
+    un langage créé pour CMake. Le script de configuration initiale étant
     totalement incompatible, nous sommes repartis de zéro pour la
     configuration de CMake. CMake nous a permis d'inclure le téléchargement
     et la compilation de certaines dépendances à l'étape de compilation,
@@ -57,9 +57,9 @@
     (\textit{EarthHeight16k.jpg}). On distingue très clairement des artéfacts dans la partie océan.
     
     \subsection{Travail effectué}
-    Une classe Procedural a été écrite, elle permet de créer une planète en utilisant un algorithme de bruit
+    Une classe \emph{Procedural} a été écrite, elle permet de créer une planète en utilisant un algorithme de bruit
     sur la texture de la carte de hauteur.
-    Des modifications importantes ont été faites dans le code de Texture et dans le shader patch.
+    Des modifications importantes ont été faites dans le code de Texture et dans le \emph{shader patch}.
     Un nouveau constructeur a été écrit pour prendre en charge ce nouveau type de texture. En effet de 
     base le constructeur reçoit une chaîne de caractères représentant un chemin d'accès sur le disque.
     Ce nouveau constructeur prend quand à lui un tableau à deux dimensions de flottants et sa taille en paramètre.\\
@@ -71,13 +71,13 @@
     De même, comme des données suffisamment précises sont créées, il n'est plus nécessaire de charger des images supplémentaires. Ce qui corrige aussi les problèmes de discontinuités.\\
     L'image doit cependant être générée avec un algorithme de bruit 3d.\\
     
-    Un bug à longtemps subsisté, un dépassement de tampon au sein des pilotes graphiques. 
+    Un bug a longtemps subsisté, un dépassement de tampon au sein des pilotes graphiques. 
     Les données pointées lors de ce dépassement étant indéfinis, certains sommets pouvaient avoir une hauteur bien supérieure à la normal. Une solution provisoire était de seuiller les sommets dans le \textit{shader}.\\
     Finalement la solution a été trouvée, le problème était qu'un tableau à deux dimensions était alloué.
     Bien que la fonction d'OpenGL requière une hauteur et une largeur, il faut lui passer un tableau à une dimension. Une explication plus détaillée est faite dans la section \ref{sec:class_texture}
     
    \section{Génération du maillage}	% Explication de triangulator.
-   La génération du maillage est réalisé en 2 partie distinct: La première s'éffectue sur le CPU, la seconde sur le GPU. Les classes directement concernés sont Triangulator et Patch.
+   La génération du maillage est réalisée en 2 parties distinctes: La première s'éffectue sur le CPU, la seconde sur le GPU. Les classes directement concernées sont Triangulator et Patch.
   % icosaèdre ?
   % triangulator ?
   % structure de données
@@ -104,7 +104,7 @@
 	% Parler de la generation avec le nombre d'or
 	\subsubsection{Récursion}
 	
-	La récursion prend en entrée un triangle et un booléen spécifiant si il faut faire un test de frustum culling (toujours vrai au début). Pour chaque triangle, elle s'appuie sur SplitHeuristic() pour savoir si elle doit :
+	La récursion prend en entrée un triangle et un booléen spécifiant s'il faut faire un test de frustum culling (toujours vrai au début). Pour chaque triangle, elle s'appuie sur SplitHeuristic() pour savoir si elle doit :
 	\begin{itemize} 
 	\item le dessiner (LEAF)
 	\item l'éliminer (CULL)
@@ -113,7 +113,7 @@
 	\end{itemize}
 	\paragraph{}
 	Chacun des cas est expliqué dans la section \ref{sec:SplitHeuristic}. 
-	La distinction entre le cas 3 et 4 est nécessaire pour des raisons de performance. Pour beaucoup de triangles (au centre de la caméra), on peut se rendre compte dés le premier niveaux que tous les fils sont dans le frustum(plus de détails dans la section \ref{sec:Frustum}).Ainsi, sur une telle branche de la récursion, il ne sert à rien de réexaminer en permanence l'intersection avec le frustum. D'autant plus que selon valgrind, cet examen est coûteux (Voir annexe \ref{fig:perfCulling}).
+	La distinction entre le cas 3 et 4 est nécessaire pour des raisons de performance. Pour beaucoup de triangles (au centre de la caméra), on peut se rendre compte dès le premier niveau que tous les fils sont dans le frustum (plus de détails dans la section \ref{sec:Frustum}).Ainsi, sur une telle branche de la récursion, il ne sert à rien de réexaminer en permanence l'intersection avec le frustum. D'autant plus que selon valgrind, cet examen est coûteux (voir annexe \ref{fig:perfCulling}).
 	
 	\begin{figure}[H]
         \centerline{\includegraphics[width=5cm]{img/TriangleSplit.png}}
@@ -125,7 +125,7 @@
 	
 \iffalse
 L'arbre de données est implémenté avec la méthode des flux du CDLOD (StreamingCDLOD), dont les avantages ont été expliqué précédemment.
-	L'implémentation ici ne suit pas entièrement le standard du \textit{StreamingLOD}, il a été expliqué que l'algorithme peut conserver les parties qui restent dans le champs de vision. Ici l'intégralité de l'arbre est régénéré à chaque tour de boucle. Cependant dans un contexte de visualisation simple les gains de performances engendrés par de telles optimisations sont négligeables.
+	L'implémentation ici ne suit pas entièrement le standard du \textit{StreamingLOD}, il a été expliqué que l'algorithme peut conserver les parties qui restent dans le champ de vision. Ici l'intégralité de l'arbre est régénéré à chaque tour de boucle. Cependant dans un contexte de visualisation simple les gains de performances engendrés par de telles optimisations sont négligeables.
 	
 	Pour accélérer les temps d'accès mémoire, les distances avec les différents triangles sont conservées
 	dans un tableau. \\
@@ -153,13 +153,13 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
 	La méthode SplitHeuristic, associée aux différentes tables LUT, prend un triangle et retourne :
 	\begin{itemize} 
 	\item CULL: 
-	 \newline Si le triangle ne fait pas face à la bonne direction, (Backface Culling) ou si aucun triangle de la descendance n'est dans le frustum(cf:section Frustum \ref{sec:Frustum}).
+	 \newline si le triangle ne fait pas face à la bonne direction, (Backface Culling) ou si aucun triangle de la descendance n'est dans le frustum(cf: section Frustum \ref{sec:Frustum}).
 	\item LEAF: 
-	\newline Si le triangle est suffisamment détaillé par rapport à sa distance à la caméra.
+	\newline si le triangle est suffisamment détaillé par rapport à sa distance à la caméra.
 	\item SPLIT: 
-	\newline Si la totalité de la descendance est dans le frustum, ou que le mode Frustum culling est désactivé.
+	\newline si la totalité de la descendance est dans le frustum, ou que le mode Frustum culling est désactivé.
 	\item SPLITCULL:
-	\newline Si aucune des situations précédentes ne s'appliquent.
+	\newline si aucune des situations précédentes ne s'appliquent.
 	\end{itemize}
 	 
 	
@@ -168,23 +168,23 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
 	
 	\subsection{Patch}
 	\subsubsection{Découpe d'un Triangle}
-	La classe Patch met en place le mécanisme de subdivision des triangles envoyés par Triangulator. On parle cette fois ci de grosse subdivision. La figure \ref{subfig:morph5} montre un découpage avec un nombre de point sur la base (RC) valant 5 (à l'étape \ref{subfig:morph1}, vous pouvez voir 5 points sur la base). Au cour d'un lancement normal, RC vaut 17.\\
-	Pour créer la découpe, l'auteur procède comme suis:
+	La classe Patch met en place le mécanisme de subdivision des triangles envoyés par Triangulator. On parle cette fois-ci de grosse subdivision. La figure \ref{subfig:morph5} montre un découpage avec un nombre de points sur la base (RC) valant 5 (à l'étape \ref{subfig:morph1}, vous pouvez voir 5 points sur la base). Au cours d'un lancement normal, RC vaut 17.\\
+	Pour créer la découpe, l'auteur procède comme suit:
 	\paragraph{}
-	On se place dans un système de coordonnée en deux dimensions correspondant au repère formé par le point inférieur gauche du triangle, et des 2 vecteurs correspondant aux 2 autres points du triangle équilatéral de la petite division(le petit triangle en bas à gauche de l'étape \ref{subfig:morph1}).
+	On se place dans un système de coordonnées en deux dimensions correspondant au repère formé par le point inférieur gauche du triangle, et des 2 vecteurs correspondant aux 2 autres points du triangle équilatéral de la petite division(le petit triangle en bas à gauche de l'étape \ref{subfig:morph1}).
 	\paragraph{}
-	On itère sur les points en partant de la base, de gauche à droite, puis étage par étage. Ainsi à chaque itération, en mémorisant l'étage et la position dans l'étage, on obtient directement les coordonnées du point dans le repère indiqué. Cette coordonnée permettra à la carte graphique de savoir où placer le point.
+	On itère sur les points en partant de la base, de gauche à droite, puis étage par étage. Ainsi à chaque itération, en mémorisant l'étage et la position dans l'étage, on obtient directement les coordonnées du point dans le repaire indiqué. Cette coordonnée permettra à la carte graphique de savoir où placer le point.
 	\paragraph{}
 	Reste à lui indiquer la direction que devra prendre le point lors du morphing. 
 	Cette direction doit provoquer une rotation harmonieuse des points, et faire en sorte que les triangles vers le bas continuent de partager leurs points avec les autres. Ce n'est pas évident à voir, mais cela dépend uniquement de la parité des coordonnées. 
 	\paragraph{}
-	Il ne reste plus qu'à préciser au GPU à quels points il faut "se lier" pour former les micros-triangles. Cela ce fait, dans le contexte OpenGl, en remplissant un buffer d'indice décrivant l'ordre dans lesquelles les VAO seront envoyés au pipeline graphique. Il faut, pour chaque points, envoyer son indice, l'indice de son voisin du haut, et l' indice du voisin de droite.//todo je maîtrise pas du tout cette partie, alors si quelqu'un a le bon vocab et surtout a deja utilisé les VAO VBO EBO indexé, qu'il hésite pas.
+	Il ne reste plus qu'à préciser au GPU à quels points il faut "se lier" pour former les micros-triangles. Cela ce fait, dans le contexte OpenGl, en remplissant un buffer d'indice décrivant l'ordre dans lesquelles les VAO seront envoyés au pipeline graphique. Il faut, pour chaque point, envoyer son indice, l'indice de son voisin du haut, et l' indice du voisin de droite.%todo je maîtrise pas du tout cette partie, alors si quelqu'un a le bon vocab et surtout a déjà utilisé les VAO VBO EBO indexé, qu'il hésite pas.
 	\paragraph{}
-	Une fois dans le shader, la carte graphique connaît donc le point et la direction du morph. Elle connaît aussi la table des distances. Pour connaître l'intensité du morph à appliquer, elle regarde dans quel mesure le point était proche de passer au niveaux suivant. Plus il était proche, plus le point décalé dans la direction de son morph.
+	Une fois dans le shader, la carte graphique connaît donc le point et la direction du morph. Elle connaît aussi la table des distances. Pour connaître l'intensité du morph à appliquer, elle regarde dans quelle mesure le point était proche de passer aux niveaux suivants. Plus il était proche, plus le point décalé dans la direction de son morph.
 	
 	
   \subsubsection{Application du morphing}
-  La figure \ref{fig:morphTri} représente les déformations causés par le \textit{morphing} lors du rapprochement de la caméra. Le fonctionnement reste assez semblable à celle expliqué dans la section morphing \ref{subsec:morphing} mais est ici appliqué sur des triangles.
+  La figure \ref{fig:morphTri} représente les déformations causées par le \textit{morphing} lors du rapprochement de la caméra. Le fonctionnement reste assez semblable à celui expliqué dans la section morphing \ref{subsec:morphing} mais est ici appliqué sur des triangles.
   	
 \begin{figure}[H]
     \centering
@@ -216,9 +216,9 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
 \end{figure}
 
     Dans la figure \ref{fig:morphTri}, on représente le découpage d'un triangle du Triangulator, au fur et à mesure que la caméra s'en rapproche. Pour des raisons de simplicité, on prend un découpage très faible.
-    Sur la figure \ref{subfig:morph5} le triangle n'est pas encore suffisamment proche pour être déformé. Cependant tout les points (et triangles) dans les autres figures sont présents et dessinés. 
-    Lorsque la distance commence à dépasser une certaine limite, les points commencent à diverger vers les directions calculées à l'initialisation. Plus le triangle se rapproche, et plus les points diverges fortement, jusqu'à la figure \ref{subfig:morph1}. Il faut comprendre qu'à la figure \ref{subfig:morph1}, ce n'est plus le même triangle que dans les autres figures, mais le fils du milieu dans la récursion de Triangulator.
-    Le morphing est plus important qu'il n'y parait. Il ne permet pas seulement d'avoir des transitions plus continues en terme de détail. C'est la seule chose qui masque les "trous" à la frontière entre deux zones de niveaux différents comme on peut le voir sur la figure \ref{fig:noMorphingHole}
+    Sur la figure \ref{subfig:morph5} le triangle n'est pas encore suffisamment proche pour être déformé. Cependant tous les points (et triangles) dans les autres figures sont présents et dessinés. 
+    Lorsque la distance commence à dépasser une certaine limite, les points commencent à divergés vers les directions calculées à l'initialisation. Plus le triangle se rapproche, et plus les points diverges fortement, jusqu'à la figure \ref{subfig:morph1}. Il faut comprendre qu'à la figure \ref{subfig:morph1}, ce n'est plus le même triangle que dans les autres figures, mais le fils du milieu dans la récursion de Triangulator.
+    Le morphing est plus important qu'il n'y paraît. Il ne permet pas seulement d'avoir des transitions plus continues en matière de détail. C'est la seule chose qui masque les "trous" à la frontière entre deux zones de niveaux différents comme on peut le voir sur la figure \ref{fig:noMorphingHole}
  \begin{figure}[H]
   \centerline{
   \includegraphics[width=10cm]{img/noMorphingHole.png}}
@@ -237,23 +237,23 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
   \label{fig:culling}
   \end{figure}
   
-  Le \textit{frustum} représente la sous partie de l'espace contenue dans le champs de la caméra. On s'intéresse à cet espace car il permet de ne pas perdre de temps à afficher des triangles hors champs.
+  Le \textit{frustum} représente la sous-partie de l'espace contenue dans le champ de la caméra. On s'intéresse à cet espace car il permet de ne pas perdre de temps à afficher des triangles hors champs.
   
   
 
-  \footnotetext{Extrait de \url{http://robert-lindner.com/img/blog/planet_renderer/week5-6/researchPaper.pdf}, dernier accès Mars 2018}
+  \footnotetext{Extrait de \url{http://robert-lindner.com/img/blog/planet_renderer/week5-6/researchPaper.pdf}, dernier accès avril 2018}
  
-  Le frustum est entièrement déterminé par les paramètres de la caméra.  
-  En effet, grace au \textit{FOV}, à la position, la direction et la distance near, on peut créer un rectangle near. On créait similairement un rectangle far, parallèle au plan near. On caractérise alors le frustum par 6 plans, dont on obtient la paramétrisation grâce aux triangles formés par les 8 points des deux rectangles, en prenant garde à orienter les normales des plans vers l'intérieur. Visible sur la figure \ref{fig:culling}.
+  Le \emph{frustum} est entièrement déterminé par les paramètres de la caméra.  
+  En effet, grâce au \textit{FOV}, à la position, la direction et la distance \emph{near}, on peut créer un rectangle \emph{near}. On créait similairement un rectangle far, parallèle au plan \emph{near}. On caractérise alors le \emph{frustum} par 6 plans, dont on obtient la paramétrisation grâce aux triangles formés par les 8 points des deux rectangles, en prenant garde à orienter les normales des plans vers l'intérieur. Visible sur la figure \ref{fig:culling}.
   
-  On dispose ensuite d'une méthode simple pour décider si un point est à l'intérieur du frustum: il suffit, pour chaque plan, d'évaluer l'équation du plan en les coordonnées du point. Si le résultat est positif pour chacun des plans, c'est que le point est à l'intérieur.
+  On dispose ensuite d'une méthode simple pour décider si un point est à l'intérieur du \emph{frustum}: il suffit, pour chaque plan, d'évaluer l'équation du plan en les coordonnées du point. Si le résultat est positif pour chacun des plans, c'est que le point est à l'intérieur.
   
-  Grâce à cette primitive, l'auteur implémente une technique pour faire la mêmes chose avec un triangle. Pour chacun des six plans, on regarde combien de points sont du cotés extérieur. Si ce nombre est différent de 0 ou 3, on peut déjà affirmer que l'intersection est non nul. Si il vaut 3, alors on peut affirmer que les triangle est complètement hors du frustum. Arriver au dernier plan, si le triangle n'est toujours pas classifié, c'est qu'il est totalement inclue dans le frustum.
+  Grâce à cette primitive, l'auteur implémente une technique pour faire la même chose avec un triangle. Pour chacun des six plans, on regarde combien de points sont du côté extérieur. Si ce nombre est différent de 0 ou 3, on peut déjà affirmer que l'intersection est non nulle. Si il vaut 3, alors on peut affirmer que le triangle est complètement hors du \emph{frustum}. Arriver au dernier plan, si le triangle n'est toujours pas classifié, c'est qu'il est totalement inclus dans le \emph{frustum}.
   
-  Cependant, lors de la récursion dans Triangulator, il ne suffit pas de tester que le triangle actuel est hors frustum. En effet, les enfants sont toujours plus haut que les parents. Ainsi si l'on se place de biais à une faible altitude, il est possible que le frustum rase un triangle du premier niveaux, mais touche les triangles des niveaux suivant. 
+  Cependant, lors de la récursion dans Triangulator, il ne suffit pas de tester que le triangle actuel est hors \emph{frustum}. En effet, les fils sont toujours plus haut que les parents. Ainsi si l'on se place de biais à une faible altitude, il est possible que le \emph{frustum} rase un triangle du premier niveau, mais touche les triangles des niveaux suivants. 
   \textbf{TODO rajouter screen shoot culling non protégé}
-  Il faut donc "protéger" les triangles. Pour cela, on va réaliser l'intersection du frustum, non pas avec le triangle, mais avec le prisme formé par le triangle, et le triangle normé à une certaine hauteur. Il suffit pour cela de reprendre l'algorithme du triangle, mais en considérant cette fois 6 points.
-  En ce qui concerne cette hauteur. Le plus simple est de toujours normer le triangle sur l'altitude maximal. L'auteur utilise une technique plus poussée, et fait varier cette hauteur en fonction du niveau.  
+  Il faut donc "protéger" les triangles. Pour cela, on va réaliser l'intersection du \emph{frustum}, non pas avec le triangle, mais avec le prisme formé par le triangle, et le triangle normé à une certaine hauteur. Il suffit pour cela de reprendre l'algorithme du triangle, mais en considérant cette fois 6 points.
+  En ce qui concerne cette hauteur. Le plus simple est de toujours normaliser le triangle sur l'altitude maximale. L'auteur utilise une technique plus poussée, et fait varier cette hauteur en fonction du niveau.  
   
   \section{Génération de la Heightmap}
   
@@ -270,9 +270,9 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
   
   \subsection{Classe ArgvParser}
   
-  Le but de la classe \textit{ArgvParser} est de récupérer chaque entré de \textit{argv}, les diviser en deux en fonction du caractère "=" et de stocker les deux chaînes de caractères résultants dans un tableau dynamic de deux-uplets (\textit{tuple}.\\
+  Le but de la classe \textit{ArgvParser} est de récupérer chaque entré de \textit{argv}, les diviser en deux en fonction du caractère "=" et de stocker les deux chaînes de caractères résultantes dans un tableau dynamique de deux-uplets (\textit{tuple}).\\
   
-  Par exemple avec une entrée "--width=100", un deux-uplets contenant "--width" et "100" est créée et est stocké.\\
+  Par exemple avec une entrée "--width=100", un deux-uplets contenant "--width" et "100" est créé et est stocké.\\
   Si une entrée ne contient pas de "=", par exemple "--help" un deux-uplets est créé, avec "--help" et "true" comme valeur. La valeur par défaut lorsque l'on ne trouve pas de "=" est "true".
   Un autre système avait été mis en place à l'origine. Le concept était d'utiliser des paramètres optionnels
   avec la classe \textit{optionnal} de la bibliothèque standard mais ce système a été standardisé en \textit{C++17} et n'est pas disponible dans la version que l'on utilise. Un exemple de l'utilisation de ce système est renseigné en annexe, 
@@ -310,7 +310,7 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
   \label{sec:class_texture}
   La classe Texture permet de charger une texture depuis le disque, de la lier à \textit{OpenGL} pour l'utiliser dans les \textit{shaders}.\\
   
-  Cette classe a été modifiée pour pouvoir accepter une pointeur sur une texture déjà existante. 
+  Cette classe a été modifiée pour pouvoir accepter un pointeur sur une texture déjà existante. 
   La difficulté est de correctement configurer OpenGL pour envoyer des données correctes. Les données dont des flottants codés sur 32bit (GL\_32F).\\
   Nous utilisons la fonction \textit{glPixelStorei(GL\_UNPACK\_ALIGNMENT, 1)} pour préciser que les données envoyées à OpenGL sont contiguës. D'après le standard OpenGL cette fonction est nécessaire mais 
   nous n'avons pas trouvé de différences selon la valeur renseignée.
@@ -325,7 +325,7 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
   Comme vue dans la partie \ref{sec::ProceduralPlanet}, une structure correspondant au bruit voulu est créé,
   elle est ensuite passé sous forme de pointer à la construction de la planète.\\
   
-  Le code de création de la fenêtre était à l'origine dans le constructeur, il a été déplacé dans une méthode dédiée \textit{CreatePlanetFromArgs}. Une méthode \textit{check_value} a aussi été écrite, elle permet de mettre une valeur par défaut dans la variable si cette dernière est égale à une valeur de comparaison. On peut voir que dans l'exemple \ref{fig:code_scene} le création d'une planète avec une bruit \textit{FLOW-NOISE}, un angle de 0.5. Les autres paramètres n'étant pas spécifié, leur valeur est une valeur par défault précisée dans la structure \textit{ProceduralPlanet::Properties}.
+  Le code de création de la fenêtre était à l'origine dans le constructeur, il a été déplacé dans une méthode dédiée \textit{CreatePlanetFromArgs}. Une méthode \textit{check_value} a aussi été écrite, elle permet de mettre une valeur par défaut dans la variable si cette dernière est égale à une valeur de comparaison. On peut voir que dans l'exemple \ref{fig:code_scene} la création d'une planète avec un bruit \textit{FLOW-NOISE}, un angle de 0.5. Les autres paramètres n'étant pas spécifiés, leur valeur est une valeur par défault précisée dans la structure \textit{ProceduralPlanet::Properties}.
   
   \begin{figure}
     \centering
@@ -346,7 +346,7 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
   \end{figure}
   
   
-  La planète est créée sans aucune vérification des données, cependant si une exception est levée par le constructeur de \textit{ProceduralPlanet}, et est attrapée et le programme se termine.\\
+  La planète est créée sans aucune vérification des données, cependant si une exception est levée par le constructeur de \textit{ProceduralPlanet}, et est attrapée \textit{Scene} et le programme dans se termine.\\
   C'est par exemple le cas quand une taille de texture négative est renseigné par l'utilisateur.
   
   \section{Fonctions de bruit}
@@ -354,7 +354,9 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
   Pour générer la planète, plusieurs type de bruit ont été proposés. Le bruit de Simplex et de Perlin sont implémenté par la bibliothèque glm. Les autres bruits sont des dérivés de Simplex et sont implémenté dans une bibliothèque nommée \textit{SimplexNoise} (source : \url{https://github.com/simongeilfus/SimplexNoise})
   
   N'étant pas central dans le projet, nous considérons ces fonctions de bruis comme des fonctions boîtes noires.
-  Les bruits sont crées grâces à des points en trois dimensions. 
+  Les bruits sont crées grâces à des points en trois dimensions. Pour être appliqué sur une sphère, ce sont des coordonnées polaires qui sont utilisées. Elles sont ensuite converties en coordonnées cartésiennes pour être utilisées sous la forme d'un point 3D.\\
+
+  %TODO expliquer vite fais les bruits
   
 %  \section{Calcul de la lumière}
 %  \label{sec:phong}

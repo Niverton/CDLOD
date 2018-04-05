@@ -112,6 +112,33 @@ placés.
 
 %A écrire
 
+\paragraph{noise-performance}
+
+Des tests de performances on été réalisé sur les différents bruits proposés. Une serie de planète est créée avec un taille de texture différentes. Pour chaque type de bruit, six planète sont construites avec à chaque fois une taille correspondant à $2^{i} * 2^{i}$ avec i l'ième planète du bruit. Pour des raisons de cohérences, les textures sont créée avec une taille commençant à $2^{6}$ c'est à dire 64x64 jusqu'a une taille de $2^{11}$ c'est à dire une taille de 2048x2048. Le processeur est récupéré avant et après la création de la planète, une différences est ensuite affichée à l'écran.\\
+
+Les résultats sont affichés sous format csv \textit{comma separted value}. C'est à dire que les valeurs sont séparées par des ";". Cela permet d'être facilement exploitable par un tableur tel que \textit{Libreoffice calc}.
+
+
+%A refaire
+\begin{figure}
+    \centering
+    \includegraphics[width=10cm]{img/noise-perf_i7-4700HQ.png}
+    \caption{Test de performance, processeur Intel® core i7-4700HQ}
+    \label{fig:bench}
+\end{figure}
+
+La figure \ref{fig:bench} montre les résultats du test fait sur un processeur Intel® core i7-4700HQ.
+
+L'analyse des résultats montre que les bruits de Simplex classique est bien moins performant que les autres bruit. Cela est très probablement due à l'implémentation puisque Simplex est la version développé dans \textit{glm} alors que les autres bruits (tous basé sur Simplex) sont issue d'une autre bibliothèque. \\
+
+\paragraph{Remarque}
+
+Le système de tests de \textit{Cmake} capture la sortie standard, il est nécessaire de lancer l'outil de manière autonome : \textit{./tests/perf-noise_test $>$ perf.csv}\\
+
+%Remarque, les tests ne fonctionne plus à réparer
+%Remarque, essayer de corriger cette histoire de ~Texture qui segfault
+%Remarque éviter de lancer le bench quand make test est appelé
+
 \newpage
 \section{Analyse statique}\label{sec:sanal}
 
@@ -344,10 +371,3 @@ projet, en incluant les en-têtes de cette bibliothèque. Le standard du
 C++ recommande cependant d'utiliser les versions C++ de ces en-têtes,
 qui préfixent les noms de fichiers avec un `c' afin de les marquer comme
 appartenant au standard C.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=10cm]{img/noise-perf_i7-4700HQ.png}
-    \caption{Test de performance, processeur Intel® core i7-4700HQ}
-    \label{fig:bench}
-\end{figure}

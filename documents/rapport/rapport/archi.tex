@@ -57,7 +57,7 @@
   Le programme utilise un \emph{quadtree} pour générer les différents niveaux de détail. 
   Ensuite une nouvelle hauteur est appliquée à ce point pour le déplacer. 
   Cependant, le \emph{quadtree} ne stocke pas la hauteur du sommet. Cette dernière
-  est enregistrée dans une texture 2d et est envoyé à la carte graphique. 
+  est enregistrée dans une texture 2d et est envoyée à la carte graphique. 
   Chaque pixel de la texture représente donc une valeur codée sur un nombre flottant entre -1 et 1.
   La texture récupérée par la carte graphique, est plaquée sur le maillage de la sphère et la hauteur du sommet
   est déduite de l'interpolation des texels de la texture sur le maillage.
@@ -71,8 +71,8 @@
   Triangulator. Les différents composants seront analysés plus loin dans le chapitre implémentation.
   
   \section{Patch}
-  La classe Patch récupère les triangles envoyés par Triangulator, et les subdivise (beaucoup) tout en appliquant l'algorithme de morphing. La subdivision n'est calculée qu'une seule fois à l'initialisation, tous les triangles sont en suites subdivisé de la même façon. Ce mécanisme est possible grâce au mécanisme de EBO/VBO d'openGL. C'est excellent en terme de performance. Cela permet d'atteindre un grand nombre de triangle sans que ceux ci n'apparaissent directement dans la récursion du CPU. Cela diminue aussi la taille des transferts.
-  Le morphing permet quand à lui d'adoucir les différences entre les niveaux de détails et notamment d'éliminer les trous.
+  La classe Patch récupère les triangles envoyés par Triangulator, et les subdivise (beaucoup) tout en appliquant l'algorithme de morphing. La subdivision n'est calculée qu'une seule fois à l'initialisation, tous les triangles sont ensuite subdivisés de la même façon. Ce mécanisme est possible grâce au mécanisme de EBO/VBO d'openGL. C'est excellent en matière de performance. Cela permet d'atteindre un grand nombre de triangle sans que ceux-ci n'apparaissent directement dans la récursion du CPU. Cela diminue aussi la taille des transferts.
+  Le morphing permet non seulement d'adoucir les différences entre les niveaux de détails et mais aussi et surtout d'éliminer les trous.
   
   
   \begin{figure}
@@ -83,9 +83,9 @@
   \end{figure}
   
   \section{Frustum}
-  La classe Frustum permet de faire la différence entre un triangle dans le champs, un triangle partiellement dans le champs, et un triangle hors champ. Le Frustum est utilisé par la classe Triangulator lors de la construction du maillage.\\
+  La classe Frustum permet de faire la différence entre un triangle dans le champ, un triangle partiellement dans le champ, et un triangle hors champ. Le Frustum est utilisé par la classe Triangulator lors de la construction du maillage.\\
   
-  Cette classe a pour but d'éliminer les triangles qui ne sont pas visibles. Cette opération appelée \textit{culling} accélère la génération en supprimant des noeuds de récursion, diminue la taille des transfère entre CPU/GPU, et diminue le nombre de triangle à dessiner dans la carte graphique.
+  Cette classe a pour but d'éliminer les triangles qui ne sont pas visibles. Cette opération appelée \textit{culling} accélère la génération en supprimant des noeuds de récursion, diminue la taille de transfère entre CPU/GPU, et diminue le nombre de triangles à dessiner dans la carte graphique.
   
   
  \newpage %pour placer les images correctement
