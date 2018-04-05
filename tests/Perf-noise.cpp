@@ -13,10 +13,10 @@
     \return   Elsape time
  */
 template <typename Fun>
-double Timer(Fun f, int nb){
+double Timer(Fun f, int nb, int type){
   auto s = std::chrono::system_clock::now();
   
-  f(nb);
+  f(nb, type);
   
   auto e = std::chrono::system_clock::now();
   auto elapse = std::chrono::duration<double, std::milli>(e - s);
@@ -26,11 +26,12 @@ double Timer(Fun f, int nb){
 }
 
 bool test(){
-  auto noise = [] (int i) {
+  auto noise = [] (int i, int j) {
               ProceduralPlanet::Properties prop;
               prop.width = pow(2, i);
               prop.height = pow(2, i);
-              
+              prop.noise = static_cast<ProceduralPlanet::Noise> (j);
+
               Planet* p = new ProceduralPlanet (&prop);
            };
 
@@ -41,7 +42,7 @@ bool test(){
 
 
     for (int j=0; j<8; j++){
-      std::cout << Timer(noise, i)  << ';';
+      std::cout << Timer(noise, i, j)  << ';';
     }
     std::cout << '\n';
   }
