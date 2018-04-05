@@ -1,87 +1,124 @@
 # PlanetRenderer
 
-## **Work in this repository has been discontinued. The project lives on in a new repository, as it has been merged with my openGL framework: https://github.com/Illation/ETEngine**
+Ce projet a été repris dans le cadre de l'UE de Projet de Programmation
+du Master Informatique de l'Université de Bordeaux en 2018. L'objectif
+de ce projet était d'implémenter l'algorithme de CDLOD de F. Strugar,
+proposé dans son papier "*Continuous Distance-Dependent Level of Detail
+for Rendering Heightmaps*" publié en 2009.
+
+Le projet repris est celui de Robert Lindner (alias *Illation*),
+distribué sous license MIT. Le projet original est disponible
+[ici](https://github.com/Illation/PlanetRenderer), une copie du README
+original est disponible dans ce dépot sous le nom de README_old.
+
+# Compilation
+
+Ce projet n'a été testé que sous Linux.
+
+## Dépendances
+
+Ce projet nécessite les dépendances suivantes:
+- CMake 3.5.1
+- OpenGL 3.3
+- SDL 2
+- GLM 0.9.8.5
+- DevIL 1.8.0
+- Un compilateur C++ supportant le standard C++14
+
+CMake téléchargera automatiquement DevIL à la compilation, ainsi que GLM
+si la bibliothèque n'a pas été trouvée.
+
+La génération de la documentation nécessite Doxygen (ainsi que graphviz
+pour les graphes) et une version de CMake égale ou supérieur à 3.9.6.
+
+## Compilation
+
+```sh
+mkdir build
+cd build
+cmake ..
+make -j4
+```
+
+Les variables CMake suivantes peuvent être modifiées à la configuration
+en passant l'option `-D<VARIABLE>=<VALEUR>`:
+- GLM_USE_NATIVE (NO): Désactive le téléchargement de GLM
+- NO_SVG (NO): Exporter les graphes Doxygen au format PNG
+- ASAN (NO): Active l'*address sanitizer* à la compilation
+- SANAL (NO): Active les analyseurs statiques à la compilation
 
 
-### A repo for my research on planet rendering in c++ | opengl
+# Utilisation
 
-#### Description
-Basic Planet rendering using a version of the CDLOD algorithm with triangles instead of quads on an icosahedron.
-I regularly post updates about this project on my blog: http://robert-lindner.com/blog/category/project/planet-renderer/
+## Options
 
-#### Terrain
-There is a recursively subdividing icosahedron. Triangles subdivide based on the distance from the camera and get culled when outside of the frustum. When drawn, every triangle instances a patch geometry, which allows for insane level of detail at high framerates, and morphs smoothly between subdivision levels.
+```sh
+-> % ./PlanetRenderer -h
+Usage: ./PlanetRenderer
+For non procedural run on Earth or Moon: just type MOON/EARTH
 
-![Text Rendering Moon Planet terrain LOD Robert Lindner](http://i.imgur.com/csAW0tV.jpg)
-![OpenGL Planet terrain LOD Rendering Robert Lindner](http://i.imgur.com/qubk7gj.jpg)
+For procedurals runs:
 
-### Demo Video (Click to open)
-[![Link](https://i.ytimg.com/vi/66VysDSQ8Mw/maxresdefault.jpg)](https://www.youtube.com/watch?v=66VysDSQ8Mw)
+ <NOISE> --<noise-option>=<value> --<option>
 
-#### Controls
-| Keys | Function |
-| :---: |:--- |
-| F1 | Screenshot |
-| F2 | Toggle Debug UI |
-| W - S | Change Camera Altitude |
-| A - D | Change Camera Longitude |
-| NUM4 - NUM6 | Change Camera Zoom |
-| Z | Toggle Wireframe |
-| SPACE | Lock Frustum |
-| R | Rotate Planet |
-| UP - Down | Change max subdivisions |
-| LMB | Rotate View |
+option:
+         -h  --help             show this page.
+             --fullscreen       start program in fullscreen.
+             --use-vsync        start program with vsync.
 
-#### Framework
-A lot of the code for the framework is copied from my openGL framework, but since I want a barebones techdemo as a result in order to keep all the code relevant, I did not code this in the framework itself.
+<NOISE> --<noise-option>=<value>
+Order of options does not matter.
+if you set a flag with a wrong noise, it will be ignored
 
-Currently there is context managment, time, input managment, window settings, opengl and sdl initialization, shaders, camera, transforms, textures and text rendering.
+Common options                     Default value
+         --width=UInt                    1024
+         --height=UInt                   1024
+         --max_height=Float              10.0
 
-#### Libraries
-Libraries used: SDL2, GLM, OpenGL, DevIL
+SIMPLEX
+        <common-options>
 
-Font files created with BMFont.
+RIDGEG-NOISE
+        <common-options>
 
-#### Building
+FLOW-NOISE
+        <common-options>
+        --angle=Float                    0.5
 
-This framework uses Genie to generate project files: https://github.com/bkaradzic/GENie
-You need to install it and use it from a terminal, the easiest way to do that is adding it to your PATH
-You should obviously also be running on a computer that has the hardware and drivers for modern openGL.
+FBM
+        <common-options>
+        --octave=UInt                    4
+        --lacunarity=Float               2.0
+        --gain=Float                     0.5
 
-##### Windows
+WARPED-FBM
+        <common-options>
+        --octave=UInt                    4
+        --lacunarity=Float               2.0
+        --gain=Float                     0.5
 
-Navigate to the folder where this readme is located in a terminal
+DFBM-WARPED-FBM
+        --octave=UInt                    4
+        --lacunarity=Float               2.0
+        --gain=Float                     0.5
 
-    genie --file=build\genie.lua vs2015
-    
-Open the generated visual studio solution
+RIDGED-MULTI-FRACTAL
+        <common-options>
+        --octave=UInt                    4
+        --lacunarity=Float               2.0
+        --gain=Float                     0.5
 
-To build the project you need to define an environment variable or [a macro for visual studio](https://imgur.com/a/6uMFN) to find the above mentioned libraries.
-The variable is called "S_LIBS", and the value would be something like "C:\Dev\StaticLibraries".
-That folder needs to contain the .lib files and the include folders of SDL2, GLM and DevIL.
-For DevIL I suggest downloading the [Windows SDK at version 1.8](https://sourceforge.net/projects/openil/files/DevIL%20Windows%20SDK/1.8.0/).
+```
 
-Hit F5
+## Controles
 
-If there are any linker errors, check if your library directory matches the include and library paths, you might need to remove the version name from your folder.
-Alternativly you can modify the visual studio project include and library paths to suit your setup. 
+- F2: désactive le texte
+- Z - S: change l'altitude de la caméra
+- Q - D: Change la latitude de la caméra
+- NUM4 - NUM6: Change le champs de vision de la caméra
+- W: Affichage fil de fer
+- Flèches Haut et Bas: Change le niveau de détail maximum
+- Clique gauche: orienter la caméra
+- R: Rotation automatique
 
-##### Linux
-
-Make sure you have libraries for SDL2, GLM and DevIL installed, with -dev packages where applicable.
-You might need to change the path in the includedirs configuration in "build/genie.lua"
-
-Navigate to the folder where this readme is located in a terminal
-
-    genie --file=build\genie.lua gmake
-    
-    make
-    
-    cp -R ./PlanetFramework/Fonts/ ./bin/release/
-    cp -R ./PlanetFramework/Textures/ ./bin/release/
-    cp -R ./PlanetFramework/Shaders/ ./bin/release/
-Navigate to the release folder to make sure that it is your working directory (for file loading)
-
-    cd ./bin/release
-    ./PlanetFramework
 
