@@ -16,7 +16,7 @@
   La méthode \emph{CLOD} utilise un \textit{quadtree} permettant de stocker les différents \emph{LOD}. Lors de l'exécution le \emph{quadtree} est généré et composé des niveaux de détails, les \emph{LOD} nécessaire sont calculés et ainsi utilisés depuis le \emph{quadtree}. 
   
   Pour appliquer une texture il suffit alors d'associer chaque "chunck" (n\oe{}ud) à une texture.
-  Le rendu du terrain est alors fait en fonction de la distance par rapport à la caméra. Pour afficher un n\oe{}ud, le \emph{quadtree} est parcourue depuis la racine avec une tolérance maximale prédéfinie. Si le du n\oe{}ud parcouru est valide, il est affiché et s'il y a un trop grand écart alors on vérifie ses fils dans \emph{quadtree}, et ainsi de suite.
+  Le rendu du terrain est alors fait en fonction de la distance par rapport à la caméra. Pour afficher un n\oe{}ud, le \emph{quadtree} est parcourue depuis la racine avec une tolérance maximale prédéfinie. Si le n\oe{}ud parcouru est valide, il est affiché et s'il y a un trop grand écart alors on vérifie ses fils dans \emph{quadtree}, et ainsi de suite.
  
   Lorsqu'un n\oe{}ud est sur le point d'être réduit à ses fils ou inversement, il va alors se produire un effet "flash"/une apparition brusque de la grille. La méthode résout ce problème en ajoutant un petit \emph{morphing} (une transition fluide). Pour se faire la méthode utilisée consiste à ajouter un point et de le décaler pour que cela corresponde niveau de détail souhaité(plus grand ou plus petit)
  

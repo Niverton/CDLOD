@@ -14,9 +14,28 @@ implémentées dans des bibliothèques, comme
 libnoise\footnote{\url{http://libnoise.sourceforge.net/}} ou
 GLM\footnote{\url{https://glm.g-truc.net/0.9.8/index.html}}.\\
 
+La gènération procédurale de terrains et son rendu en temps interactif pause un sérieux problème de complexité algorithmique. En effet les ensembles de données géométriques peuvent être trop complexes pour que l'on puisse les utiliser. Une des solutions possibles est alors de simplifier les détails éloignés de la caméra, Ceci est connu sous le nom de "\emph{Level Of Detail"}(LOD).
+
+\section*{Level of detail}
+
+Le concept de LOD a été introduit en 1976 par James H.Clark dans son article "\emph{Hierarchical geometric models for visible surface algorithms}"~\cite{Clark}. Le but initial de sa recherche était l'amélioration de la qualité d'une structure géométrique ou de l'amélioration de la performance des algorithmes permettant leur génération. L'algorithme présenté par James H.Clark dans son article est l'algorithme de "\emph{Discrete LOD}" (DLOD). La technique utilisée est de créer des LOD pour chaque objet séparément dans un pré-processus. Puis au moment de l'exécution, choisir la LOD de chaque objet en fonction de la distance de l'objet par rapport à la caméra (ou critère similaire).
+
+Une autre technique utilisée est celle de \emph{Continuous LOD} introduite en 1997 par P.Enrico et S.Roberto dans leurs article "\emph{Simplification LOD and Multiresolution} ~\cite{Enrico}. La différence entre les deux méthodes est que là où la méthode \emph{Discrete LOD} va créer les LOD dans un pré-processus, la méthode  \emph{Continuous LOD} elle va créer une structure de données contenant tous les LOD souhaité et va venir les sélectionné lors du rendu. Cette technique va notamment être associée à la méthode de "\emph{View-dependent simplification of
+arbitrary polygonal environments}"~\cite{view-dependent} publié la même année par D.Luebke et C.Erikson. Cette méthode se sert du champ de vision et la distance entre la caméra et l'objet pour simplifier ce dernier.\\
+
+\section*{Adaptation de LOD pour le rendu de terrains}
+
+Dans le contexte de la génération de terrains l'utilisation de ces algorithmes permet l'amélioration des performances de rendu en temps interactif.
+Les premières méthodes de rendu de terrains appliquant les techniques de LOD utilisés le CPU, telle que la méthode de "Real-time Optimally Adapting Meshes" (ROAMing terrain) en 1997~\cite{ROAM}.
+
+La méthode de rendu de terrains utilisée lors de ce projet est une méthode qui utilise le GPU , celle de "\emph{Continuous Distance-Dependent Level of Detail for Rendering Heightma"}(CDLOD) par Filip Strugar~\cite{CDLOD}. En effet d'après F.Strugar : "Dans le contexte des PC moderne et des consoles de jeux, il n'y a aucun bénéfice à avoir un algorithme de rendu de terrain qui produit une distribution optimale des triangles sur CPU s'il ne peut produire assez de triangle ou qu'il consomme une trop grosse partie de puissance de traitement du CPU. Pour que le système puisse être optimal, les algorithmes de rendu de terrains doivent changer pour utiliser les GPU le plus possible". La méthode CDLOD étant une des exigences de notre projet, nous la présentons plus en détail dans le chapitre \ref{chap:cdlod}.
+
+La première méthode de rendu de terrains utilisant le GPU est celle de Ulrich.T~\cite{CLOD} en 2002, sur laquelle F.Strugar se repose notamment dans sa méthode CDLOD (un résumé de la méthode de Ulrich.T est disponible en annexe \ref{sec:chunked-lod}).
+
+\section*{Projet existant appliquant les techniques de LOD}
 
 Dans son article~\cite{CDLOD}, F. Strugar propose une implémentation
-complète de son algorithme, sous licence libre
+complète de son algorithme, sous une licence libre
 (zlib\footnote{\url{https://opensource.org/licenses/zlib-license.php},
 dernier accès mars 2018}). Ce projet propose un affichage de
 démonstration d'un terrain plat permettant de voir le fonctionnement de
@@ -26,13 +45,13 @@ Windows et incompatible avec Linux. Aussi, l'algorithme original étant
 prévu pour des terrains plats, l'implémentation n'est pas faite pour les
 maillages sphériques.
 
-Nous avons aussi trouvé le projet WorldGenerator de Leif
+Le projet "WorldGenerator" de Leif
 Erkenbrach\footnote{\url{http://leifnode.com/} |
 \url{https://github.com/LeifNode/World-Generator}, dernier accès: mars
-2018} sous licence MIT. Ce projet permet de visualiser une planète en
+2018} sous une licence MIT, utilise également les techniques de LOD. Ce projet permet de visualiser une planète en
 trois dimensions générée procéduralement. Implémenté en C++ et utilisant
 OpenGL 4.4, bibliothèque graphique disponible pour Linux. Cependant, le
-projet n'implémente pas l'algorithme complet de CDLOD, et nécessite
+projet n'implémente pas l'algorithme complet de CDLOD, et dans le cadre de notre projet, nécessite
 d'être porté sous Linux. Nous avions décidé que ce projet était une base
 viable, et avons commencé à le porter sous Linux. Cependant, nous nous
 sommes rendu compte lors de tests que les
@@ -42,9 +61,9 @@ n'étaient pas compatibles avec les drivers graphique Linux.  Corriger ce
 problème nécessitait de réécrire une bonne partie du pipeline graphique
 (processus de rendu graphique). 
 
-Enfin, le projet Planet Renderer de Robert
+Le projet "Planet Renderer" de Robert
 Lindner\footnote{\url{https://github.com/Illation/PlanetRenderer},
-dernier accès avril 2018}. Ce projet, sous licence MIT, affiche une
+dernier accès avril 2018} ,sous licence MIT, affiche une
 planète en trois dimensions ainsi que son maillage. L'algorithme de
 CDLOD est respecté. Le projet est écrit en C++ et avec OpenGL 4.5 et il
 est prévu pour Linux et Windows. Après tests, le projet est une base

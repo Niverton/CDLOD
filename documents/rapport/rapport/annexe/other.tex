@@ -10,10 +10,10 @@
         \caption{Division}
         \label{fig:perfCulling}
  \end{figure}
- Les 2 captures d'écrans \ref{fig:perfNoCulling} et \ref{fig:perfCulling} montrent à quel point le mode SplitCull est plus consommateur que le mode normale.  Les sorties ont été réalisées en s'assurant que tout les triangles de la récursion soit au niveau de détails 2, la caméra centré sur la planète. Le frustum culling ne sert donc à rien dans ces conditions.
+ Les 2 captures d'écrans \ref{fig:perfNoCulling} et \ref{fig:perfCulling} montrent à quel point le mode SplitCull est plus consommateur que le mode normal.  Les sorties ont été réalisées en s'assurant que tous les triangles de la récursion soient au niveau de détails 2, la caméra centrée sur la planète. Le frustum culling ne sert donc à rien dans ces conditions.
  
  
- Pour la sortie 1, sans culling, la branche de récursion est donc 
+ Pour la sortie 1, sans culling, la branche de récursion est donc :
  \newline
  Split->Leaf.
 
@@ -21,5 +21,5 @@ Pour l'autre, avec culling:
  \newline
  SplitCull->Leaf.
  
- On se rend compte que le mode culling a coûter 3 fois plus d'instructions.
+ On se rend compte que le mode culling a demander 3 fois plus d'instructions.
  
