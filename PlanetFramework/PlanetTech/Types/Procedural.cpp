@@ -1,18 +1,9 @@
 #include "Procedural.h"
 #include "Simplex.h"
 #include "Texture.h"
-#include <cmath>
 #include <functional>
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
-
-/*
-static double gaussian(double x, double y, double sigma) {
-  double a = (1. / (2 * M_PI * sigma * sigma));
-  double b = -((x * x + y * y) / (2 * sigma * sigma));
-  return a * std::exp(b);
-}
-*/
 
 ProceduralPlanet::ProceduralPlanet(Properties *prop) {
   unsigned int width = prop->width;
@@ -71,17 +62,11 @@ ProceduralPlanet::ProceduralPlanet(Properties *prop) {
 
   m_data = new float[height * width];
   for (unsigned int i = 0; i < height * width; i++) {
-    double x = std::fmod(double(i), double(width));
-    double y = std::floor(double(i) / double(width));
-    double u = x / double(width);
-    double v = y / double(width);
-    double theta = 2 * M_PI * u;
-    double phi = M_PI * v;
-    glm::vec3 p{std::cos(theta) * std::cos(phi) * m_Radius,
-                std::sin(theta) * std::cos(phi) * m_Radius,
-                std::sin(phi) * m_Radius};
-    // Low pass filter
-    m_data[i] = ((noise_maker(p) + 1.) / 2.);// * gaussian(u, v, 1.5);
+    double u = std::fmod(double(i), double(width));
+    double v = std::floor(double(i) / double(width));
+    glm::vec3 p{std::cos(u) * std::cos(v) * m_Radius,
+                std::sin(u) * std::cos(v) * m_Radius, std::sin(v) * m_Radius};
+    m_data[i] = (1+noise_maker(p))/2.0;
   }
 
   m_pHeight = new Texture(m_data, width, height);
