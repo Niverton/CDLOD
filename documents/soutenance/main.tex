@@ -1,0 +1,374 @@
+
+
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+
+\documentclass[french]{beamer}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}[frame number]
+\setbeamerfont{footline}{size=\fontsize{14}{11}\selectfont}
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\title{Génération procédurale de planètes}
+
+\author{  \vspace{1.5cm}Rémy \textsc{Maugey} \and
+  Jérémi \textsc{Bernard} \and
+  Hugo \textsc{Alonso} \and
+  Brian \textsc{Mazé}\\
+  \vspace{2.5cm}
+  Client : Emmanuel \textsc{Fleury}}
+
+\date{11 avril 2018}
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \usebeamercolor[fg]{title}
+  \usebeamerfont{title}\insertsectionhead\par
+  \vfill
+  \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Présentation du sujet}
+
+  
+    \begin{itemize}
+  \item
+    Génération procédurale de planète
+    \begin{itemize}
+    \item
+      Utilisation de la méthode \alert{"Continuous Distance-Dependent Level of Detail for Rendering Heightmaps"} (CDLOD) présenté par Filip Strugar en Juillet 2010\protect\footnotemark
+    \end{itemize}
+  \end{itemize}
+  
+  \begin{figure}
+   \includegraphics[scale=0.20]{img/planet_intro.png}
+   \caption{Planète}
+\end{figure}
+  
+      \footnotetext{Dernier accès avril 2018: \url{http://www.vertexasylum.com/downloads/cdlod/cdlod_latest.pdf}}
+    
+\end{frame}
+
+\section{CDLOD}
+
+\begin{frame}{CDLOD}{Carte de Hauteur}
+
+
+\begin{itemize}
+    \item Carte de hauteur (Heightmap)
+    \begin{itemize}
+        \item Image en nuance de gris. 
+        \item Le noir représente la distance minimum et le blanc la distance maximale.
+        \item Valeur interprétée comme une élévation par rapport à la surface.
+    \end{itemize}
+
+\end{itemize}
+
+
+\begin{figure}
+   \includegraphics[scale=0.60]{img/heightmap.png}
+   \caption{Interprétation de la carte de hauteur \protect\footnotemark}
+\end{figure}
+    \footnotetext{Source, dernier accès avril 2018: \url{https://newbiz.developpez.com/tutoriels/opengl/heightmap/}}
+
+\end{frame}
+
+\begin{frame}{CDLOD}{Quadtree}
+
+
+\begin{itemize}
+
+    \item Quadtree
+    \begin{itemize}
+        \item Structure de données
+        \item Arbre où chaque n\oe{}ud possède quatre fils
+        \item Un bon moyen de diviser un terrain en zone égale à différents niveaux
+        
+        
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}
+   \includegraphics[scale=0.40]{img/quadtree-arbre.png}
+   \caption{Quadtree \protect\footnotemark}
+\end{figure}
+    \footnotetext{Source, dernier accès avril 2018: \url{http://codeforces.com/blog/entry/57498}}
+    
+\end{frame}
+
+\begin{frame}{CDLOD}{Sélection}
+
+\begin{itemize}
+    \item Amélioration des performances en réduisant le nombre de triangles utilisés
+    \begin{itemize}
+        \item Sélection de n\oe{}ud dans le quadtree
+        \begin{itemize}
+            \item Distance entre la camèra et le terrain
+            \item Champ de vision
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+
+\begin{figure}
+   \includegraphics[scale=0.55]{img/selection.png}
+   \caption{N\oe{}uds affichés \protect\footnotemark}
+\end{figure}
+    \footnotetext{Source, dernier accès avril 2018: \url{http://www.vertexasylum.com/downloads/cdlod/cdlod_latest.pdf}}
+    
+
+\end{frame}
+
+
+\begin{frame}{CDLOD}{Discontinuité / Trou}
+    
+
+    \begin{itemize}
+    \item Discontinuité 
+    \begin{itemize}
+        \item La différence entre deux niveaux de détails voisins va faire apparaître des discontinuités
+        \item Discontinuité présente par exemple dans la méthode "Chuncked-LOD" présenté par Thatcher Ulrich en 2002\protect\footnotemark
+        \footnotetext{Dernier accès avril 2018: \url{http://tulrich.com/geekstuff/sig-notes.pdf}}
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}
+   \includegraphics[scale=0.7]{img/cracks.png}
+   \caption{Discontinuité \protect\footnotemark}
+\end{figure}
+    \footnotetext{Source, dernier accès avril 2018: \url{https://people.eecs.berkeley.edu/~sequin/CS284/LECT09/L13.html}}
+    
+
+\end{frame}
+
+\begin{frame}{CDLOD}{Morphing}
+    
+\begin{itemize}
+    \item Morphing
+    \begin{itemize}
+        \item Transition fluide
+        \item Opération effectué avant le changement de niveau de détail.
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+\centerline{
+   \subfigure[]{\includegraphics[scale=0.44]{img/morph5.png}}
+   \subfigure[]{\includegraphics[scale=0.44]{img/morph4.png}}
+   \subfigure[]{\includegraphics[scale=0.48]{img/morph3.png}}
+   }
+\end{figure}
+\begin{figure}[H]
+   \subfigure[]{\includegraphics[scale=0.63]{img/morph2.png}}
+   \subfigure[]{\includegraphics[scale=0.8]{img/morph1.png}}
+   
+   \caption{Augmentation du niveau de détail}
+\end{figure}
+
+
+\end{frame}
+
+% -------------
+% Besoins
+
+\begin{frame}{Besoins}
+  Besoins fonctionnels:
+  \begin{itemize}
+    \item Algorithme de CDLOD
+      \begin{itemize}
+        \item Quadtree
+        \item Morph
+      \end{itemize}
+    \item Interface graphique
+    \item Génération procédurale
+      \begin{itemize}
+        \item Carte de hauteur
+        \item Différents bruits
+      \end{itemize}
+  \end{itemize}
+  Besoins non-fonctionnels:
+  \begin{itemize}
+    \item CMake comme système de configuration
+    \item Utiliser le standard C++11 ou C++14
+    \item Cibler Linux avec des drivers libres (OpenGL 3.3)
+    \item Implémenter des tests
+  \end{itemize}
+\end{frame}
+
+
+
+
+%%  ARCHI
+
+\input{archi.tex}
+
+%%
+
+\section{Triangulator et Patch}
+\begin{frame}{Triangulator}{Icosaèdre}
+  Le triangulator construit un maillage de triangle, en subdivisant récursivement les faces d'un icosaèdre. Le but étant d'approcher une sphère.
+%parler du fait que le triangulator considère uniquement les coordonée par rapport au centre de la planète, et travaille dans l'espace en 3 dimensions, sur des triangles parfait (pas de relief)
+\begin{figure}[H]
+\centerline{
+   \subfigure[Icosaèdre de base]{\includegraphics[scale=0.1]{img/3-Icosahedron.jpg}}
+   \subfigure[Récursion total de profondeur 1]{\includegraphics[scale=0.1]{img/4-IcosphereSd1.jpg}}
+   \subfigure[Récursion total de profondeur 2]{\includegraphics[scale=0.1]{img/5-IcosphereSd2.jpg}}
+   \subfigure[Récursion total de profondeur 3]{\includegraphics[scale=0.1]{img/6-IcosphereSd3.jpg}}
+   }
+\end{figure}
+    \footnotetext{Source, dernier accès avril 2018: \url{http://robert-lindner.com/img/blog/planet_renderer/week5-6/researchPaper.pdf}}
+\end{frame}
+
+\begin{frame}{Triangulator}{Subdivision}
+\begin{figure}
+%todo gérer borders
+\centerline{
+   \subfigure[]{\includegraphics[scale=0.25]{img/triangleBeforeSplit.png}}
+   \subfigure[]{\includegraphics[scale=0.25]{img/split1.png}}
+   \subfigure[]{\includegraphics[scale=0.25]{img/splitBombe.png}}
+   }
+   \caption{Subdivision d'un triangle, Les enfants sont obtenues en prenant le milieu de chaque coté du père, puis en les normant sur la sphère}
+   
+\end{figure}
+\end{frame}
+
+\begin{frame}{Triangulator}{Récursion}
+Chaque appel récursif traite un triangle, et s'appuie sur la fonction SplitHeuristic, qui décide si le triangle doit ètre:
+\newline
+  \begin{itemize}
+  \item {
+    \textbf{filtré}
+  }
+  \item {
+    \textbf{validé}
+  }
+  \item {
+   ou \textbf{subdivisé}
+  }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Triangulator}{Filtre}
+Pour chaque appel, la récursion est arrêtée d'office si le triangle est totalement hors du frustum, ou si il fait face à la mauvaise direction.
+\begin{figure}
+%todo gérer borders
+\centerline{
+   \subfigure[Frustum culling]{\includegraphics[scale=0.15]{img/culling.png}}
+   \subfigure[Backface culling]{\includegraphics[scale=0.094]{img/backfaceCulling.jpg}}
+   }
+   
+\end{figure}
+      \footnotetext{Source dernier accès avril 2018: \url{http://robert-lindner.com/img/blog/planet_renderer/week5-6/researchPaper.pdf}}
+  
+  \end{frame}
+  
+ \begin{frame}{Triangulator}{Validation}
+     
+
+Si le triangle passe les filtres, alors soit :
+\begin{itemize}
+    \item Il est suffisamment proche pour être éligibles par la table des distances et est subdivisé en 4 sous triangles.
+    %explication table des distance
+    \item Soit il est envoyé au GPU.
+\end{itemize}
+
+La table des distances est un simple tableaux indiquant quels sont les limites pour chacun des niveaux.
+\newline
+
+[14000,7000,3500,1750,875...]
+\newline
+
+Un triangle de niveaux 2 doit être éloigné de moins de 7000 kilomètres pour être subdivisé. 
+\label{fig:my_label}
+
+ \end{frame}
+ 
+ \begin{frame}{Patch}{Découpage}
+ Patch permet d'organiser en amont le redécoupage et le morphing des triangles envoyés par Triangulator dans le GPU.
+ \begin{figure}
+\caption{Découpage d'un triangle dans la carte graphique. Tous les points sont cette fois ci normés selon leurs position dans la heightmap}
+
+\centerline{
+   \subfigure[Triangle sortant de la récursion]{\includegraphics[scale=0.15]{img/patchBefor.png}}
+   \subfigure[Triangle "patché"]{\includegraphics[scale=0.15]{img/patch.png}}
+   \subfigure[Triangle après normalisation selon la carte de hauteur ]{\includegraphics[scale=0.15]{img/afterPatchNorm.png}}
+   }
+   
+   
+\end{figure}
+ \end{frame}
+
+ 
+
+
+% -----
+% TESTS
+% -----
+\input{tests.tex}
+
+
+
+
+\input{conclusion.tex}
+
+%---------
+%ANNEXE
+%--------
+
+\input{annexe.tex}
+
+
+\end{document}
