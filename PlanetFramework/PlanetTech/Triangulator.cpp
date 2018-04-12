@@ -17,8 +17,8 @@
 #include <glm/glm.hpp>
 #endif
 
-Triangulator::Triangulator(Planet *pPlanet) : m_pPlanet(pPlanet) {
-  m_pFrustum = new Frustum();
+Triangulator::Triangulator(Planet *pPlanet)
+    : m_pPlanet{pPlanet}, m_pFrustum{new Frustum()} {
 }
 
 void Triangulator::Init() {
@@ -46,7 +46,7 @@ void Triangulator::Init() {
   // Triangles on planes
   m_Icosahedron.emplace_back(ico[1], ico[3], ico[8], nullptr, 1);
   m_Icosahedron.emplace_back(ico[1], ico[3], ico[9], nullptr, 1);
-  m_Icosahedron.emplace_back(ico[0], ico[2], ico[10], nullptr,1);
+  m_Icosahedron.emplace_back(ico[0], ico[2], ico[10], nullptr, 1);
   m_Icosahedron.emplace_back(ico[0], ico[2], ico[11], nullptr, 1);
 
   m_Icosahedron.emplace_back(ico[5], ico[7], ico[0], nullptr, 1);
@@ -153,7 +153,7 @@ void Triangulator::GenerateGeometry() {
   float frac = tanf((m_AllowedTriPx * glm::radians(m_pFrustum->GetFOV())) /
                     WINDOW.Width);
 
-  m_DistanceLUT.push_back(2*sizeL/frac);
+  m_DistanceLUT.push_back(2 * sizeL / frac);
   for (int level = 0; level < m_MaxLevel + 5; level++) {
     m_DistanceLUT.push_back(sizeL / frac);
     sizeL *= 0.5f;
@@ -181,45 +181,50 @@ TriNext Triangulator::SplitHeuristic(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c,
     auto intersect =
         m_pFrustum->ContainsTriVolume(a, b, c, m_HeightMultLUT[level]);
     // auto intersect = m_pFrustum->ContainsTriangle(a, b, c);
-    if (intersect == VolumeTri::OUTSIDE)
+    if (intersect == VolumeTri::OUTSIDE) {
       return TriNext::CULL;
+    }
     if (intersect ==
         VolumeTri::CONTAINS) // stop frustum culling -> all
                              // children are also inside the frustum
     {
       // check if new splits are allowed
-      if (level >= m_MaxLevel)
+      if (level >= m_MaxLevel) {
         return TriNext::LEAF;
+      }
       // split according to distance
       float aDist = glm::length(a - m_pFrustum->GetPositionOS());
       float bDist = glm::length(b - m_pFrustum->GetPositionOS());
       float cDist = glm::length(c - m_pFrustum->GetPositionOS());
-      if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level])
+      if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level]) {
         return TriNext::SPLIT;
+      }
       return TriNext::LEAF;
     }
-    else{
-	// check if new splits are allowed
-      if (level >= m_MaxLevel)
-        return TriNext::LEAF;
-      // split according to distance
-      float aDist = glm::length(a - m_pFrustum->GetPositionOS());
-      float bDist = glm::length(b - m_pFrustum->GetPositionOS());
-      float cDist = glm::length(c - m_pFrustum->GetPositionOS());
-      if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level])
-        return TriNext::SPLITCULL;
+    // check if new splits are allowed
+    if (level >= m_MaxLevel) {
       return TriNext::LEAF;
     }
+    // split according to distance
+    float aDist = glm::length(a - m_pFrustum->GetPositionOS());
+    float bDist = glm::length(b - m_pFrustum->GetPositionOS());
+    float cDist = glm::length(c - m_pFrustum->GetPositionOS());
+    if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level]) {
+      return TriNext::SPLITCULL;
+    }
+    return TriNext::LEAF;
   }
   // check if new splits are allowed
-  if (level >= m_MaxLevel)
+  if (level >= m_MaxLevel) {
     return TriNext::LEAF;
+  }
   // split according to distance
   float aDist = glm::length(a - m_pFrustum->GetPositionOS());
   float bDist = glm::length(b - m_pFrustum->GetPositionOS());
   float cDist = glm::length(c - m_pFrustum->GetPositionOS());
-  if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level])
+  if (std::fminf(aDist, std::fminf(bDist, cDist)) < m_DistanceLUT[level]) {
     return TriNext::SPLIT;
+  }
   return TriNext::LEAF;
 }
 
