@@ -28,7 +28,7 @@ public:
     float ridgeOffset = 0.1f;
   };
 
-  ProceduralPlanet(Properties* properties);
+  ProceduralPlanet(Properties* prop);
   ~ProceduralPlanet();
 
 private:
