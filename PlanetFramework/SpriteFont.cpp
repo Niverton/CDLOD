@@ -29,10 +29,12 @@ void SpriteFont::Load(const std::string &filename) {
     }
   }
   if (!valid) {
+    delete pBinReader;
     std::cerr << "[ERROR] Font file header invalid!\n";
     return;
   }
   if (pBinReader->Read<char>() < 3) {
+    delete pBinReader;
     std::cerr << "[ERROR] Font version invalid!\n";
     return;
   }
