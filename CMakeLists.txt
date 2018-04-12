@@ -19,10 +19,12 @@ set(SANAL NO CACHE BOOL
   "Run static analysers during build ?")
 set(TIDY_CONFIG
   "-checks=*,\
--google-runtime-int,\
+-android*,-google*,-fuchsia*,-llvm-header-guard,\
+-cppcoreguidelines-owning-memory,\
 -cppcoreguidelines-pro-type-union-access,\
 -cppcoreguidelines-pro-bounds-pointer-arithmetic,\
 -cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
+-hicpp-no-array-decay,\
 -cppcoreguidelines-pro-type-reinterpret-cast"
   CACHE STRING
   "clang-tidy configuration")
@@ -409,7 +411,7 @@ if(BUILD_TESTS)
     tests/Argv_parser.cpp
     )
   
-  make_test(perf-noise
+  make_test(perf_noise
     PlanetFramework/PlanetTech/Types/Procedural.cpp
     PlanetFramework/PlanetTech/Planet.cpp
     tests/dummies/Texture.cpp
