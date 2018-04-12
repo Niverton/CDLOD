@@ -12,7 +12,7 @@ class Planet;
 
 class Scene {
 public:
-  Scene(int argc, char** argv, ArgvParser& parser);
+  Scene(int argc, ArgvParser& parser);
   ~Scene();
 
   void Init();
@@ -51,5 +51,5 @@ private:
     return false;
   }
 
-  void CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser);
+  void CreatePlanetFromArgs(int argc, ArgvParser& argvParser);
 };

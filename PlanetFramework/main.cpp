@@ -231,7 +231,7 @@ int main(int argc, char **argv) {
   pInput->Init();
 
   // Make a scene :D
-  auto *pScene = new Scene(argc, argv, argvParser);
+  auto *pScene = new Scene(argc, argvParser);
   pScene->Init();
 
   glEnable(GL_DEPTH_TEST);
@@ -269,9 +269,9 @@ int main(int argc, char **argv) {
 
   SafeDelete(pScene);
 
-  pInput->DestroyInstance();
-  pSettings->DestroyInstance();
-  pContext->DestroyInstance();
+  InputManager::DestroyInstance();
+  Settings::DestroyInstance();
+  Context::DestroyInstance();
 
   SDL_GL_DeleteContext(context);
   SDL_VideoQuit();

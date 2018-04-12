@@ -1,31 +1,29 @@
-
 #include "Scene.h"
-#include "Camera.h"                      // for Camera
-#include "Context.h"                     // for ContextObjects, Context
-#include <cstdlib>                       // for std::exit, EXIT_FAILURE
-#include "Types/Earth.h"      // for Earth
-#include "InputManager.h"                // for InputManager
+#include "Camera.h"           // for Camera
+#include "Context.h"          // for ContextObjects, Context
+#include "InputManager.h"     // for InputManager
 #include "Planet.h"           // for Planet
+#include "SpriteFont.h"       // for SpriteFont
+#include "TextRenderer.h"     // for TextRenderer
+#include "Time.h"             // for Time
+#include "Types/Earth.h"      // for Earth
 #include "Types/Moon.h"       // for Moon
 #include "Types/Procedural.h" // for ProceduralPlanet
-#include "SpriteFont.h"                  // for SpriteFont
-#include "TextRenderer.h"                // for TextRenderer
-#include "Time.h"                        // for Time
-#include "glad.h"                        // for GL_FRONT_AND_BACK, glDepth...
-#include "utils.h"                       // for SafeDelete, INPUT, CONTEXT
+#include "glad.h"             // for GL_FRONT_AND_BACK, glDepth...
+#include "utils.h"            // for SafeDelete, INPUT, CONTEXT
 #include <array>
-#include <iomanip>                       // for operator<<, setprecision
-#include <sstream>                       // for stringstream, basic_ostream
-#include <string>                        // for operator+, allocator, to_s...
+#include <cstdlib> // for std::exit, EXIT_FAILURE
+#include <iomanip> // for operator<<, setprecision
+#include <sstream> // for stringstream, basic_ostream
+#include <string>  // for operator+, allocator, to_s...
 
-
-#define PLANET_ERROR "Error: could not create planet, you must have set an invalid value"
+#define PLANET_ERROR                                                           \
+  "Error: could not create planet, you must have set an invalid value"
 
 //#include "Screenshot.h"
 
-Scene::Scene(int argc, char** argv, ArgvParser& parser) {
-  CreatePlanetFromArgs(argc, argv, parser);
-  m_pDebugFont = new SpriteFont();
+Scene::Scene(int argc, ArgvParser &parser) : m_pDebugFont{new SpriteFont()} {
+  CreatePlanetFromArgs(argc, parser);
 }
 
 void Scene::Init() {
@@ -136,7 +134,7 @@ Scene::~Scene() {
   SafeDelete(m_pPlanet);
 
   SafeDelete(m_pDebugFont);
-  TextRenderer::GetInstance()->DestroyInstance();
+  TextRenderer::DestroyInstance();
   // Screenshot::GetInstance()->DestroyInstance();
 
   SafeDelete(m_pTime);
@@ -144,30 +142,26 @@ Scene::~Scene() {
   SafeDelete(m_pConObj);
 }
 
-void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
+void Scene::CreatePlanetFromArgs(int argc, ArgvParser &argvParser) {
   if (argc == 1) {
-    //Create default planet
+    // Create default planet
     ProceduralPlanet::Properties prop;
     m_pPlanet = new ProceduralPlanet(&prop);
   } else {
     ProceduralPlanet::Properties prop;
-    
-    
+
     const std::array<std::string, 8> NOISES = {
-    "SIMPLEX", "PERLIN", "RIDGED-NOISE", "FLOW-NOISE", "FBM", "WARPED-FBM",
-    "DFBM-WARPED-FBM", "RIDGED-MULTI-FRACTAL"
-    };
-    
+        "SIMPLEX", "PERLIN",     "RIDGED-NOISE",    "FLOW-NOISE",
+        "FBM",     "WARPED-FBM", "DFBM-WARPED-FBM", "RIDGED-MULTI-FRACTAL"};
+
     const std::array<std::string, 8> noises = {
-    "simplex", "perlin", "ridged-noise", "flow-noise", "fbm", "warped-fbm",
-    "dfbm-warped-fbm", "ridged-multi-fractal"
-    };
+        "simplex", "perlin",     "ridged-noise",    "flow-noise",
+        "fbm",     "warped-fbm", "dfbm-warped-fbm", "ridged-multi-fractal"};
 
     std::string noise = argvParser.GetMode();
-    if ( noise == "MOON" || noise == "moon"){
+    if (noise == "MOON" || noise == "moon") {
       m_pPlanet = new Moon();
-    }
-    else if ( noise == "EARTH" || noise == "earth"){
+    } else if (noise == "EARTH" || noise == "earth") {
       m_pPlanet = new Earth();
     } else {
 
@@ -190,18 +184,19 @@ void Scene::CreatePlanetFromArgs(int argc, char** argv, ArgvParser& argvParser){
       check_value<float>(prop.ridgeOffset, 0, 0.1);
 
       bool found = false;
-      for (int i=0; i<8; i++){
-        if (noise == NOISES[i] || noise == noises[i]){
+      for (int i = 0; i < 8; i++) {
+        if (noise == NOISES[i] || noise == noises[i]) {
           found = true;
-          prop.noise = static_cast<ProceduralPlanet::Noise> (i);
+          prop.noise = static_cast<ProceduralPlanet::Noise>(i);
         }
       }
-      if (!found){
-        std::cerr << "Error please specify a correct noise, see usage for more info.\n";
+      if (!found) {
+        std::cerr << "Error please specify a correct noise, see usage for more "
+                     "info.\n";
         std::exit(EXIT_FAILURE);
       }
 
-      try { 
+      try {
         m_pPlanet = new ProceduralPlanet(&prop);
       } catch (...) {
         std::cerr << PLANET_ERROR << '\n';
