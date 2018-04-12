@@ -412,14 +412,14 @@ if(BUILD_TESTS)
   make_test(perf-noise
     PlanetFramework/PlanetTech/Types/Procedural.cpp
     PlanetFramework/PlanetTech/Planet.cpp
-    PlanetFramework/Texture.cpp
+    tests/dummies/Texture.cpp
     PlanetFramework/PlanetTech/Triangulator.cpp
-    PlanetFramework/PlanetTech/Patch.cpp
+    tests/dummies/Patch.cpp
     PlanetFramework/Time.cpp
-    PlanetFramework/PlanetTech/Frustum.cpp
     PlanetFramework/InputManager.cpp
     PlanetFramework/Transform.cpp
-    PlanetFramework/Shader.cpp
+    tests/dummies/Shader.cpp
+    tests/dummies/Frustum.cpp
     tests/Perf-noise.cpp
     )
 endif()

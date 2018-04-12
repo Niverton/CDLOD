@@ -33,6 +33,7 @@ bool test(){
               prop.noise = static_cast<ProceduralPlanet::Noise> (j);
 
               Planet* p = new ProceduralPlanet (&prop);
+              delete p;
            };
 
   std::cout << "simplex;perlin;ridged;flow;fbm;warped;dfbm;fractal;\n";
