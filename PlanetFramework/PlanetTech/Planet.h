@@ -1,9 +1,9 @@
 #pragma once
 
-class Patch;  // lines 8-8
-class Texture;  // lines 6-6
-class Transform;  // lines 4-4
-class Triangulator;  // lines 7-7
+class Patch;        // lines 8-8
+class Texture;      // lines 6-6
+class Transform;    // lines 4-4
+class Triangulator; // lines 7-7
 
 /**
   \brief  Extend this class for create new planet type.

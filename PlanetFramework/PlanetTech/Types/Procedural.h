@@ -16,22 +16,21 @@ public:
   };
 
   struct Properties {
-    Noise noise = Noise::SIMPLEX;        //default
+    Noise noise = Noise::SIMPLEX; // default
     unsigned int width = 1024;
     unsigned int height = 1024;
     unsigned int octave = 4;
-    float radius = 1737.1f;       //Same as moon
-    float maxHeight = 10.7f;      //Same as moon
+    float radius = 1737.1f;  // Same as moon
+    float maxHeight = 10.7f; // Same as moon
     float lacunarity = 2.0f;
     float gain = 0.5f;
     float angle = 0.5f;
     float ridgeOffset = 0.1f;
   };
 
-  ProceduralPlanet(Properties* prop);
+  ProceduralPlanet(Properties *prop);
   ~ProceduralPlanet();
 
 private:
-  float* m_data;
+  float *m_data;
 };
-

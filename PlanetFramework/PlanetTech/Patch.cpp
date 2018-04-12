@@ -65,8 +65,9 @@ void Patch::Init() {
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(PatchVertex),
                         reinterpret_cast<GLvoid *>(offsetof(PatchVertex, pos)));
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(PatchVertex),
-                        reinterpret_cast<GLvoid *>(offsetof(PatchVertex, morph)));
+  glVertexAttribPointer(
+      1, 2, GL_FLOAT, GL_FALSE, sizeof(PatchVertex),
+      reinterpret_cast<GLvoid *>(offsetof(PatchVertex, morph)));
   // instances
   // bind
   glBindBuffer(GL_ARRAY_BUFFER, m_VBOInstance);
@@ -74,8 +75,9 @@ void Patch::Init() {
   glEnableVertexAttribArray(3);
   glEnableVertexAttribArray(4);
   glEnableVertexAttribArray(5);
-  glVertexAttribIPointer(2, 1, GL_INT, sizeof(PatchInstance),
-                         reinterpret_cast<GLvoid *>(offsetof(PatchInstance, level)));
+  glVertexAttribIPointer(
+      2, 1, GL_INT, sizeof(PatchInstance),
+      reinterpret_cast<GLvoid *>(offsetof(PatchInstance, level)));
   glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(PatchInstance),
                         reinterpret_cast<GLvoid *>(offsetof(PatchInstance, a)));
   glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(PatchInstance),

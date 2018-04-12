@@ -17,7 +17,7 @@
 #pragma once
 
 #include "glad.h" // for GLuint, GLenum
-#include <string>                         // for string
+#include <string> // for string
 class Shader {
 public:
   /*!

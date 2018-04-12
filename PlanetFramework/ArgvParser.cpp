@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-ArgvParser::ArgvParser(int argc, char **argv) : m_Mode{argv[1]}{
+ArgvParser::ArgvParser(int argc, char **argv) : m_Mode{argv[1]} {
   for (int i = 2; i < argc; i++) {
     m_Tokens.emplace_back(Split(argv[i], '='));
   }

@@ -6,14 +6,14 @@
 #include <glm/glm.hpp>
 #endif
 
-#include "InputManager.h" // for InputManager
-#include "PlanetTech/Planet.h"       // for Planet
-#include "Settings.h"     // for Settings::WindowSettings
-#include "Time.h"         // for Time
-#include "Transform.h"    // for Transform
-#include "utils.h"       // for INPUT, TIME, WINDOW
+#include "InputManager.h"      // for InputManager
+#include "PlanetTech/Planet.h" // for Planet
+#include "Settings.h"          // for Settings::WindowSettings
+#include "Time.h"              // for Time
+#include "Transform.h"         // for Transform
+#include "utils.h"             // for INPUT, TIME, WINDOW
 #include <SDL2/SDL_scancode.h> // for ::SDL_SCANCODE_KP_4
-#include <cmath>          // for powf, cos, sin, sqrtf
+#include <cmath>               // for powf, cos, sin, sqrtf
 
 /*!
   \brief  Camera provide two mode, orthigraphic and perspective.
@@ -56,15 +56,15 @@ public:
   }
 
   /*!
-    \brief  This function update camera stuff according to keyboard ans mouse 
+    \brief  This function update camera stuff according to keyboard ans mouse
             input.
-            New far and near plane are calculate based on planet: 
-            $ 
+            New far and near plane are calculate based on planet:
+            $
               \sqrt{(radius + altitude}^{2} - radius^{2}} +
               \sqrt{(radius + max_height}^{2} - radius^{2}}
             $
 
-            Projection matrix and other matrix has calculate thanks to 
+            Projection matrix and other matrix has calculate thanks to
             the class Transform.
   */
   void Update();

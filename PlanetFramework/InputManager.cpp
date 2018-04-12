@@ -100,7 +100,6 @@ void InputManager::UpdateEvents() {
       &m_MousePosX, &m_MousePosY); // Update new Mouse state and position
   m_MouseMove = glm::vec2(static_cast<float>(m_MousePosX - mPosOldX),
                           static_cast<float>(m_MousePosY - mPosOldY));
-
 }
 //----------------------------
 // Getters

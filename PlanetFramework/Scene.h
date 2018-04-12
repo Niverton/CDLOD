@@ -12,7 +12,7 @@ class Planet;
 
 class Scene {
 public:
-  Scene(int argc, ArgvParser& parser);
+  Scene(int argc, ArgvParser &parser);
   ~Scene();
 
   void Init();
@@ -37,19 +37,19 @@ private:
   // Planet tech
   Planet *m_pPlanet = nullptr;
 
-  //Planet properties
+  // Planet properties
   /**
     \brief  if val == cmp then val is set to default value def
             T must be overload == operator
   */
   template <typename T>
-  bool check_value(T& val, T cmp, T def){
-    if (val == cmp){
+  bool check_value(T &val, T cmp, T def) {
+    if (val == cmp) {
       val = def;
       return true;
     }
     return false;
   }
 
-  void CreatePlanetFromArgs(int argc, ArgvParser& argvParser);
+  void CreatePlanetFromArgs(int argc, ArgvParser &argvParser);
 };

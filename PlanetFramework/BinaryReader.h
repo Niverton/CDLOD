@@ -20,7 +20,7 @@ public:
     }
 
     T value;
-    m_pReader->read(reinterpret_cast<char*>(&value), sizeof(T));
+    m_pReader->read(reinterpret_cast<char *>(&value), sizeof(T));
     return value;
   }
 

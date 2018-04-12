@@ -66,7 +66,7 @@ ProceduralPlanet::ProceduralPlanet(Properties *prop) {
     double v = std::floor(double(i) / double(width));
     glm::vec3 p{std::cos(u) * std::cos(v) * m_Radius,
                 std::sin(u) * std::cos(v) * m_Radius, std::sin(v) * m_Radius};
-    m_data[i] = (1+noise_maker(p))/2.0;
+    m_data[i] = (1 + noise_maker(p)) / 2.0;
   }
 
   m_pHeight = new Texture(m_data, width, height);

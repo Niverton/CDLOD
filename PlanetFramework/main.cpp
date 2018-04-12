@@ -21,54 +21,52 @@
 #include <iostream> // for operator<<, endl, basic_os...
 #include <string>   // for char_traits, string
 
-static const char* USAGE =
+static const char *USAGE =
 
+    "\nFor non procedural run on Earth or Moon: just type MOON/EARTH \n\nFor "
+    "procedurals runs:\n\n"
+    " <NOISE> --<noise-option>=<value> --<option>\n\n"
+    "option:\n"
+    "\t -h  --help      	show this page.\n"
+    "\t     --fullscreen	start program in fullscreen.\n"
+    "\t     --use-vsync	start program with vsync.\n"
+    "\n"
+    "<NOISE> --<noise-option>=<value>\n"
+    "Order of options does not matter.\n"
+    "if you set a flag with a wrong noise, it will be ignored\n\n"
+    "Common options                     Default value\n"
+    "\t --width=UInt                    1024\n"
+    "\t --height=UInt                   1024\n"
+    "\t --max_height=Float              10.0\n\n"
+    "SIMPLEX\n"
+    "\t<common-options>\n\n"
+    "RIDGEG-NOISE\n"
+    "\t<common-options>\n\n"
+    "FLOW-NOISE\n"
+    "\t<common-options>\n"
+    "\t--angle=Float                    0.5\n\n"
+    "FBM\n"
+    "\t<common-options> \n"
+    "\t--octave=UInt                    4\n"
+    "\t--lacunarity=Float               2.0 \n"
+    "\t--gain=Float                     0.5\n\n"
+    "WARPED-FBM \n"
+    "\t<common-options> \n"
+    "\t--octave=UInt                    4\n"
+    "\t--lacunarity=Float               2.0\n"
+    "\t--gain=Float                     0.5\n\n"
+    "DFBM-WARPED-FBM \n"
+    "\t--octave=UInt                    4\n"
+    "\t--lacunarity=Float               2.0\n"
+    "\t--gain=Float                     0.5\n\n"
+    "RIDGED-MULTI-FRACTAL \n"
+    "\t<common-options> \n"
+    "\t--octave=UInt                    4\n"
+    "\t--lacunarity=Float               2.0\n"
+    "\t--gain=Float                     0.5\n";
 
-"\nFor non procedural run on Earth or Moon: just type MOON/EARTH \n\nFor procedurals runs:\n\n"
-" <NOISE> --<noise-option>=<value> --<option>\n\n"
-"option:\n"
-"\t -h  --help      	show this page.\n"
-"\t     --fullscreen	start program in fullscreen.\n"
-"\t     --use-vsync	start program with vsync.\n"
-"\n"
-"<NOISE> --<noise-option>=<value>\n"
-"Order of options does not matter.\n"
-"if you set a flag with a wrong noise, it will be ignored\n\n"
-"Common options                     Default value\n"
-"\t --width=UInt                    1024\n"
-"\t --height=UInt                   1024\n"
-"\t --max_height=Float              10.0\n\n"
-"SIMPLEX\n"
-"\t<common-options>\n\n"
-"RIDGEG-NOISE\n"
-"\t<common-options>\n\n"
-"FLOW-NOISE\n"
-"\t<common-options>\n"
-"\t--angle=Float                    0.5\n\n"
-"FBM\n"
-"\t<common-options> \n"
-"\t--octave=UInt                    4\n"
-"\t--lacunarity=Float               2.0 \n"
-"\t--gain=Float                     0.5\n\n"
-"WARPED-FBM \n"
-"\t<common-options> \n"
-"\t--octave=UInt                    4\n"
-"\t--lacunarity=Float               2.0\n"
-"\t--gain=Float                     0.5\n\n"
-"DFBM-WARPED-FBM \n"
-"\t--octave=UInt                    4\n"
-"\t--lacunarity=Float               2.0\n"
-"\t--gain=Float                     0.5\n\n"
-"RIDGED-MULTI-FRACTAL \n"
-"\t<common-options> \n"
-"\t--octave=UInt                    4\n"
-"\t--lacunarity=Float               2.0\n"
-"\t--gain=Float                     0.5\n";
-
-void usage(const char* msg){
-  std::cout << "Usage: "
-            << msg
-            << USAGE << '\n';
+void usage(const char *msg) {
+  std::cout << "Usage: " << msg << USAGE << '\n';
   std::exit(0);
 }
 
@@ -123,7 +121,7 @@ int main(int argc, char **argv) {
   if (argc <= 1) {
     usage(argv[0]);
   }
-  
+
   bool need_h = false;
   bool need_help = false;
   if (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h") {

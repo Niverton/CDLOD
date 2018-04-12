@@ -19,4 +19,3 @@ void Transform::UpdateTransforms() {
   m_Right = glm::normalize(m_Rotation * glm::vec3(1, 0, 0));
   m_Up = glm::normalize(glm::cross(m_Forward, m_Right));
 }
-

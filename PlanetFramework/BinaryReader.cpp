@@ -1,5 +1,5 @@
 #include "BinaryReader.h"
-#include "utils.h" // for SafeDelete
+#include "utils.h"  // for SafeDelete
 #include <fstream>  // for basic_ifstream
 #include <iostream> // for operator<<, endl, stringstream, basic_ostream, cout
 #include <sstream>
