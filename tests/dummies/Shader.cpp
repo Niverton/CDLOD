@@ -13,6 +13,7 @@ void Shader::Build() {
 }
 
 GLuint Shader::CompileShader(const std::string &shaderSourceStr, GLenum type) {
+  return 0;
 }
 
 Shader::~Shader() {

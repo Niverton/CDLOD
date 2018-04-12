@@ -17,6 +17,7 @@ void Frustum::Update() {
 }
 
 bool Frustum::Contains(glm::vec3 p) {
+  return false;
 }
 
 VolumeTri Frustum::ContainsTriangle(glm::vec3 &a, glm::vec3 &b, glm::vec3 &c) {
