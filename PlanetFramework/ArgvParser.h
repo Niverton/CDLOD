@@ -13,7 +13,7 @@ public:
   ~ArgvParser() = default;
 
   template <typename T>
-  void GetCmdInt(const std::string &cmd, T *ret) {
+  void GetCmdInt(const std::string &cmd, T *ret) const {
     for (auto &t : m_Tokens) {
       std::string token, value;
       std::tie(token, value) = t;
@@ -31,7 +31,7 @@ public:
     *ret = 0;
   }
 
-  void GetCmdFloat(const std::string &cmd, float *ret) {
+  void GetCmdFloat(const std::string &cmd, float *ret) const {
     for (auto &t : m_Tokens) {
       std::string token, value;
       std::tie(token, value) = t;
@@ -49,7 +49,7 @@ public:
     *ret = 0.0;
   }
 
-  void GetCmdBool(const std::string &cmd, bool *ret) {
+  void GetCmdBool(const std::string &cmd, bool *ret) const {
     for (auto &t : m_Tokens) {
       std::string token, value;
       std::tie(token, value) = t;
@@ -63,7 +63,7 @@ public:
     *ret = false;
   }
 
-  std::string GetMode() {
+  std::string GetMode() const {
     return m_Mode;
   }
 

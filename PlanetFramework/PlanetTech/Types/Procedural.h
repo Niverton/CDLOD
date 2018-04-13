@@ -29,6 +29,7 @@ public:
   };
 
   ProceduralPlanet(Properties *prop);
+  ProceduralPlanet(const ProceduralPlanet&) = delete;
   ~ProceduralPlanet();
 
 private:
