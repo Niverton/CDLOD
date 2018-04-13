@@ -262,8 +262,6 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
   
   
   Le \textit{frustum} représente la sous-partie de l'espace contenue dans le champ de la caméra. On s'intéresse à cet espace car il est le seul à être vue par la caméra.\\
-
-  \footnotetext{Extrait de \url{http://robert-lindner.com/img/blog/planet_renderer/week5-6/researchPaper.pdf}, dernier accès avril 2018}
  
   Le \emph{frustum} est entièrement déterminé par les paramètres de la caméra.  
   En effet, grâce au \textit{FOV} (champ de vue), à la position, la direction et la distance \emph{near}, on peut créer un rectangle \emph{near}. On créait similairement un rectangle far, parallèle au plan \emph{near}. On caractérise alors le \emph{frustum} par 6 plans, dont on obtient la paramétrisation grâce aux triangles formés par les 8 points des deux rectangles, en prenant garde à orienter les normales des plans vers l'intérieur. Visible sur la figure \ref{fig:culling}.\\
@@ -275,6 +273,7 @@ L'arbre de données est implémenté avec la méthode des flux du CDLOD (Streami
   \caption{Cône de vision de la caméra \protect\footnotemark}
   \label{fig:culling}
   \end{figure}
+  \footnotetext{Extrait de \url{http://robert-lindner.com/img/blog/planet_renderer/week5-6/researchPaper.pdf}, dernier accès avril 2018}
   Le rectangle \textit{near} et \textit{far} correspondent respectivement au petit/grand rectangle sur la figure \ref{fig:culling} de droite. 
   Il est nécessaire de calculer la paramétrisation des 4 autres plans. Pour cela, on peut prendre n'importe lequel des triangles sur chacun des plans, et calculer la normale grâce à un simple produit en croix entre deux segments.
   
