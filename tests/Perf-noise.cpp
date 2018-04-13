@@ -38,7 +38,8 @@ bool test(){
   std::cout << "simplex;perlin;ridged;flow;fbm;warped;dfbm;fractal;\n";
   //[6..11] -> [64x64 .. 2048x2048]
   static const int nb_tests = 5;
-  for (int i=6; i <= 6 + nb_tests; i++){
+
+  for (int i=nb_tests+1; i <= nb_tests * 2 + 1; i++){
 
 
     for (int j=0; j<8; j++){
